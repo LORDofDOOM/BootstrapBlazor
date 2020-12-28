@@ -3100,9 +3100,41 @@ input:disabled,
   content: "\f107";
 }
 
+.tabs .tabs-nav-wrap .nav-link-bar {
+  padding: 0.5rem 1rem;
+  background-color: #fff;
+  border: 1px solid #dcdfe6;
+  border-width: 0 0 1px 1px;
+  height: 39px;
+  cursor: pointer;
+}
+
+.tabs .tabs-nav-wrap .nav-link-bar.left {
+  border: 1px solid #dcdfe6;
+  border-width: 0 1px 1px 0;
+}
+
+.tabs .tabs-nav-wrap .nav-link-bar.right {
+  border: 1px solid #dcdfe6;
+  border-width: 0 0 1px 1px;
+}
+
+.tabs .tabs-nav-wrap .dropdown-toggle:after {
+  display: none;
+}
+
+.tabs .tabs-nav-wrap .dropdown-item {
+  transition: background-color .3s linear;
+}
+
+.tabs .tabs-nav-wrap .dropdown-item:hover {
+  background-color: #409eff;
+}
+
 /*scroll*/
 .tabs .tabs-nav-scroll {
   overflow: hidden;
+  flex: 1;
 }
 
 .tabs.tabs-card.tabs-top .tabs-nav-scroll {
@@ -3235,6 +3267,7 @@ input:disabled,
   cursor: pointer;
   align-items: center;
   position: relative;
+  transition: color .3s linear, background-color .3s linear;
 }
 
 .tabs-item:hover {
@@ -3453,6 +3486,17 @@ input:disabled,
   margin-right: 1rem;
   margin-left: 0rem;
 }
+
+.layout-main > .tabs.tabs-top.tabs-border-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  border: none;
+  overflow: auto;
+}
+
 /*end tabs*/
 
 /*transfer*/
@@ -5055,6 +5099,7 @@ input:disabled,
 
   .layout.is-page .layout-side {
     width: 214px;
+    box-shadow: 0 14px 28px rgba(0,0,0,.25),0 10px 10px rgba(0,0,0,.22);
   }
 
   .layout.is-page .layout-side.is-collapsed,
@@ -5101,6 +5146,7 @@ input:disabled,
     flex: 1 1 auto;
     opacity: 1;
     transition: opacity 0.3s linear;
+    color: #e9ecef;
   }
 
   .layout.is-page .is-collapsed .layout-title {
@@ -5475,11 +5521,7 @@ input:disabled,
   margin: 0;
   background-color: rgba($black, 0.5);
   transform: translateX(-100%);
-  z-index: 2020;
-}
-
-.drawer-wrapper.is-open {
-  transform: translateX(0);
+  z-index: 1050;
 }
 
 .drawer-container {
@@ -5534,8 +5576,30 @@ input:disabled,
   transform: translateY(100%);
 }
 
-.is-open .drawer {
+.is-open .drawer,
+.is-open.drawer-wrapper,
+.is-close.drawer-wrapper {
   transform: translateX(0);
+}
+
+.is-close .drawer {
+  transform: translateX(0);
+}
+ 
+.is-close .drawer {
+  transform: translateX(-100%);
+}
+
+.is-close .drawer.right {
+  transform: translateX(100%);
+}
+
+.is-close .drawer.top {
+  transform: translateY(-100%);
+}
+
+.is-close .drawer.bottom {
+  transform: translateY(100%);
 }
 /*end drawer*/
 
@@ -5544,7 +5608,7 @@ input:disabled,
   position: fixed;
   left: 1rem;
   right: 1rem;
-  z-index: 1040;
+  z-index: 1055;
   pointer-events: none;
 }
 
@@ -5579,6 +5643,10 @@ input:disabled,
 /*end message*/
 
 /*tree*/
+.tree {
+  position: relative;
+}
+
 .tree .tree-root {
   padding: 0;
   margin: 0;
@@ -5833,6 +5901,10 @@ input:disabled,
   border: 1px solid $primary-200;
 }
 
+.listview .listview-body .listview-item .card {
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+}
+
 .listview .listview-body .listview-item-group {
   flex-basis: 100%;
   margin: 1rem 0;
@@ -6040,3 +6112,63 @@ input:disabled,
   display: none;
 }
 /*end scanner*/
+
+/*widget*/
+.widget .dropdown-toggle {
+  color: #fff;
+  padding: 14px 15px;
+  position: relative;
+}
+
+.widget .dropdown-toggle:after {
+  content: unset;
+}
+
+.widget .dropdown-toggle .badge {
+  position: absolute;
+  top: 5px;
+  font-size: 9px;
+}
+
+.widget .dropdown-menu {
+  overflow: visible;
+  width: 235px;
+  margin-left: -96px;
+  padding: 0;
+  max-height: none;
+  border: none;
+}
+
+.widget .dropdown-menu .dropdown-arrow {
+  border-style: solid;
+  border-width: 0 9px 9px;
+  position: absolute;
+  left: 108px;
+  top: -9px;
+}
+
+.widget .dropdown-header {
+  color: #fff;
+  padding: 0.5rem 0.625rem;
+  border-radius: 4px 4px 0 0;
+}
+
+.widget .dropdown-body {
+  overflow: auto;
+  max-height: 300px;
+}
+
+.widget .dropdown-footer {
+  padding: 0.5rem 0.625rem;
+  background-color: #dcdfe6;
+  border-radius: 0 0 4px 4px;
+}
+
+.widget .dropdown-item {
+  border-bottom: 1px solid #dcdfe6;
+}
+
+.widget .dropdown-item:nth-of-type(odd) {
+  background-color: #eef0f3;
+}
+/*end widget*/
