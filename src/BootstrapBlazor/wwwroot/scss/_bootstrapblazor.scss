@@ -3102,20 +3102,20 @@ input:disabled,
 
 .tabs .tabs-nav-wrap .nav-link-bar {
   padding: 0.5rem 1rem;
-  background-color: #fff;
-  border: 1px solid #dcdfe6;
+  background-color: $white;
+  border: 1px solid $gray-300;
   border-width: 0 0 1px 1px;
   height: 39px;
   cursor: pointer;
 }
 
 .tabs .tabs-nav-wrap .nav-link-bar.left {
-  border: 1px solid #dcdfe6;
+  border: 1px solid $gray-300;
   border-width: 0 1px 1px 0;
 }
 
 .tabs .tabs-nav-wrap .nav-link-bar.right {
-  border: 1px solid #dcdfe6;
+  border: 1px solid $gray-300;
   border-width: 0 0 1px 1px;
 }
 
@@ -3128,7 +3128,7 @@ input:disabled,
 }
 
 .tabs .tabs-nav-wrap .dropdown-item:hover {
-  background-color: #409eff;
+  background-color: $primary-200;
 }
 
 /*scroll*/
@@ -5099,7 +5099,7 @@ input:disabled,
 
   .layout.is-page .layout-side {
     width: 214px;
-    box-shadow: 0 14px 28px rgba(0,0,0,.25),0 10px 10px rgba(0,0,0,.22);
+    box-shadow: 0 14px 28px rgba($black,.25),0 10px 10px rgba($black,.22);
   }
 
   .layout.is-page .layout-side.is-collapsed,
@@ -5146,7 +5146,7 @@ input:disabled,
     flex: 1 1 auto;
     opacity: 1;
     transition: opacity 0.3s linear;
-    color: #e9ecef;
+    color: $gray-200;
   }
 
   .layout.is-page .is-collapsed .layout-title {
@@ -5902,7 +5902,7 @@ input:disabled,
 }
 
 .listview .listview-body .listview-item .card {
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  box-shadow: 0 2px 12px 0 rgba($black,.1);
 }
 
 .listview .listview-body .listview-item-group {
@@ -6115,7 +6115,7 @@ input:disabled,
 
 /*widget*/
 .widget .dropdown-toggle {
-  color: #fff;
+  color: $white;
   padding: 14px 15px;
   position: relative;
 }
@@ -6148,7 +6148,7 @@ input:disabled,
 }
 
 .widget .dropdown-header {
-  color: #fff;
+  color: $white;
   padding: 0.5rem 0.625rem;
   border-radius: 4px 4px 0 0;
 }
@@ -6160,15 +6160,15 @@ input:disabled,
 
 .widget .dropdown-footer {
   padding: 0.5rem 0.625rem;
-  background-color: #dcdfe6;
+  background-color: $gray-300;
   border-radius: 0 0 4px 4px;
 }
 
 .widget .dropdown-item {
-  border-bottom: 1px solid #dcdfe6;
+  border-bottom: 1px solid $gray-300;
 }
 
 .widget .dropdown-item:nth-of-type(odd) {
-  background-color: #eef0f3;
+  background-color: $gray-100;
 }
 /*end widget*/
