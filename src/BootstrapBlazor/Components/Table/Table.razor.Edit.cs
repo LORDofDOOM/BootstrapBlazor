@@ -1,11 +1,6 @@
-﻿// **********************************
-// 框架名称：BootstrapBlazor 
-// 框架作者：Argo Zhang
-// 开源地址：
-// Gitee : https://gitee.com/LongbowEnterprise/BootstrapBlazor
-// GitHub: https://github.com/ArgoZhang/BootstrapBlazor 
-// 开源协议：LGPL-3.0 (https://gitee.com/LongbowEnterprise/BootstrapBlazor/blob/dev/LICENSE)
-// **********************************
+﻿// Copyright (c) Argo Zhang (argo@163.com). All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -175,6 +170,28 @@ namespace BootstrapBlazor.Components
         [Parameter]
         public bool AutoGenerateColumns { get; set; }
 
+        [NotNull]
+        private string? DataServiceInvalidOperationText { get; set; }
+
+        /// <summary>
+        /// 获得/设置 注入数据服务
+        /// </summary>
+        [Inject]
+        [NotNull]
+        private IEnumerable<IDataService<TItem>>? DataServices { get; set; }
+
+        private IDataService<TItem> GetDataService()
+        {
+            if (DataServices.Any())
+            {
+                return DataServices.Last();
+            }
+            else
+            {
+                throw new InvalidOperationException(DataServiceInvalidOperationText);
+            }
+        }
+
         /// <summary>
         /// 单选模式下选择行时调用此方法
         /// </summary>
@@ -223,10 +240,28 @@ namespace BootstrapBlazor.Components
         /// </summary>
         protected async Task QueryData()
         {
+            // https://gitee.com/LongbowEnterprise/BootstrapBlazor/issues/I29YK1
+            // TODO: 选中行目前不支持跨页
+            // 原因是选中行实例无法在翻页后保持
+            SelectedItems.Clear();
+
             QueryData<TItem>? queryData = null;
             if (OnQueryAsync != null)
             {
                 queryData = await OnQueryAsync(new QueryPageOptions()
+                {
+                    PageIndex = PageIndex,
+                    PageItems = PageItems,
+                    SearchText = SearchText,
+                    SortOrder = SortOrder,
+                    SortName = SortName,
+                    Filters = Filters.Values,
+                    SearchModel = SearchModel
+                });
+            }
+            else if (UseInjectDataService)
+            {
+                queryData = await GetDataService().QueryAsync(new QueryPageOptions()
                 {
                     PageIndex = PageIndex,
                     PageItems = PageItems,

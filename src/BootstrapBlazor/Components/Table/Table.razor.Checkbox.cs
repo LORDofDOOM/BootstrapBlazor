@@ -1,11 +1,6 @@
-﻿// **********************************
-// 框架名称：BootstrapBlazor 
-// 框架作者：Argo Zhang
-// 开源地址：
-// Gitee : https://gitee.com/LongbowEnterprise/BootstrapBlazor
-// GitHub: https://github.com/ArgoZhang/BootstrapBlazor 
-// 开源协议：LGPL-3.0 (https://gitee.com/LongbowEnterprise/BootstrapBlazor/blob/dev/LICENSE)
-// **********************************
+﻿// Copyright (c) Argo Zhang (argo@163.com). All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using Microsoft.AspNetCore.Components;
 using System;
@@ -124,8 +119,6 @@ namespace BootstrapBlazor.Components
                     : (SelectedItems.Count == Items.Count() ? CheckboxState.Checked : CheckboxState.Mixed);
                 await HeaderCheckbox.SetState(headerCheckboxState);
             }
-
-            if (SelectedRowsChanged.HasDelegate) await SelectedRowsChanged.InvokeAsync(SelectedRows);
 
             // https://gitee.com/LongbowEnterprise/BootstrapBlazor/issues/I1UYQG
             StateHasChanged();

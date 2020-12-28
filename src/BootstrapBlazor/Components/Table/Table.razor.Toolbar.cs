@@ -1,11 +1,6 @@
-﻿// **********************************
-// 框架名称：BootstrapBlazor 
-// 框架作者：Argo Zhang
-// 开源地址：
-// Gitee : https://gitee.com/LongbowEnterprise/BootstrapBlazor
-// GitHub: https://github.com/ArgoZhang/BootstrapBlazor 
-// 开源协议：LGPL-3.0 (https://gitee.com/LongbowEnterprise/BootstrapBlazor/blob/dev/LICENSE)
-// **********************************
+﻿// Copyright (c) Argo Zhang (argo@163.com). All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -179,10 +174,21 @@ namespace BootstrapBlazor.Components
         /// </summary>
         public async Task AddAsync()
         {
-            if (OnSaveAsync != null)
+            if (UseInjectDataService || OnSaveAsync != null)
             {
-                if (OnAddAsync != null) EditModel = await OnAddAsync();
-                else EditModel = new TItem();
+                if (OnAddAsync != null)
+                {
+                    EditModel = await OnAddAsync();
+                }
+                else if (UseInjectDataService)
+                {
+                    EditModel = new TItem();
+                    await GetDataService().AddAsync(EditModel);
+                }
+                else
+                {
+                    EditModel = new TItem();
+                }
 
                 SelectedItems.Clear();
                 EditModalTitleString = AddModalTitle;
@@ -215,13 +221,21 @@ namespace BootstrapBlazor.Components
         /// <summary>
         /// 编辑按钮方法
         /// </summary>
-        public Task EditAsync()
+        public async Task EditAsync()
         {
-            if (OnSaveAsync != null)
+            if (UseInjectDataService || OnSaveAsync != null)
             {
                 if (SelectedItems.Count == 1)
                 {
-                    EditModel = SelectedItems[0].Clone();
+                    if (UseInjectDataService && GetDataService() is IEntityFrameworkCoreDataService ef)
+                    {
+                        EditModel = SelectedItems[0];
+                        await ef.EditAsync(EditModel);
+                    }
+                    else
+                    {
+                        EditModel = SelectedItems[0].Clone();
+                    }
                     EditModalTitleString = EditModalTitle;
 
                     if (EditMode == EditMode.Popup)
@@ -255,7 +269,6 @@ namespace BootstrapBlazor.Components
                 };
                 Toast.Show(option);
             }
-            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -275,10 +288,10 @@ namespace BootstrapBlazor.Components
         /// 保存数据
         /// </summary>
         /// <param name="context"></param>
-        protected async Task Save(EditContext context)
+        protected async Task SaveAsync(EditContext context)
         {
             var valid = false;
-            if (OnSaveAsync != null)
+            if (UseInjectDataService || OnSaveAsync != null)
             {
                 if (EditMode == EditMode.EditForm)
                 {
@@ -286,7 +299,8 @@ namespace BootstrapBlazor.Components
                     ShowEditForm = false;
                 }
 
-                valid = await OnSaveAsync((TItem)context.Model);
+                if (OnSaveAsync != null) valid = await OnSaveAsync((TItem)context.Model);
+                else valid = await GetDataService().SaveAsync((TItem)context.Model);
                 var option = new ToastOption
                 {
                     Category = valid ? ToastCategory.Success : ToastCategory.Error,
@@ -294,9 +308,9 @@ namespace BootstrapBlazor.Components
                 };
                 option.Content = string.Format(SaveButtonToastResultContent, valid ? SuccessText : FailText, Math.Ceiling(option.Delay / 1000.0));
                 Toast.Show(option);
-                if (valid)
+                if (valid && DialogOption.Dialog != null)
                 {
-                    DialogOption.Dialog?.Toggle();
+                    await DialogOption.Dialog.Close();
                     await QueryAsync();
                 }
             }
@@ -323,18 +337,27 @@ namespace BootstrapBlazor.Components
             DialogOption.ShowFooter = false;
             DialogOption.Size = Size.ExtraLarge;
             DialogOption.Title = EditModalTitleString;
-
+            DialogOption.OnCloseAsync = async () =>
+            {
+                if (UseInjectDataService && GetDataService() is IEntityFrameworkCoreDataService ef)
+                {
+                    // EFCore
+                    await ef.CancelAsync();
+                }
+            };
             var editorParameters = new List<KeyValuePair<string, object>>
             {
                 new KeyValuePair<string, object>(nameof(TableEditorDialog<TItem>.Model), EditModel),
                 new KeyValuePair<string, object>(nameof(TableEditorDialog<TItem>.Columns), Columns.Where(i => i.Editable)),
-                new KeyValuePair<string, object>(nameof(TableEditorDialog<TItem>.OnSaveAsync), new Func<EditContext, Task>(Save)),
+                new KeyValuePair<string, object>(nameof(TableEditorDialog<TItem>.OnCloseAsync), new Func<Task>(DialogOption.OnCloseAsync)),
+                new KeyValuePair<string, object>(nameof(TableEditorDialog<TItem>.OnSaveAsync), new Func<EditContext, Task>(SaveAsync)),
                 new KeyValuePair<string, object>(nameof(TableEditorDialog<TItem>.ShowLabel), false),
                 new KeyValuePair<string, object>(nameof(TableEditorDialog<TItem>.BodyTemplate), EditTemplate!)
             };
             if (!string.IsNullOrEmpty(EditDialogSaveButtonText)) editorParameters.Add(new KeyValuePair<string, object>(nameof(TableEditorDialog<TItem>.SaveButtonText), EditDialogSaveButtonText));
 
             DialogOption.Component = DynamicComponent.CreateComponent<TableEditorDialog<TItem>>(editorParameters);
+
             DialogService.Show(DialogOption);
         }
 
@@ -368,6 +391,7 @@ namespace BootstrapBlazor.Components
         {
             var ret = false;
             if (OnDeleteAsync != null) ret = await OnDeleteAsync(SelectedItems);
+            else if (UseInjectDataService) ret = await GetDataService().DeleteAsync(SelectedItems);
             var option = new ToastOption()
             {
                 Title = DeleteButtonToastTitle

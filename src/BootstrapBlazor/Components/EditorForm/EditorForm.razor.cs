@@ -1,11 +1,6 @@
-﻿// **********************************
-// 框架名称：BootstrapBlazor 
-// 框架作者：Argo Zhang
-// 开源地址：
-// Gitee : https://gitee.com/LongbowEnterprise/BootstrapBlazor
-// GitHub: https://github.com/ArgoZhang/BootstrapBlazor 
-// 开源协议：LGPL-3.0 (https://gitee.com/LongbowEnterprise/BootstrapBlazor/blob/dev/LICENSE)
-// **********************************
+﻿// Copyright (c) Argo Zhang (argo@163.com). All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using BootstrapBlazor.Components.EditorForm;
 using Microsoft.AspNetCore.Components;
@@ -207,12 +202,12 @@ namespace BootstrapBlazor.Components
                 builder.AddAttribute(index++, "ValueChanged", fieldValueChanged);
                 builder.AddAttribute(index++, "ValueExpression", valueExpression);
                 builder.AddAttribute(index++, "IsDisabled", col.Readonly);
-                builder.AddMultipleAttributes(index++, CreateMultipleAttributes(fieldType));
+                builder.AddMultipleAttributes(index++, CreateMultipleAttributes(fieldType, fieldName));
                 builder.CloseComponent();
             }
         };
 
-        private IEnumerable<KeyValuePair<string, object>> CreateMultipleAttributes(Type fieldType)
+        private IEnumerable<KeyValuePair<string, object>> CreateMultipleAttributes(Type fieldType, string fieldName)
         {
             var ret = new List<KeyValuePair<string, object>>();
             var type = Nullable.GetUnderlyingType(fieldType) ?? fieldType;
@@ -228,7 +223,8 @@ namespace BootstrapBlazor.Components
                 switch (type.Name)
                 {
                     case nameof(String):
-                        ret.Add(new KeyValuePair<string, object>("placeholder", PlaceHolderText));
+                        var placeHolder = Model.GetPlaceHolder(fieldName);
+                        ret.Add(new KeyValuePair<string, object>("placeholder", placeHolder ?? PlaceHolderText));
                         break;
                     default:
                         break;

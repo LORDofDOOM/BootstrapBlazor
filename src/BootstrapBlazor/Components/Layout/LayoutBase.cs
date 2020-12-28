@@ -1,17 +1,13 @@
-﻿// **********************************
-// 框架名称：BootstrapBlazor 
-// 框架作者：Argo Zhang
-// 开源地址：
-// Gitee : https://gitee.com/LongbowEnterprise/BootstrapBlazor
-// GitHub: https://github.com/ArgoZhang/BootstrapBlazor 
-// 开源协议：LGPL-3.0 (https://gitee.com/LongbowEnterprise/BootstrapBlazor/blob/dev/LICENSE)
-// **********************************
+﻿// Copyright (c) Argo Zhang (argo@163.com). All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace BootstrapBlazor.Components
@@ -142,6 +138,18 @@ namespace BootstrapBlazor.Components
         public IEnumerable<MenuItem>? Menus { get; set; }
 
         /// <summary>
+        /// 获得/设置 是否右侧使用 Tab 组件 默认为 false 不使用
+        /// </summary>
+        [Parameter]
+        public bool UseTabSet { get; set; }
+
+        /// <summary>
+        /// 获得/设置 Gets or sets a collection of additional assemblies that should be searched for components that can match URIs.
+        /// </summary>
+        [Parameter]
+        public IEnumerable<Assembly>? AdditionalAssemblies { get; set; }
+
+        /// <summary>
         /// 获得/设置 是否固定 Footer 组件
         /// </summary>
         [Parameter]
@@ -212,13 +220,13 @@ namespace BootstrapBlazor.Components
         /// 点击菜单时回调此方法
         /// </summary>
         /// <returns></returns>
-        protected async Task ClickMenu(MenuItem item)
+        protected Func<MenuItem, Task> ClickMenu() => async item =>
         {
             // 小屏幕时生效
             if (IsSmallScreen && !item.Items.Any()) await CollapseMenu();
 
             if (OnClickMenu != null) await OnClickMenu(item);
-        }
+        };
 
         /// <summary>
         /// 设置 请求头方法

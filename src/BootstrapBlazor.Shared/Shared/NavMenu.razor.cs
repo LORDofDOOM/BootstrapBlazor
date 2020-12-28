@@ -1,11 +1,6 @@
-﻿// **********************************
-// 框架名称：BootstrapBlazor 
-// 框架作者：Argo Zhang
-// 开源地址：
-// Gitee : https://gitee.com/LongbowEnterprise/BootstrapBlazor
-// GitHub: https://github.com/ArgoZhang/BootstrapBlazor 
-// 开源协议：LGPL-3.0 (https://gitee.com/LongbowEnterprise/BootstrapBlazor/blob/dev/LICENSE)
-// **********************************
+﻿// Copyright (c) Argo Zhang (argo@163.com). All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using BootstrapBlazor.Components;
 using BootstrapBlazor.Shared.Pages.Components;
@@ -144,6 +139,12 @@ namespace BootstrapBlazor.Shared.Shared
                 Text = "客户端模式 wasm",
                 Url = "install-wasm"
             });
+            item.AddItem(new DemoMenuItem()
+            {
+                Text = "后台模板模拟器",
+                Url = "layout-page",
+                IsNew = true
+            });
 
             item.IsCollapsed = false;
             Menus.Add(item);
@@ -188,6 +189,7 @@ namespace BootstrapBlazor.Shared.Shared
             });
             item.AddItem(new DemoMenuItem()
             {
+                IsUpdate = true,
                 Text = "时间范围框 DateTimeRange",
                 Url = "datetimeranges"
             });
@@ -319,6 +321,12 @@ namespace BootstrapBlazor.Shared.Shared
             });
             item.AddItem(new DemoMenuItem()
             {
+                IsNew = true,
+                Text = "挂架 DropdownWidget",
+                Url = "widgets"
+            });
+            item.AddItem(new DemoMenuItem()
+            {
                 Text = "列表组件 ListView",
                 Url = "listviews"
             });
@@ -334,6 +342,7 @@ namespace BootstrapBlazor.Shared.Shared
             });
             item.AddItem(new DemoMenuItem()
             {
+                IsUpdate = true,
                 Text = "搜索框 Search",
                 Url = "searchs"
             });
@@ -393,8 +402,7 @@ namespace BootstrapBlazor.Shared.Shared
             it.AddItem(new DemoMenuItem()
             {
                 Text = "列设置",
-                Url = "tables/column",
-                IsUpdate = true
+                Url = "tables/column"
             });
 
             it.AddItem(new DemoMenuItem()
@@ -436,8 +444,7 @@ namespace BootstrapBlazor.Shared.Shared
             it.AddItem(new DemoMenuItem()
             {
                 Text = "固定列",
-                Url = "tables/fix-column",
-                IsUpdate = true
+                Url = "tables/fix-column"
             });
 
             it.AddItem(new DemoMenuItem()
@@ -571,6 +578,11 @@ namespace BootstrapBlazor.Shared.Shared
 
         private void AddNavigation(DemoMenuItem item)
         {
+            item.AddItem(new DemoMenuItem()
+            {
+                Text = "锚点 Anchor",
+                Url = "anchors"
+            });
             item.AddItem(new DemoMenuItem()
             {
                 Text = "面包屑 Breadcrumb",

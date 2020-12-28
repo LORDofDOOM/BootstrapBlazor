@@ -80,7 +80,11 @@
     "EndPlaceHolderText": "End date",
     "ClearButtonText": "Clear",
     "ConfirmButtonText": "Ok",
-    "DateFormat": "M/d/yyyy"
+    "DateFormat": "M/d/yyyy",
+    "Last7Days": "Last 7 Days",
+    "Last30Days": "Last 30 Days",
+    "ThisMonth": "This Month",
+    "LastMonth": "Last Month"
   },
   "BootstrapBlazor.Components.DropdownList": {
     "PlaceHolder": "Please select ..."
@@ -150,6 +154,11 @@
     "OnInnerText": "On",
     "OffInnerText": "Off"
   },
+  "BootstrapBlazor.Components.Tab": {
+    "CloseCurrentTabText": "Close",
+    "CloseOtherTabsText": "Close Other",
+    "CloseAllTabsText": "Close All"
+  },
   "BootstrapBlazor.Components.Table": {
     "AddButtonText": "Add",
     "EditButtonText": "Edit",
@@ -185,7 +194,8 @@
     "FailText": "Failed",
     "DeleteButtonToastTitle": "Delete Data",
     "DeleteButtonToastContent": "Please select DELETE rows, auto close after {1}s",
-    "DeleteButtonToastResultContent": "Delete data {0}, auto close after {1}s"
+    "DeleteButtonToastResultContent": "Delete data {0}, auto close after {1}s",
+    "DataServiceInvalidOperationText": "Cannot provide a value for property 'DataService' on type 'BootstrapBlazor.Components.Table`1[[{0}]]'. There is no registered service of type 'BootstrapBlazor.Components.IDataService`1[{0}]'."
   },
   "BootstrapBlazor.Components.TableEditorDialog": {
     "CloseButtonText": "Close",

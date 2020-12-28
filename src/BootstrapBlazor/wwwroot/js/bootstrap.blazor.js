@@ -1308,6 +1308,15 @@
         bb_table: function (el, method, args) {
             var $ele = $(el);
 
+            var tooltip = function () {
+                $ele.find('.is-tips').tooltip({
+                    container: 'body',
+                    title: function () {
+                        return $(this).text();
+                    }
+                });
+            }
+
             var btn = $ele.find('.btn-col');
             if (!btn.hasClass('init')) {
                 btn.addClass('init');
@@ -1391,8 +1400,7 @@
                 var marginTop = 0;
                 if ($toolbar.length > 0) marginTop = $toolbar.height();
 
-                // 点击 filter 小按钮时计算弹出位置
-                $ele.find('.filterable .fa-filter').on('click', function () {
+                var calcPosition = function () {
                     // position
                     var position = $(this).position();
                     var field = $(this).attr('data-field');
@@ -1415,14 +1423,23 @@
                         $arrow.css({ 'left': 'calc(50% - 0.5rem + ' + (margin + 16) + 'px)' });
                     }
                     $body.css({ "top": position.top + marginTop + 50, "left": left - marginRight });
+                };
+
+                // 点击 filter 小按钮时计算弹出位置
+                $ele.find('.filterable .fa-filter').on('click', function () {
+                    calcPosition.call(this);
                 });
 
-                $ele.find('.is-tips').tooltip({
-                    container: 'body',
-                    title: function () {
-                        return $(this).text();
-                    }
+                tooltip();
+
+                $ele.children('.table-scroll').scroll(function () {
+                    $ele.find('.table-filter-item.show').each(function () {
+                        var fieldName = $(this).attr('data-field');
+                        var filter = $ele.find('.fa-filter[data-field="' + fieldName + '"]')[0];
+                        calcPosition.call(filter);
+                    });
                 });
+
                 $.bb_table_resize($ele);
             }
             else if (method === 'width') {
@@ -1430,6 +1447,9 @@
                 if (args) width = $ele.outerWidth(true);
                 else width = $(window).outerWidth(true);
                 return width;
+            }
+            else if (method === 'tooltip') {
+                tooltip();
             }
         },
         timePicker: function (el) {
@@ -1505,14 +1525,9 @@
                         }
                     });
 
-                //$('.datetime-picker-input-icon').on('click', function (e) {
-                //    // handler disabled event
-                //    if ($(this).hasClass('disabled')) return;
-
-                //    e.stopImmediatePropagation();
-                //    var $input = $(this).parents('.datetime-picker-bar').find('.datetime-picker-input');
-                //    $input.trigger('click');
-                //});
+                $el.find('.is-clear').on('click', function () {
+                    $input.popover('hide');
+                });
             }
             else $input.popover(method);
         },
@@ -1617,6 +1632,27 @@
                 e.preventDefault();
                 $(target || window).scrollTop(0);
                 tooltip.tooltip('hide');
+            });
+        },
+        bb_anchor: function (el) {
+            var $el = $(el);
+            $el.on('click', function (e) {
+                e.preventDefault();
+                var $target = $($el.data('target'));
+                var container = $el.data('container');
+                if (!container) {
+                    container = window;
+                }
+                var margin = $target.offset().top;
+                var marginTop = $target.css("marginTop").replace('px', '');
+                if (marginTop) {
+                    margin = margin - parseInt(marginTop);
+                }
+                var offset = $el.data('offset');
+                if (offset) {
+                    margin = margin - parseInt(offset);
+                }
+                $(container).scrollTop(margin);
             });
         },
         bb_editor: function (el, obj, attrMethod, callback, method, height, value) {
@@ -1975,6 +2011,23 @@
                 $el.on('shown.bs.dropdown', function () {
                     $search.focus();
                 });
+            }
+        },
+        bb_drawer: function (el, open) {
+            var $el = $(el);
+            if (open) {
+                $el.addClass('is-open');
+                $('body').addClass('overflow-hidden');
+            }
+            else {
+                if ($el.hasClass('is-open')) {
+                    $el.removeClass('is-open').addClass('is-close');
+                    var handler = window.setTimeout(function () {
+                        window.clearTimeout(handler);
+                        $el.removeClass('is-close');
+                        $('body').removeClass('overflow-hidden');
+                    }, 350);
+                }
             }
         }
     });

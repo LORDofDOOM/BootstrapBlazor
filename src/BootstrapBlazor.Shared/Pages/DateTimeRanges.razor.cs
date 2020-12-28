@@ -1,11 +1,6 @@
-﻿// **********************************
-// 框架名称：BootstrapBlazor 
-// 框架作者：Argo Zhang
-// 开源地址：
-// Gitee : https://gitee.com/LongbowEnterprise/BootstrapBlazor
-// GitHub: https://github.com/ArgoZhang/BootstrapBlazor 
-// 开源协议：LGPL-3.0 (https://gitee.com/LongbowEnterprise/BootstrapBlazor/blob/dev/LICENSE)
-// **********************************
+﻿// Copyright (c) Argo Zhang (argo@163.com). All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using BootstrapBlazor.Components;
 using BootstrapBlazor.Shared.Common;
@@ -30,6 +25,8 @@ namespace BootstrapBlazor.Shared.Pages
         private DateTimeRangeValue DateTimeRangeValue2 { get; set; } = new DateTimeRangeValue();
 
         private DateTimeRangeValue DateTimeRangeValue3 { get; set; } = new DateTimeRangeValue() { Start = DateTime.Today, End = DateTime.Today.AddDays(3) };
+
+        private DateTimeRangeValue DateTimeRangeValue4 { get; set; } = new DateTimeRangeValue();
 
         private Task OnConfirm(DateTimeRangeValue value)
         {
@@ -67,6 +64,14 @@ namespace BootstrapBlazor.Shared.Pages
             },
             new AttributeItem()
             {
+                Name = "ShowSidebar",
+                Description = "是否显示快捷侧边栏 默认为 fasle",
+                Type = "bool",
+                ValueList = "true|false",
+                DefaultValue = "false"
+            },
+            new AttributeItem()
+            {
                 Name = "Placement",
                 Description = "设置弹窗出现位置",
                 Type = "Placement",
@@ -91,6 +96,13 @@ namespace BootstrapBlazor.Shared.Pages
                 Name = "Value",
                 Description = "包含开始时间结束时间的自定义类",
                 Type = "DateTimeRangeValue",
+                ValueList = "",
+                DefaultValue = " — "
+            },
+            new AttributeItem() {
+                Name = "SidebarItems",
+                Description = "侧边栏快捷选项集合",
+                Type = "IEnumerable<DateTimeRangeSidebarItem>",
                 ValueList = "",
                 DefaultValue = " — "
             }

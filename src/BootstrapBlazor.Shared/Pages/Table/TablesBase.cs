@@ -1,11 +1,6 @@
-﻿// **********************************
-// 框架名称：BootstrapBlazor 
-// 框架作者：Argo Zhang
-// 开源地址：
-// Gitee : https://gitee.com/LongbowEnterprise/BootstrapBlazor
-// GitHub: https://github.com/ArgoZhang/BootstrapBlazor 
-// 开源协议：LGPL-3.0 (https://gitee.com/LongbowEnterprise/BootstrapBlazor/blob/dev/LICENSE)
-// **********************************
+﻿// Copyright (c) Argo Zhang (argo@163.com). All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using BootstrapBlazor.Components;
 using BootstrapBlazor.Shared.Common;
@@ -14,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace BootstrapBlazor.Shared.Pages
@@ -38,7 +34,7 @@ namespace BootstrapBlazor.Shared.Pages
         /// 
         /// </summary>
         /// <returns></returns>
-        protected static List<BindItem> GenerateItems() => Enumerable.Range(1, 80).Select(i => new BindItem()
+        internal static List<BindItem> GenerateItems() => Enumerable.Range(1, 80).Select(i => new BindItem()
         {
             Id = i,
             Name = $"张三 {i:d4}",
@@ -58,12 +54,12 @@ namespace BootstrapBlazor.Shared.Pages
         /// 
         /// </summary>
         /// <returns></returns>
-        protected IEnumerable<AttributeItem> GetTableColumnAttributes() => new AttributeItem[]
+        protected static IEnumerable<AttributeItem> GetTableColumnAttributes() => new AttributeItem[]
         {
             new AttributeItem() {
                 Name = "Sortable",
                 Description = "是否排序",
-                Type = "string",
+                Type = "boolean",
                 ValueList = "true|false",
                 DefaultValue = "false"
             },
@@ -185,7 +181,7 @@ namespace BootstrapBlazor.Shared.Pages
         /// 获得属性方法
         /// </summary>
         /// <returns></returns>
-        protected IEnumerable<AttributeItem> GetAttributes() => new AttributeItem[]
+        protected static IEnumerable<AttributeItem> GetAttributes() => new AttributeItem[]
         {
             // TODO: 移动到数据库中
             new AttributeItem() {
@@ -497,6 +493,13 @@ namespace BootstrapBlazor.Shared.Pages
                 DefaultValue = " — "
             },
             new AttributeItem() {
+                Name = "OnClickRowCallback",
+                Description = "点击行回调委托方法",
+                Type = "Func<TItem, Task>",
+                ValueList = " — ",
+                DefaultValue = " — "
+            },
+            new AttributeItem() {
                 Name = "OnDoubleClickRowCallback",
                 Description = "双击行回调委托方法",
                 Type = "Func<TItem, Task>",
@@ -532,6 +535,20 @@ namespace BootstrapBlazor.Shared.Pages
                 DefaultValue = " — "
             },
             new AttributeItem() {
+                Name = "AddModalTitle",
+                Description = "新建数据弹窗 Title",
+                Type = "string",
+                ValueList = " — ",
+                DefaultValue = " — "
+            },
+            new AttributeItem() {
+                Name = "EditModalTitle",
+                Description = "编辑数据弹窗 Title",
+                Type = "string",
+                ValueList = " — ",
+                DefaultValue = " — "
+            },
+            new AttributeItem() {
                 Name = "RenderModel",
                 Description = "Table 组件布局模式设置",
                 Type = "TableRenderModel",
@@ -544,7 +561,7 @@ namespace BootstrapBlazor.Shared.Pages
         /// 
         /// </summary>
         /// <returns></returns>
-        protected IEnumerable<MethodItem> GetMethods() => new MethodItem[]
+        protected static IEnumerable<MethodItem> GetMethods() => new MethodItem[]
         {
             new MethodItem()
             {
@@ -573,58 +590,67 @@ namespace BootstrapBlazor.Shared.Pages
     /// <summary>
     /// 
     /// </summary>
+    //[TableName("Test")]
+    //[PrimaryKey("Id", AutoIncrement = true)]
+    //[FreeSql.DataAnnotations.Table(Name = "Test")]
+    [Table("Test")]
     public class BindItem
     {
+        // 列头信息支持 ColumnName Display DisplayName 三种标签
+
         /// <summary>
         /// 
         /// </summary>
-        [DisplayName("主键")]
+        [Display(Name = "主键")]
         [AutoGenerateColumn(Ignore = true)]
+        //[Key]
+        //[FreeSql.DataAnnotations.Column(IsIdentity = true)]
         public int Id { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [DisplayName("姓名")]
-        [Required(ErrorMessage = "姓名不能为空")]
+        [Required(ErrorMessage = "{0}不能为空")]
         [AutoGenerateColumn(Order = 10)]
+        [ColumnName(Name = "姓名", ResourceName = "Name", ResourceType = typeof(BindItem))]
         public string? Name { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [DisplayName("日期")]
-        [AutoGenerateColumn(Order = 1, FormatString = "yyyy-MM-dd")]
+        [AutoGenerateColumn(Order = 1, FormatString = "yyyy-MM-dd", Width = 180)]
+        [ColumnName(Name = "日期", ResourceName = "DateTime", ResourceType = typeof(BindItem))]
         public DateTime? DateTime { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [DisplayName("地址")]
-        [Required(ErrorMessage = "地址不能为空")]
+        [ColumnName(Name = "地址", ResourceName = "Address", ResourceType = typeof(BindItem))]
+        [Required(ErrorMessage = "{0}不能为空")]
         [AutoGenerateColumn(Order = 20)]
         public string? Address { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [DisplayName("数量")]
+        [ColumnName(Name = "数量", ResourceName = "Count", ResourceType = typeof(BindItem))]
         [AutoGenerateColumn(Order = 40)]
         public int Count { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [DisplayName("是/否")]
+        [ColumnName(Name = "是/否", ResourceName = "Complete", ResourceType = typeof(BindItem))]
         [AutoGenerateColumn(Order = 50)]
         public bool Complete { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [Required(ErrorMessage = "请选择学历")]
-        [DisplayName("学历")]
+        [Required(ErrorMessage = "请选择{0}")]
+        [ColumnName(Name = "学历", ResourceName = "Education", ResourceType = typeof(BindItem))]
         [AutoGenerateColumn(Order = 60)]
+        //[EnumConverter(typeof(EnumEducation))]
         public EnumEducation? Education { get; set; }
     }
 
@@ -645,4 +671,36 @@ namespace BootstrapBlazor.Shared.Pages
         [Description("中学")]
         Middel
     }
+
+    ///// <summary>
+    ///// BindItemContext 上下文操作类
+    ///// </summary>
+    //public class BindItemDbContext : DbContext
+    //{
+    //    /// <summary>
+    //    /// 构造函数
+    //    /// </summary>
+    //    /// <param name="options"></param>
+    //    public BindItemDbContext(DbContextOptions<BindItemDbContext> options) : base(options)
+    //    {
+
+    //    }
+
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    public DbSet<BindItem>? BindItems { get; set; }
+
+    //    /// <summary>
+    //    /// OnModelCreating 方法
+    //    /// </summary>
+    //    /// <param name="modelBuilder"></param>
+    //    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    //    {
+    //        modelBuilder.Entity(delegate (EntityTypeBuilder<BindItem> entity)
+    //        {
+    //            entity.HasKey(e => e.Id);
+    //        });
+    //    }
+    //}
 }

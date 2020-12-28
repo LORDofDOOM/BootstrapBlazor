@@ -1,16 +1,12 @@
-﻿// **********************************
-// 框架名称：BootstrapBlazor 
-// 框架作者：Argo Zhang
-// 开源地址：
-// Gitee : https://gitee.com/LongbowEnterprise/BootstrapBlazor
-// GitHub: https://github.com/ArgoZhang/BootstrapBlazor 
-// 开源协议：LGPL-3.0 (https://gitee.com/LongbowEnterprise/BootstrapBlazor/blob/dev/LICENSE)
-// **********************************
+﻿// Copyright (c) Argo Zhang (argo@163.com). All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using BootstrapBlazor.Components;
 using BootstrapBlazor.Shared.Common;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,42 +17,57 @@ namespace BootstrapBlazor.Shared.Pages
     /// </summary>
     public sealed partial class Tabs
     {
+        [NotNull]
         private Tab? TabSet { get; set; }
 
-        private async Task AddTab()
+        [NotNull]
+        private Tab? TabSet2 { get; set; }
+
+        /// <summary>
+        /// OnInitialized 方法
+        /// </summary>
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (TabSet != null)
+            await base.OnAfterRenderAsync(firstRender);
+
+            if (firstRender)
             {
-                var text = $"Tab {TabSet.Items.Count() + 1}";
-                var item = new TabItem();
-                var parameters = new Dictionary<string, object>
+                var menuItem = TabMenu?.Items.FirstOrDefault();
+                if (menuItem != null)
                 {
-                    [nameof(TabItem.Text)] = text,
-                    [nameof(TabItem.IsActive)] = true,
-                    [nameof(TabItem.ChildContent)] = new RenderFragment(builder =>
+                    await InvokeAsync(() =>
                     {
-                        var index = 0;
-                        builder.OpenElement(index++, "div");
-                        builder.AddContent(index++, $"我是新建的 Tab 名称是 {text}");
-                        builder.CloseElement();
-                    })
-                };
-                var _ = item.SetParametersAsync(ParameterView.FromDictionary(parameters));
-                await TabSet.Add(item);
+                        var _ = TabMenu?.OnClick?.Invoke(menuItem);
+                    });
+                }
             }
+        }
+
+        private void AddTab(Tab tabset)
+        {
+            var text = $"Tab {tabset.Items.Count() + 1}";
+            tabset.Add(new Dictionary<string, object>
+            {
+                [nameof(TabItem.Text)] = text,
+                [nameof(TabItem.IsActive)] = true,
+                [nameof(TabItem.ChildContent)] = new RenderFragment(builder =>
+                {
+                    var index = 0;
+                    builder.OpenElement(index++, "div");
+                    builder.AddContent(index++, $"我是新建的 Tab 名称是 {text}");
+                    builder.CloseElement();
+                })
+            });
         }
 
         private string? RemoveEndableString => (TabSet?.Items.Count() > 4) ? null : "true";
 
-        private async Task RemoveTab()
+        private void RemoveTab(Tab tabset)
         {
-            if (TabSet != null)
+            if (tabset.Items.Count() > 4)
             {
-                if (TabSet.Items.Count() > 4)
-                {
-                    var item = TabSet.Items.Last();
-                    await TabSet.Remove(item);
-                }
+                var item = tabset.Items.Last();
+                tabset.Remove(item);
             }
         }
 
@@ -76,31 +87,27 @@ namespace BootstrapBlazor.Shared.Pages
             };
         }
 
+        [NotNull]
         private Tab? TabSetMenu { get; set; }
 
-        private async Task OnClickMenuItem(MenuItem item)
+        [NotNull]
+        private Menu? TabMenu { get; set; }
+
+        private Task OnClickMenuItem(MenuItem item)
         {
-            if (TabSetMenu != null)
-            {
-                var text = item.Text;
-                var tabItem = TabSetMenu.Items.FirstOrDefault(i => i.Text == text);
-                if (tabItem == null) await AddTabItem(text ?? "");
-                else await TabSetMenu.ActiveTab(tabItem);
-            }
+            var text = item.Text;
+            var tabItem = TabSetMenu.Items.FirstOrDefault(i => i.Text == text);
+            if (tabItem == null) AddTabItem(text ?? "");
+            else TabSetMenu.ActiveTab(tabItem);
+            return Task.CompletedTask;
         }
 
-        private async Task AddTabItem(string text)
+        private void AddTabItem(string text) => TabSetMenu.Add(new Dictionary<string, object>
         {
-            var item = new TabItem();
-            var parameters = new Dictionary<string, object>
-            {
-                [nameof(TabItem.Text)] = text,
-                [nameof(TabItem.IsActive)] = true,
-                [nameof(TabItem.ChildContent)] = text == "计数器" ? DynamicComponent.CreateComponent<Counter>().Render() : DynamicComponent.CreateComponent<FetchData>().Render()
-            };
-            var _ = item.SetParametersAsync(ParameterView.FromDictionary(parameters));
-            if (TabSetMenu != null) await TabSetMenu.Add(item);
-        }
+            [nameof(TabItem.Text)] = text,
+            [nameof(TabItem.IsActive)] = true,
+            [nameof(TabItem.ChildContent)] = text == "计数器" ? DynamicComponent.CreateComponent<Counter>().Render() : DynamicComponent.CreateComponent<FetchData>().Render()
+        });
 
         /// <summary>
         /// 获得属性方法
@@ -113,14 +120,35 @@ namespace BootstrapBlazor.Shared.Pages
                 Name = "IsBorderCard",
                 Description = "是否为带边框卡片样式",
                 Type = "boolean",
-                ValueList = " — ",
+                ValueList = "true/false",
                 DefaultValue = "false"
             },
             new AttributeItem() {
                 Name = "IsCard",
                 Description = "是否为卡片样式",
                 Type = "boolean",
+                ValueList = "true/false",
+                DefaultValue = "false"
+            },
+            new AttributeItem() {
+                Name = "ShowClose",
+                Description = "是否显示关闭按钮",
+                Type = "boolean",
+                ValueList = "true/false",
+                DefaultValue = "false"
+            },
+            new AttributeItem() {
+                Name = "ShowExtendButtons",
+                Description = "是否显示扩展按钮",
+                Type = "boolean",
                 ValueList = " — ",
+                DefaultValue = "false"
+            },
+            new AttributeItem() {
+                Name = "ClickTabToNavigation",
+                Description = "点击标题时是否导航",
+                Type = "boolean",
+                ValueList = "true/false",
                 DefaultValue = "false"
             },
             new AttributeItem() {
@@ -138,13 +166,6 @@ namespace BootstrapBlazor.Shared.Pages
                 DefaultValue = "0"
             },
             new AttributeItem() {
-                Name = "ShowClose",
-                Description = "是否显示关闭按钮",
-                Type = "boolean",
-                ValueList = " — ",
-                DefaultValue = "false"
-            },
-            new AttributeItem() {
                 Name = "Items",
                 Description = "TabItem 集合",
                 Type = "IEnumerable<TabItemBase>",
@@ -155,6 +176,20 @@ namespace BootstrapBlazor.Shared.Pages
                 Name = "ChildContent",
                 Description = "ChildContent 模板",
                 Type = "RenderFragment",
+                ValueList = " — ",
+                DefaultValue = " — "
+            },
+            new AttributeItem() {
+                Name = "AdditionalAssemblies",
+                Description = "额外程序集合，用于初始化路由",
+                Type = "IEnumerable<Assembly>",
+                ValueList = " — ",
+                DefaultValue = " — "
+            },
+            new AttributeItem() {
+                Name = "OnClickTab",
+                Description = "点击 TabItem 标题时回调委托方法",
+                Type = "Func<TabItem, Task>",
                 ValueList = " — ",
                 DefaultValue = " — "
             }
@@ -180,9 +215,9 @@ namespace BootstrapBlazor.Shared.Pages
                 ReturnValue = " — "
             },
             new MethodItem() {
-                Name = "ReActiveTab",
-                Description = "切换后回调此方法",
-                Parameters = " — ",
+                Name = "ActiveTab",
+                Description = "设置指定 TabItem 为激活状态",
+                Parameters = "TabItem",
                 ReturnValue = " — "
             }
         };

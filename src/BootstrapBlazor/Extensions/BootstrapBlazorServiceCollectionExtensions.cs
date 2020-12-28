@@ -1,15 +1,13 @@
-﻿// **********************************
-// 框架名称：BootstrapBlazor 
-// 框架作者：Argo Zhang
-// 开源地址：
-// Gitee : https://gitee.com/LongbowEnterprise/BootstrapBlazor
-// GitHub: https://github.com/ArgoZhang/BootstrapBlazor 
-// 开源协议：LGPL-3.0 (https://gitee.com/LongbowEnterprise/BootstrapBlazor/blob/dev/LICENSE)
-// **********************************
+﻿// Copyright (c) Argo Zhang (argo@163.com). All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using BootstrapBlazor.Components;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using BootstrapBlazor.Localization.Json;
 using Microsoft.Extensions.Options;
+using System;
+using System.Globalization;
+using System.Linq;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -22,10 +20,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// 增加 BootstrapBlazor 服务
         /// </summary>
         /// <param name="services"></param>
+        /// <param name="configureOptions"></param>
+        /// <param name="setupAction"></param>
         /// <returns></returns>
-        public static IServiceCollection AddBootstrapBlazor(this IServiceCollection services)
+        public static IServiceCollection AddBootstrapBlazor(this IServiceCollection services, Action<BootstrapBlazorOptions>? configureOptions = null, Action<JsonLocalizationOptions>? setupAction = null)
         {
-            services.AddJsonLocalization();
+            services.AddJsonLocalization(setupAction);
             services.AddSingleton<IComponentIdGenerator, DefaultIdGenerator>();
             services.AddSingleton<ITableExcelExport, DefaultExcelExport>();
             services.AddScoped<DialogService>();
@@ -33,7 +33,21 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<PopoverService>();
             services.AddScoped<ToastService>();
             services.AddScoped<SwalService>();
+            services.AddScoped<MenuTabBoundleOptions>();
             services.AddSingleton<IConfigureOptions<BootstrapBlazorOptions>, ConfigureOptions<BootstrapBlazorOptions>>();
+            services.Configure<BootstrapBlazorOptions>(options =>
+            {
+                configureOptions?.Invoke(options);
+
+                // fix(#I2925C): https://gitee.com/LongbowEnterprise/BootstrapBlazor/issues/I2925C
+                if (CultureInfo.CurrentUICulture.Name == "en" || !options.SupportedCultures.Any(c => c.Equals(CultureInfo.CurrentUICulture.Name, StringComparison.OrdinalIgnoreCase)))
+                {
+                    CultureInfo.CurrentUICulture = new CultureInfo(options.DefaultUICultureInfoName ?? "en-US");
+                }
+            });
+
+            ServiceProviderHelper.RegisterService(services);
+
             return services;
         }
     }

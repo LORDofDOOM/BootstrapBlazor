@@ -80,7 +80,11 @@
     "EndPlaceHolderText": "结束日期",
     "ClearButtonText": "清空",
     "ConfirmButtonText": "确定",
-    "DateFormat": "yyyy-MM-dd"
+    "DateFormat": "yyyy-MM-dd",
+    "Last7Days": "最近 7 天",
+    "Last30Days": "最近 30 天",
+    "ThisMonth": "这个月",
+    "LastMonth": "上个月"
   },
   "BootstrapBlazor.Components.DropdownList": {
     "PlaceHolder": "请选择 ..."
@@ -150,6 +154,11 @@
     "OnInnerText": "开",
     "OffInnerText": "关"
   },
+  "BootstrapBlazor.Components.Tab": {
+    "CloseCurrentTabText": "关闭当前标签",
+    "CloseOtherTabsText": "关闭其他标签",
+    "CloseAllTabsText": "关闭所有标签"
+  },
   "BootstrapBlazor.Components.Table": {
     "AddButtonText": "新建",
     "EditButtonText": "编辑",
@@ -185,7 +194,8 @@
     "FailText": "失败",
     "DeleteButtonToastTitle": "删除数据",
     "DeleteButtonToastContent": "请选择要删除的数据, {0} 秒后自动关闭",
-    "DeleteButtonToastResultContent": "删除数据{0}, {1} 秒后自动关闭"
+    "DeleteButtonToastResultContent": "删除数据{0}, {1} 秒后自动关闭",
+    "DataServiceInvalidOperationText": "未注册 'BootstrapBlazor.Components.IDataService`1[{0}]' 服务"
   },
   "BootstrapBlazor.Components.TableEditorDialog": {
     "CloseButtonText": "关闭",

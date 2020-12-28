@@ -1,11 +1,6 @@
-﻿// **********************************
-// 框架名称：BootstrapBlazor 
-// 框架作者：Argo Zhang
-// 开源地址：
-// Gitee : https://gitee.com/LongbowEnterprise/BootstrapBlazor
-// GitHub: https://github.com/ArgoZhang/BootstrapBlazor 
-// 开源协议：LGPL-3.0 (https://gitee.com/LongbowEnterprise/BootstrapBlazor/blob/dev/LICENSE)
-// **********************************
+﻿// Copyright (c) Argo Zhang (argo@163.com). All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Builder;
@@ -66,16 +61,52 @@ namespace BootstrapBlazor.Server
             services.AddBlazorBackgroundTask();
 
             // 增加 BootstrapBlazor 组件
-            services.AddBootstrapBlazor();
+            services.AddBootstrapBlazor(options =>
+            {
+                // 统一设置 Toast 组件自动消失时间
+                options.ToastDelay = 4000;
+            });
 
             // 增加 Table Excel 导出服务
             services.AddBootstrapBlazorTableExcelExport();
 
-            // 统一设置 Toast 组件自动消失时间
-            services.Configure<BootstrapBlazorOptions>(options =>
-            {
-                options.ToastDelay = 4000;
-            });
+            // 增加 Table 数据服务操作类
+            services.AddTableDemoDataService();
+
+            // 增加 PetaPoco ORM 数据服务操作类
+            // 需要时打开下面代码
+            //services.AddPetaPoco(option =>
+            //{
+            //    // 配置数据信息
+            //    // 使用 SQLite 数据以及从配置文件中获取数据库连接字符串
+            //    // 需要引用 Microsoft.Data.Sqlite 包，操作 SQLite 数据库
+            //    // 需要引用 PetaPoco.Extensions 包，PetaPoco 包扩展批量插入与删除
+            //    option.UsingProvider<SQLiteDatabaseProvider>()
+            //          .UsingConnectionString(Configuration.GetConnectionString("bb"));
+            //});
+
+            // 增加 FreeSql ORM 数据服务操作类
+            // 需要时打开下面代码
+            // 需要引入 FreeSql 对 SQLite 的扩展包 FreeSql.Provider.Sqlite
+            //services.AddFreeSql(option =>
+            //{
+            //    option.UseConnectionString(FreeSql.DataType.Sqlite, Configuration.GetConnectionString("bb"))
+#if DEBUG
+            //         //开发环境:自动同步实体
+            //         .UseAutoSyncStructure(true)
+            //         //调试sql语句输出
+            //         .UseMonitorCommand(cmd => System.Console.WriteLine(cmd.CommandText))
+#endif
+            //        ;
+            //});
+
+            // 增加 EFCore ORM 数据服务操作类
+            // 需要时打开下面代码
+            //services.AddEntityFrameworkCore<Shared.Pages.BindItemDbContext>(option =>
+            //{
+            //    // 需要引用 Microsoft.EntityFrameworkCore.Sqlite 包，操作 SQLite 数据库
+            //    option.UseSqlite(Configuration.GetConnectionString("bb"));
+            //});
 
             // 增加多语言支持配置信息
             services.Configure<RequestLocalizationOptions>(options =>

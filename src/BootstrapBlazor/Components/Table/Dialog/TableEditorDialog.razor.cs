@@ -1,11 +1,6 @@
-﻿// **********************************
-// 框架名称：BootstrapBlazor 
-// 框架作者：Argo Zhang
-// 开源地址：
-// Gitee : https://gitee.com/LongbowEnterprise/BootstrapBlazor
-// GitHub: https://github.com/ArgoZhang/BootstrapBlazor 
-// 开源协议：LGPL-3.0 (https://gitee.com/LongbowEnterprise/BootstrapBlazor/blob/dev/LICENSE)
-// **********************************
+﻿// Copyright (c) Argo Zhang (argo@163.com). All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -42,6 +37,13 @@ namespace BootstrapBlazor.Components
         [NotNull]
         public string? SaveButtonText { get; set; }
 
+        /// <summary>
+        /// 关闭弹窗回调方法
+        /// </summary>
+        [Parameter]
+        public Func<Task>? OnCloseAsync { get; set; }
+
+
         [Inject]
         [NotNull]
         private IStringLocalizer<TableEditorDialog<TModel>>? Localizer { get; set; }
@@ -55,6 +57,11 @@ namespace BootstrapBlazor.Components
 
             CloseButtonText ??= Localizer[nameof(CloseButtonText)];
             SaveButtonText ??= Localizer[nameof(SaveButtonText)];
+        }
+
+        private async Task OnClose()
+        {
+            if (OnCloseAsync != null) await OnCloseAsync();
         }
     }
 }

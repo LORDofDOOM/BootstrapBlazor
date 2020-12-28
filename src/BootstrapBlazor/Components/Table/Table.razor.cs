@@ -1,11 +1,6 @@
-﻿// **********************************
-// 框架名称：BootstrapBlazor 
-// 框架作者：Argo Zhang
-// 开源地址：
-// Gitee : https://gitee.com/LongbowEnterprise/BootstrapBlazor
-// GitHub: https://github.com/ArgoZhang/BootstrapBlazor 
-// 开源协议：LGPL-3.0 (https://gitee.com/LongbowEnterprise/BootstrapBlazor/blob/dev/LICENSE)
-// **********************************
+﻿// Copyright (c) Argo Zhang (argo@163.com). All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -126,6 +121,12 @@ namespace BootstrapBlazor.Components
         public List<ITableColumn> Columns { get; } = new List<ITableColumn>(50);
 
         /// <summary>
+        /// 获得/设置 是否使用注入的数据服务
+        /// </summary>
+        [Parameter]
+        public bool UseInjectDataService { get; set; }
+
+        /// <summary>
         /// 获得/设置 明细行模板
         /// </summary>
         [Parameter]
@@ -234,7 +235,7 @@ namespace BootstrapBlazor.Components
         private string? methodName;
 
         /// <summary>
-        /// 获得/设置 是否我第一次 Render
+        /// 获得/设置 是否为第一次 Render
         /// </summary>
         protected bool FirstRender { get; set; } = true;
 
@@ -277,6 +278,11 @@ namespace BootstrapBlazor.Components
 
             if (IsRendered)
             {
+                if (Columns.Any(col => col.ShowTips))
+                {
+                    methodName = "tooltip";
+                }
+
                 if (!string.IsNullOrEmpty(methodName))
                 {
                     // 固定表头脚本关联
@@ -291,7 +297,7 @@ namespace BootstrapBlazor.Components
                     // 自动刷新功能
                     _ = Task.Run(async () =>
                     {
-                        while (!AutoRefreshCancelTokenSource.IsCancellationRequested)
+                        while (!(AutoRefreshCancelTokenSource?.IsCancellationRequested ?? true))
                         {
                             await InvokeAsync(QueryAsync);
                             await Task.Delay(AutoRefreshInterval, AutoRefreshCancelTokenSource.Token);
@@ -389,6 +395,7 @@ namespace BootstrapBlazor.Components
         {
             if (disposing)
             {
+                AutoRefreshCancelTokenSource?.Cancel();
                 AutoRefreshCancelTokenSource?.Dispose();
                 AutoRefreshCancelTokenSource = null;
             }
