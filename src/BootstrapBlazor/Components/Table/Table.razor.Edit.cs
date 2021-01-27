@@ -91,14 +91,7 @@ namespace BootstrapBlazor.Components
         /// 获得/设置 被选中的数据集合
         /// </summary>
         [Parameter]
-        public IEnumerable<TItem> SelectedRows
-        {
-            get => SelectedItems;
-            set
-            {
-                if (SelectedItems != value) SelectedItems = value.ToList();
-            }
-        }
+        public IEnumerable<TItem>? SelectedRows { get; set; }
 
         /// <summary>
         /// 获得/设置 被选中的数据集合回调委托
@@ -200,23 +193,35 @@ namespace BootstrapBlazor.Components
         {
             if (ClickToSelect)
             {
-                // 反转选择
+                // 多选模式清空
                 if (!IsMultipleSelect)
                 {
                     SelectedItems.Clear();
                 }
-                else if (SelectedItems.Contains(val))
+
+                if (SelectedItems.Contains(val))
                 {
                     SelectedItems.Remove(val);
                 }
+                else
+                {
+                    SelectedItems.Add(val);
+                }
 
-                SelectedItems.Add(val);
-
-                if (SelectedRowsChanged.HasDelegate) await SelectedRowsChanged.InvokeAsync(SelectedRows);
+                await OnSelectedRowsChanged();
             }
 
             if (OnClickRowCallback != null) await OnClickRowCallback(val);
         };
+
+        private async Task OnSelectedRowsChanged()
+        {
+            if (SelectedRowsChanged.HasDelegate)
+            {
+                SelectedRows = SelectedItems;
+                await SelectedRowsChanged.InvokeAsync(SelectedRows);
+            }
+        }
 
         /// <summary>
         /// 检查当前行是否被选中方法
@@ -246,32 +251,26 @@ namespace BootstrapBlazor.Components
             SelectedItems.Clear();
 
             QueryData<TItem>? queryData = null;
+            var queryOption = new QueryPageOptions()
+            {
+                PageIndex = PageIndex,
+                PageItems = PageItems,
+                SearchText = SearchText,
+                SortOrder = SortOrder,
+                SortName = SortName,
+                Filters = Filters.Values,
+                Searchs = GetSearchs(),
+                SearchModel = SearchModel
+            };
             if (OnQueryAsync != null)
             {
-                queryData = await OnQueryAsync(new QueryPageOptions()
-                {
-                    PageIndex = PageIndex,
-                    PageItems = PageItems,
-                    SearchText = SearchText,
-                    SortOrder = SortOrder,
-                    SortName = SortName,
-                    Filters = Filters.Values,
-                    SearchModel = SearchModel
-                });
+                queryData = await OnQueryAsync(queryOption);
             }
             else if (UseInjectDataService)
             {
-                queryData = await GetDataService().QueryAsync(new QueryPageOptions()
-                {
-                    PageIndex = PageIndex,
-                    PageItems = PageItems,
-                    SearchText = SearchText,
-                    SortOrder = SortOrder,
-                    SortName = SortName,
-                    Filters = Filters.Values,
-                    SearchModel = SearchModel
-                });
+                queryData = await GetDataService().QueryAsync(queryOption);
             }
+
             if (queryData != null)
             {
                 Items = queryData.Items;
@@ -293,6 +292,11 @@ namespace BootstrapBlazor.Components
                     var invoker = SortLambdaCache.GetOrAdd(typeof(TItem), key => Items.GetSortLambda().Compile());
                     Items = invoker(Items, SortName, SortOrder);
                 }
+            }
+
+            if (!IsRendered && SelectedRows != null)
+            {
+                SelectedItems.AddRange(Items.Where(i => SelectedRows.Contains(i)));
             }
         }
 

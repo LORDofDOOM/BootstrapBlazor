@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
-using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -11,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using System;
 using System.Globalization;
 using System.Linq;
 
@@ -65,6 +65,9 @@ namespace BootstrapBlazor.Server
             {
                 // 统一设置 Toast 组件自动消失时间
                 options.ToastDelay = 4000;
+            }, options =>
+            {
+                // 设置自己的多语言文化资源文件
             });
 
             // 增加 Table Excel 导出服务
@@ -145,6 +148,7 @@ namespace BootstrapBlazor.Server
             app.UseResponseCompression();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseCors(builder => builder.WithOrigins(Configuration["AllowOrigins"].Split(',', StringSplitOptions.RemoveEmptyEntries)).AllowAnyHeader().AllowAnyMethod().AllowCredentials());
 
             app.UseEndpoints(endpoints =>
             {

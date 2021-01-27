@@ -13,24 +13,6 @@ namespace BootstrapBlazor.Components
     /// </summary>
     public abstract class CollapseBase : BootstrapComponentBase
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="collapsed"></param>
-        /// <returns></returns>
-        protected string? GetButtonClassString(bool collapsed) => CssBuilder.Default("btn btn-link")
-            .AddClass("collapsed", collapsed)
-            .Build();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="collpased"></param>
-        /// <returns></returns>
-        protected string? GetClassString(bool collpased) => CssBuilder.Default("collapse-item")
-            .AddClass("collapse", collpased)
-            .AddClass("collapse show", !collpased)
-            .Build();
 
         /// <summary>
         /// 获得 按钮样式集合
@@ -84,7 +66,7 @@ namespace BootstrapBlazor.Components
         {
             await base.OnAfterRenderAsync(firstRender);
 
-            if (firstRender) await JSRuntime.InvokeVoidAsync(CollapseElement, "collapse");
+            if (firstRender) await JSRuntime.InvokeVoidAsync(CollapseElement, "bb_collapse");
         }
 
         /// <summary>

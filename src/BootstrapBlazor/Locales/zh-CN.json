@@ -86,6 +86,11 @@
     "ThisMonth": "这个月",
     "LastMonth": "上个月"
   },
+  "BootstrapBlazor.Components.ResultDialogOption": {
+    "ButtonYesText": "确认",
+    "ButtonNoText": "取消",
+    "ButtonCloseText": "关闭"
+  },
   "BootstrapBlazor.Components.DropdownList": {
     "PlaceHolder": "请选择 ..."
   },
@@ -197,7 +202,7 @@
     "DeleteButtonToastResultContent": "删除数据{0}, {1} 秒后自动关闭",
     "DataServiceInvalidOperationText": "未注册 'BootstrapBlazor.Components.IDataService`1[{0}]' 服务"
   },
-  "BootstrapBlazor.Components.TableEditorDialog": {
+  "BootstrapBlazor.Components.EditDialog": {
     "CloseButtonText": "关闭",
     "SaveButtonText": "保存"
   },
@@ -218,7 +223,7 @@
     "NotContains": "不包含",
     "EnumFilter.AllText": "全选"
   },
-  "BootstrapBlazor.Components.TableSearchDialog": {
+  "BootstrapBlazor.Components.SearchDialog": {
     "ResetButtonText": "重置",
     "QueryButtonText": "查询"
   },
@@ -237,9 +242,9 @@
     "RightPanelText": "列表 2"
   },
   "BootstrapBlazor.Components.Upload": {
-    "Text": "点击上传",
-    "ResetText": "重置",
-    "AllowFileTypeErrorMessage": "只允许选择图片类型文件",
-    "FileTooLargeText": "文件太大"
+    "DeleteButtonText": "删除",
+    "BrowserButtonText": "浏览",
+    "FileExtensions": "文件扩展名必须为以下几种格式: {0}",
+    "FileSizeValidation": "文件太大，文件限制大小为 {0}"
   }
 }

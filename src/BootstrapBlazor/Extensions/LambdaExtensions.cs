@@ -77,8 +77,9 @@ namespace System.Linq
         /// </summary>
         /// <typeparam name="TItem"></typeparam>
         /// <param name="expressions"></param>
+        /// <param name="logic"></param>
         /// <returns></returns>
-        private static Expression<Func<TItem, bool>> ExpressionAndLambda<TItem>(this IEnumerable<Expression<Func<TItem, bool>>> expressions)
+        private static Expression<Func<TItem, bool>> ExpressionAndLambda<TItem>(this IEnumerable<Expression<Func<TItem, bool>>> expressions, FilterLogic logic = FilterLogic.And)
         {
             Expression<Func<TItem, bool>>? ret = null;
             var exp_p = Expression.Parameter(typeof(TItem));
@@ -94,7 +95,9 @@ namespace System.Linq
 
                 var left = visitor.Visit(ret.Body);
                 var right = visitor.Visit(exp.Body);
-                ret = Expression.Lambda<Func<TItem, bool>>(Expression.AndAlso(left, right), exp_p);
+                ret = logic == FilterLogic.And
+                    ? Expression.Lambda<Func<TItem, bool>>(Expression.AndAlso(left, right), exp_p)
+                    : Expression.Lambda<Func<TItem, bool>>(Expression.OrElse(left, right), exp_p);
             }
             return ret ?? (r => true);
         }
@@ -104,10 +107,11 @@ namespace System.Linq
         /// </summary>
         /// <typeparam name="TItem"></typeparam>
         /// <param name="filters"></param>
+        /// <param name="logic"></param>
         /// <returns></returns>
-        public static Func<TItem, bool> GetFilterFunc<TItem>(this IEnumerable<IFilterAction> filters)
+        public static Func<TItem, bool> GetFilterFunc<TItem>(this IEnumerable<IFilterAction> filters, FilterLogic logic = FilterLogic.And)
         {
-            return filters.GetFilterLambda<TItem>().Compile();
+            return filters.GetFilterLambda<TItem>(logic).Compile();
         }
 
         /// <summary>
@@ -115,11 +119,12 @@ namespace System.Linq
         /// </summary>
         /// <typeparam name="TItem"></typeparam>
         /// <param name="filters"></param>
+        /// <param name="logic"></param>
         /// <returns></returns>
-        public static Expression<Func<TItem, bool>> GetFilterLambda<TItem>(this IEnumerable<IFilterAction> filters)
+        public static Expression<Func<TItem, bool>> GetFilterLambda<TItem>(this IEnumerable<IFilterAction> filters, FilterLogic logic = FilterLogic.And)
         {
             var exps = filters.Select(f => f.GetFilterConditions().GetFilterLambda<TItem>());
-            return exps.ExpressionAndLambda();
+            return exps.ExpressionAndLambda(logic);
         }
 
         /// <summary>
@@ -187,18 +192,10 @@ namespace System.Linq
 
         private static Expression Contains(this Expression left, Expression right)
         {
-            Expression<Func<string, string, bool>> expression = (l, r) => l != null && r != null && l.Contains(r);
-            return Expression.Invoke(expression, left, right);
-        }
-
-        private static bool NullableContains(string left, string right)
-        {
-            var ret = false;
-            if (left != null && right != null)
-            {
-                ret = left.Contains(right);
-            }
-            return ret;
+            // https://gitee.com/LongbowEnterprise/BootstrapBlazor/issues/I2DIR4
+            // 兼容 EFCore 与普通逻辑 EFCore 内自动处理空问题
+            MethodInfo method = typeof(string).GetMethod("Contains", new Type[1] { typeof(string) })!;
+            return Expression.AndAlso(Expression.NotEqual(left, Expression.Constant(null)), Expression.Call(left, method, right));
         }
 
         #region Sort

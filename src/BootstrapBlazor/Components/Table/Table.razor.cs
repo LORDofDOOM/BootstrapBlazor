@@ -19,6 +19,8 @@ namespace BootstrapBlazor.Components
     /// </summary>
     public partial class Table<TItem> : BootstrapComponentBase, ITable where TItem : class, new()
     {
+        private JSInterop<Table<TItem>>? Interop { get; set; }
+
         /// <summary>
         /// 获得 Table 组件样式表
         /// </summary>
@@ -229,7 +231,11 @@ namespace BootstrapBlazor.Components
             OnSortAsync = QueryAsync;
 
             // 设置 OnFilter 回调方法
-            OnFilterAsync = QueryAsync;
+            OnFilterAsync = async () =>
+            {
+                PageIndex = 1;
+                await QueryAsync();
+            };
         }
 
         private string? methodName;
@@ -251,6 +257,13 @@ namespace BootstrapBlazor.Components
 
             if (firstRender)
             {
+                if (ShowSearch)
+                {
+                    // 注册 SeachBox 回调事件
+                    Interop = new JSInterop<Table<TItem>>(JSRuntime);
+                    await Interop.Invoke(this, TableElement, "bb_table_search", nameof(OnSearch), nameof(OnClearSearch));
+                }
+
                 FirstRender = false;
                 methodName = Height.HasValue ? "fixTableHeader" : "init";
 
@@ -259,7 +272,8 @@ namespace BootstrapBlazor.Components
                 // 初始化列
                 if (AutoGenerateColumns)
                 {
-                    InternalTableColumn.GetProperties<TItem>(Columns);
+                    Columns.Clear();
+                    Columns.AddRange(InternalTableColumn.GetProperties<TItem>());
                 }
 
                 ColumnVisibles = Columns.Select(i => new ColumnVisibleItem { FieldName = i.GetFieldName(), Visible = i.Visible }).ToList();
@@ -278,14 +292,15 @@ namespace BootstrapBlazor.Components
 
             if (IsRendered)
             {
-                if (Columns.Any(col => col.ShowTips))
+                // fix: https://gitee.com/LongbowEnterprise/BootstrapBlazor/issues/I2AYEH
+                // PR: https://gitee.com/LongbowEnterprise/BootstrapBlazor/pulls/818
+                if (Columns.Any(col => col.ShowTips) && string.IsNullOrEmpty(methodName))
                 {
                     methodName = "tooltip";
                 }
 
                 if (!string.IsNullOrEmpty(methodName))
                 {
-                    // 固定表头脚本关联
                     await JSRuntime.InvokeVoidAsync(TableElement, "bb_table", methodName);
                     methodName = null;
                 }
@@ -297,11 +312,15 @@ namespace BootstrapBlazor.Components
                     // 自动刷新功能
                     _ = Task.Run(async () =>
                     {
-                        while (!(AutoRefreshCancelTokenSource?.IsCancellationRequested ?? true))
+                        try
                         {
-                            await InvokeAsync(QueryAsync);
-                            await Task.Delay(AutoRefreshInterval, AutoRefreshCancelTokenSource.Token);
+                            while (!(AutoRefreshCancelTokenSource?.IsCancellationRequested ?? true))
+                            {
+                                await InvokeAsync(QueryAsync);
+                                await Task.Delay(AutoRefreshInterval, AutoRefreshCancelTokenSource?.Token ?? new CancellationToken(true));
+                            }
                         }
+                        catch (TaskCanceledException) { }
                     });
                 }
             }
@@ -395,6 +414,8 @@ namespace BootstrapBlazor.Components
         {
             if (disposing)
             {
+                Interop?.Dispose();
+
                 AutoRefreshCancelTokenSource?.Cancel();
                 AutoRefreshCancelTokenSource?.Dispose();
                 AutoRefreshCancelTokenSource = null;

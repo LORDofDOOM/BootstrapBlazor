@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace BootstrapBlazor.Shared.Shared
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class NavMenu
     {
@@ -24,7 +24,7 @@ namespace BootstrapBlazor.Shared.Shared
         private List<MenuItem> Menus { get; set; } = new List<MenuItem>(100);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         protected override void OnInitialized()
         {
@@ -200,6 +200,7 @@ namespace BootstrapBlazor.Shared.Shared
             });
             item.AddItem(new DemoMenuItem()
             {
+                IsUpdate = true,
                 Text = "富文本框 Editor",
                 Url = "editors"
             });
@@ -210,6 +211,7 @@ namespace BootstrapBlazor.Shared.Shared
             });
             item.AddItem(new DemoMenuItem()
             {
+                IsUpdate = true,
                 Text = "数值框 InputNumber",
                 Url = "inputnumbers"
             });
@@ -265,6 +267,7 @@ namespace BootstrapBlazor.Shared.Shared
             });
             item.AddItem(new DemoMenuItem()
             {
+                IsNew = true,
                 Text = "上传组件 Upload",
                 Url = "uploads"
             });
@@ -322,8 +325,14 @@ namespace BootstrapBlazor.Shared.Shared
             item.AddItem(new DemoMenuItem()
             {
                 IsNew = true,
-                Text = "挂架 DropdownWidget",
-                Url = "widgets"
+                Text = "挂件 DropdownWidget",
+                Url = "dropdownwidgets"
+            });
+            item.AddItem(new DemoMenuItem()
+            {
+                IsNew = true,
+                Text = "集合 GroupBox",
+                Url = "groupboxs"
             });
             item.AddItem(new DemoMenuItem()
             {
@@ -390,6 +399,7 @@ namespace BootstrapBlazor.Shared.Shared
         {
             var it = new DemoMenuItem()
             {
+                IsUpdate = true,
                 Text = "表格 Table"
             };
 
@@ -467,6 +477,7 @@ namespace BootstrapBlazor.Shared.Shared
 
             it.AddItem(new DemoMenuItem()
             {
+                IsUpdate = true,
                 Text = "导出功能",
                 Url = "tables/export"
             });
@@ -520,6 +531,7 @@ namespace BootstrapBlazor.Shared.Shared
             });
             item.AddItem(new DemoMenuItem()
             {
+                IsUpdate = true,
                 Text = "对话框 Dialog",
                 Url = "dialogs"
             });
@@ -527,6 +539,12 @@ namespace BootstrapBlazor.Shared.Shared
             {
                 Text = "抽屉 Drawer",
                 Url = "drawers"
+            });
+            item.AddItem(new DemoMenuItem()
+            {
+                IsNew = true,
+                Text = "编辑弹窗 EditDialog",
+                Url = "editdialogs"
             });
             item.AddItem(new DemoMenuItem()
             {
@@ -562,6 +580,12 @@ namespace BootstrapBlazor.Shared.Shared
             {
                 Text = "模态弹窗 SweetAlert",
                 Url = "swals"
+            });
+            item.AddItem(new DemoMenuItem()
+            {
+                IsNew = true,
+                Text = "搜索弹窗 SearchDialog",
+                Url = "searchdialogs"
             });
             item.AddItem(new DemoMenuItem()
             {
@@ -692,7 +716,7 @@ namespace BootstrapBlazor.Shared.Shared
             public bool IsUpdate { get; set; }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="item"></param>
             public override void AddItem(MenuItem item)

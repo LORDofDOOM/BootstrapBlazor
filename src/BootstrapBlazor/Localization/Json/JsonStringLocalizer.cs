@@ -9,6 +9,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -19,12 +20,12 @@ namespace BootstrapBlazor.Localization.Json
     /// </summary>
     internal class JsonStringLocalizer : IStringLocalizer
     {
-        private readonly ConcurrentDictionary<string, IEnumerable<KeyValuePair<string, string>>> _resourcesCache = new ConcurrentDictionary<string, IEnumerable<KeyValuePair<string, string>>>();
+        private readonly ConcurrentDictionary<string, IEnumerable<KeyValuePair<string, string>>> _resourcesCache = new();
 
         private readonly Assembly _assembly;
-        private readonly string? _resourceName;
         private readonly string _typeName;
         private readonly ILogger _logger;
+        private readonly JsonLocalizationOptions _options;
 
         private string _searchedLocation = "";
 
@@ -32,15 +33,15 @@ namespace BootstrapBlazor.Localization.Json
         /// 构造函数
         /// </summary>
         /// <param name="assembly"></param>
-        /// <param name="resourceName"></param>
         /// <param name="typeName"></param>
         /// <param name="logger"></param>
-        public JsonStringLocalizer(Assembly assembly, string? resourceName, string typeName, ILogger logger)
+        /// <param name="options"></param>
+        public JsonStringLocalizer(Assembly assembly, string typeName, ILogger logger, JsonLocalizationOptions options)
         {
             _assembly = assembly;
             _typeName = typeName;
-            _resourceName = resourceName;
             _logger = logger;
+            _options = options;
         }
 
         /// <summary>
@@ -86,14 +87,6 @@ namespace BootstrapBlazor.Localization.Json
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="culture"></param>
-        /// <returns></returns>
-        [Obsolete("This method is obsolete. Use `CurrentCulture` and `CurrentUICulture` instead.")]
-        public IStringLocalizer WithCulture(CultureInfo culture) => this;
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="includeParentCultures"></param>
         /// <param name="culture"></param>
         /// <returns></returns>
@@ -117,29 +110,40 @@ namespace BootstrapBlazor.Localization.Json
         /// <returns></returns>
         protected virtual string? GetStringSafely(string name)
         {
-            var culture = CultureInfo.CurrentUICulture;
             string? value = null;
-
-            while (culture != culture.Parent)
+            if (_options.StringLocalizer != null)
             {
-                BuildResourcesCache(culture);
-
-                if (_resourcesCache.TryGetValue(culture.Name, out var resources))
+                var local = _options.StringLocalizer[name];
+                if (!local.ResourceNotFound)
                 {
-                    var resource = resources?.SingleOrDefault(s => s.Key == name);
-
-                    value = resource?.Value ?? null;
-                    _logger.LogDebug($"{nameof(JsonStringLocalizer)} searched for '{name}' in '{_searchedLocation}' with culture '{culture}'.");
-
-                    if (value != null)
-                    {
-                        break;
-                    }
-
-                    culture = culture.Parent;
+                    value = local.Value;
                 }
             }
 
+            if (string.IsNullOrEmpty(value))
+            {
+                var culture = CultureInfo.CurrentUICulture;
+
+                while (culture != culture.Parent)
+                {
+                    BuildResourcesCache(culture);
+
+                    if (_resourcesCache.TryGetValue(culture.Name, out var resources))
+                    {
+                        var resource = resources?.SingleOrDefault(s => s.Key == name);
+
+                        value = resource?.Value ?? null;
+                        _logger.LogDebug($"{nameof(JsonStringLocalizer)} searched for '{name}' in '{_searchedLocation}' with culture '{culture}'.");
+
+                        if (value != null)
+                        {
+                            break;
+                        }
+
+                        culture = culture.Parent;
+                    }
+                }
+            }
             return value;
         }
 
@@ -179,22 +183,28 @@ namespace BootstrapBlazor.Localization.Json
         {
             _resourcesCache.GetOrAdd(culture.Name, key =>
             {
-                var value = Enumerable.Empty<KeyValuePair<string, string>>();
+                var builder = new ConfigurationBuilder();
 
-                _searchedLocation = $"{_resourceName}.{key}.json";
-
+                _searchedLocation = $"{_assembly.GetName().Name}.Locales.{key}.json";
                 using var res = _assembly.GetManifestResourceStream(_searchedLocation);
 
                 if (res != null)
                 {
-                    var config = new ConfigurationBuilder()
-                        .AddJsonStream(res)
-                        .Build();
-                    var v = config.GetChildren().FirstOrDefault(c => _typeName.Equals(c.Key, StringComparison.OrdinalIgnoreCase))?.GetChildren().SelectMany(c => new KeyValuePair<string, string>[] { new KeyValuePair<string, string>(c.Key, c.Value) });
-
-                    if (v != null) value = v;
+                    builder.AddJsonStream(res);
                 }
-                return value;
+
+                if (_options.LocalizerConfigurationFactory != null)
+                {
+                    var c = _options.LocalizerConfigurationFactory(key);
+                    builder.AddConfiguration(c);
+                }
+
+                var config = builder.Build();
+                var v = config.GetChildren().FirstOrDefault(c => _typeName.Equals(c.Key, StringComparison.OrdinalIgnoreCase))?
+                    .GetChildren()
+                    .SelectMany(c => new KeyValuePair<string, string>[] { new KeyValuePair<string, string>(c.Key, c.Value) });
+
+                return v ?? Enumerable.Empty<KeyValuePair<string, string>>();
             });
         }
     }

@@ -20,6 +20,10 @@ namespace BootstrapBlazor.Shared.Pages.Components
     {
         private ElementReference PreElement { get; set; }
 
+        private bool Loaded { get; set; }
+
+        private bool CanCopy { get; set; }
+
         /// <summary>
         /// 获得 样式集合
         /// </summary>
@@ -29,6 +33,7 @@ namespace BootstrapBlazor.Shared.Pages.Components
             .Build();
 
         [Inject]
+        [NotNull]
         private ExampleService? Example { get; set; }
 
         /// <summary>
@@ -58,19 +63,22 @@ namespace BootstrapBlazor.Shared.Pages.Components
         public string? CodeFile { get; set; }
 
         /// <summary>
-        /// 获得/设置 代码加载后回调委托
-        /// </summary>
-        [Parameter]
-        public Func<string, Task<string>>? OnAfterLoadCode { get; set; }
-
-        /// <summary>
         /// OnInitializedAsync 方法
         /// </summary>
         /// <returns></returns>
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            await ReloadExampleCodeAsync();
+
+            if (ChildContent == null)
+            {
+                await ReloadExampleCodeAsync();
+            }
+            else
+            {
+                Loaded = true;
+                CanCopy = true;
+            }
         }
 
         /// <summary>
@@ -79,24 +87,30 @@ namespace BootstrapBlazor.Shared.Pages.Components
         /// <param name="firstRender"></param>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await JSRuntime.InvokeVoidAsync("$.highlight", PreElement);
+            if (Loaded)
+            {
+                await JSRuntime.InvokeVoidAsync("$.highlight", PreElement);
+            }
         }
 
         private async Task ReloadExampleCodeAsync()
         {
-            if (Example != null && !string.IsNullOrEmpty(CodeFile))
+            if (!string.IsNullOrEmpty(CodeFile))
             {
                 var code = await Example.GetCodeAsync(CodeFile);
-                if (OnAfterLoadCode != null) code = await OnAfterLoadCode.Invoke(code);
-
                 if (!string.IsNullOrEmpty(code))
                 {
                     ChildContent = builder =>
                     {
-                        var index = 0;
-                        builder.AddContent(index++, code);
+                        builder.AddContent(0, code);
                     };
                 }
+                CanCopy = !string.IsNullOrEmpty(code) && code != "无";
+                Loaded = true;
+            }
+            else
+            {
+                Loaded = true;
             }
         }
     }

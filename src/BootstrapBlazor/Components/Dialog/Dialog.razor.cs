@@ -3,6 +3,7 @@
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -69,13 +70,16 @@ namespace BootstrapBlazor.Components
             option.Dialog = ModalContainer;
             var parameters = option.ToAttributes().ToList();
 
-            if (option.BodyTemplate != null)
+            var content = option.BodyTemplate ?? option.Component?.Render();
+            if (content != null)
             {
-                parameters.Add(new KeyValuePair<string, object>(nameof(ModalDialogBase.BodyTemplate), option.BodyTemplate));
-            }
-            else if (option.Component != null)
-            {
-                parameters.Add(new KeyValuePair<string, object>(nameof(ModalDialogBase.BodyTemplate), option.Component.Render()));
+                parameters.Add(new KeyValuePair<string, object>(nameof(ModalDialogBase.BodyTemplate), option.KeepChildrenState ? content : new RenderFragment(builder =>
+                {
+                    builder.OpenElement(0, "div");
+                    builder.SetKey(option);
+                    builder.AddContent(1, content);
+                    builder.CloseElement();
+                })));
             }
 
             if (option.FooterTemplate != null)
@@ -87,16 +91,6 @@ namespace BootstrapBlazor.Components
             {
                 // 回调 OnClose 方法
                 if (option.OnCloseAsync != null) await option.OnCloseAsync();
-
-                // 不保持状态
-                if (!option.KeepChildrenState)
-                {
-                    await ModalDialog.SetParametersAsync(ParameterView.FromDictionary(new Dictionary<string, object>()
-                    {
-                        [nameof(ModalDialogBase.BodyContext)] = null!,
-                        [nameof(ModalDialogBase.BodyTemplate)] = null!
-                    }));
-                }
             })));
 
             await ModalDialog.SetParametersAsync(ParameterView.FromDictionary(parameters.ToDictionary(key => key.Key, value => value.Value)));

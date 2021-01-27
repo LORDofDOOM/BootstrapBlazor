@@ -17,7 +17,7 @@ namespace BootstrapBlazor.Components
         /// <summary>
         /// 获得/设置 组件参数集合
         /// </summary>
-        public IEnumerable<KeyValuePair<string, object>> Parameters { get; private set; }
+        private IEnumerable<KeyValuePair<string, object>> Parameters { get; set; }
 
         /// <summary>
         /// 获得/设置 组件类型
@@ -61,7 +61,10 @@ namespace BootstrapBlazor.Components
         {
             var index = 0;
             builder.OpenComponent(index++, ComponentType);
-            builder.AddMultipleAttributes(index++, Parameters);
+            if (Parameters.Any())
+            {
+                builder.AddMultipleAttributes(index++, Parameters);
+            }
             builder.CloseComponent();
         };
     }

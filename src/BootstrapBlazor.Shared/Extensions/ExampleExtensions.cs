@@ -2,7 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
-using Microsoft.AspNetCore.Components;
+using BootstrapBlazor.Shared;
+using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -34,16 +35,24 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         private HttpClient Client { get; set; }
 
+        private bool IsWebAssembly { get; set; }
+
+        private string ServerUrl { get; set; }
+
         /// <summary>
         /// 构造方法
         /// </summary>
         /// <param name="client"></param>
-        /// <param name="navigator"></param>
-        public ExampleService(HttpClient client, NavigationManager navigator)
+        /// <param name="options"></param>
+        /// <param name="storage"></param>
+        public ExampleService(HttpClient client, IOptions<WebsiteOptions> options, ICultureStorage storage)
         {
             Client = client;
             Client.Timeout = TimeSpan.FromSeconds(5);
-            Client.BaseAddress = new Uri(navigator.BaseUri);
+            Client.BaseAddress = new Uri(options.Value.RepositoryUrl);
+
+            ServerUrl = options.Value.ServerUrl;
+            IsWebAssembly = storage.Mode == CultureStorageMode.LocalStorage;
         }
 
         /// <summary>
@@ -55,16 +64,18 @@ namespace Microsoft.Extensions.DependencyInjection
             var content = "";
             try
             {
-                var folder = CodeFile.Split('.').FirstOrDefault();
-                if (!string.IsNullOrEmpty(folder))
+                if (IsWebAssembly)
                 {
-                    content = await Client.GetStringAsync($"_content/BootstrapBlazor.Docs/docs/{folder}/{CodeFile}");
+                    Client.BaseAddress = new Uri($"{ServerUrl}/api/");
+                    content = await Client.GetStringAsync($"Code?fileName={CodeFile}");
+                }
+                else
+                {
+                    content = await Client.GetStringAsync(CodeFile);
                 }
             }
-            catch (Exception ex)
-            {
-                content = ex.ToString();
-            }
+            catch (HttpRequestException) { content = "无"; }
+            catch (Exception) { }
             return content;
         }
     }
