@@ -52,11 +52,11 @@
 
         .table thead th.sortable:hover,
         .table thead th.filterable:hover {
-            background-color: #e9ecef;
+            background-color: $gray-200;
         }
 
             .table thead th.sortable:hover > .fa {
-                color: #999;
+                color: $gray-600;
             }
 
         .table thead th .table-cell {
@@ -78,12 +78,12 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                color: #ddd;
+                color: $gray-300;
             }
 
                 .table thead th .table-cell > .fa:hover {
-                    background-color: #ddd;
-                    color: #606266;
+                    background-color: $gray-300;
+                    color: $gray-600;
                 }
 
             .table thead th .table-cell .fa-filter {
@@ -91,7 +91,7 @@
             }
 
                 .table thead th .table-cell .fa-filter.active {
-                    color: #409eff;
+                    color: $primary-200;
                 }
 
         .table thead th.sortable .fa-sort-asc,
@@ -120,7 +120,7 @@
 
     .table tfoot {
         font-weight: bold;
-        border-top: 2px solid #dee2e6;
+        border-top: 2px solid $gray-300;
     }
 
     .table td, .table th {
@@ -162,7 +162,7 @@
     }
 
         .table-cell.is-sort .fa-sort {
-            color: #ddd;
+            color: $gray-300;
         }
 
     .table-cell .btn-group .btn {
@@ -180,9 +180,9 @@
     .table-filter .table-filter-item {
         min-width: 220px;
         border-radius: 0.25rem;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.125);
-        background-color: #fff;
-        border: 1px solid rgba(0,0,0,.125);
+        box-shadow: 0 0 10px rgba($black, 0.125);
+        background-color: $white;
+        border: 1px solid rgba($black, 0.125);
         position: absolute;
         display: none;
     }
@@ -215,7 +215,7 @@
         }
 
         .table-filter .card-arrow:before {
-            border-bottom-color: #ced4da;
+            border-bottom-color: $gray-400;
             top: 0;
             border-width: 0 .5rem .5rem .5rem;
         }
@@ -223,7 +223,7 @@
         .table-filter .card-arrow:after {
             top: 1px;
             border-width: 0 .5rem .5rem .5rem;
-            border-bottom-color: #f7f7f7;
+            border-bottom-color: $gray-50;
         }
 
     .table-filter .card-body {
@@ -253,19 +253,19 @@
             font-size: 0.875rem;
             border-radius: 3px;
             line-height: 12px;
-            border: 1px solid #dcdfe6;
-            color: #606266;
+            border: 1px solid $gray-300;
+            color: $gray-600;
             transition: border-color .3s linear, color .3s linear;
         }
 
             .table-filter .card-footer .btn:not(.is-disabled):not(:disabled):hover {
-                border-color: #409eff;
-                color: #409eff;
+                border-color: $primary-200;
+                color: $primary-200;
             }
 
 .table-striped tbody tr:not(:hover):not(.active):not(.highlight):nth-of-type(odd),
 .table-striped .table-row:not(.active):not(.highlight):nth-of-type(odd) {
-    background-color: #fafafa;
+    background-color: $gray-50;
 }
 
 .table-hover tbody tr.is-detail:hover,
@@ -299,8 +299,8 @@
 
 .table-toolbar .dropdown-item.hover,
 .table-toolbar .dropdown-item:hover {
-    color: #fff;
-    background-color: #007bff;
+    color: $white;
+    background-color: $primary;
 }
 
 .table-pagination {
@@ -315,11 +315,11 @@
     .btn-gear .dropdown-menu .dropdown-item {
         padding: 6px 12px;
         display: table-cell;
-        color: #504d4d;
+        color: $gray-800;
     }
 
         .btn-gear .dropdown-menu .dropdown-item:not(:first-child) {
-            border-left: solid 1px #aeb2b7;
+            border-left: solid 1px $gray-400;
         }
 
 .table-column-right {
@@ -332,7 +332,7 @@
 
     .search-input-tooltip kbd {
         display: inline-block;
-        background: #17a2b8;
+        background: $info;
         padding: 1px 6px;
     }
 
@@ -373,7 +373,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #ddd;
+    border: 1px solid $gray-300;
     border-radius: 4px;
     padding: 2rem;
     flex: 1;
@@ -386,7 +386,7 @@
 .table tbody tr.active,
 .table tbody tr.active:hover td,
 .table-row.active {
-    background-color: #9ec6ef;
+    background-color: $info-100;
 }
 
 .table-row {
@@ -394,7 +394,7 @@
 }
 
     .table-row:not(:last-child) {
-        border-bottom: 1px solid #dee2e6;
+        border-bottom: 1px solid $gray-300;
     }
 
     .table-row:first-child {
@@ -415,7 +415,7 @@
         font-weight: bold;
         width: 30%;
         margin-bottom: 0;
-        color: #212529;
+        color: $gray-900;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -433,7 +433,7 @@
                 font-weight: bold;
                 width: 30%;
                 margin-bottom: 0;
-                color: #212529;
+                color: $gray-900;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
@@ -446,7 +446,7 @@
 }
 
     .table-fixed-column .table tr:not(:hover) .fixed {
-        background-color: #fff;
+        background-color:$white;
     }
 
     .table-fixed-column .table tr .fixed {
@@ -461,27 +461,27 @@
     }
 
     .table-fixed-column .table tbody tr:hover .fixed {
-        background-color: #e4e7ed;
+        background-color: $gray-300;
     }
 
 .table-striped.table-fixed-column tbody tr:nth-of-type(odd):not(:hover) .fixed,
 .table-striped.table-fixed-column .table-row:not(.active):nth-of-type(odd) .fixed {
-    background-color: #fafafa;
+    background-color: $gray-50;
 }
 
 .table-fixed-column .table .fixed {
-    border-right: 1px solid #409eff;
+    border-right: 1px solid $primary-200;
 }
 
 .table-fixed-column .table .fixed-right {
     border-right: inherit;
-    border-left: 1px solid #409eff;
+    border-left: 1px solid $primary-200;
 }
 
 .table-fixed-column .fixed-scroll {
     position: sticky;
     right: 0;
-    background-color: #fff;
+    background-color:$white;
 }
 
 .table-striped.table-fixed-column tbody tr.active .fixed,
@@ -506,7 +506,7 @@
     }
 
         .table .is-bar .fa-caret-right:hover {
-            background-color: #ddd;
+            background-color: $gray-300;
         }
 
 .table .is-detail {
@@ -543,5 +543,5 @@
     }
 
 .table-resize .border-resize {
-    border-right: 1px solid #409eff;
+    border-right: 1px solid $primary-200;
 }

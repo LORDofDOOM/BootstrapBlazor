@@ -10,7 +10,7 @@
     "css-compile": "node-sass --output-style expanded --source-map true --source-map-contents true --precision 8 wwwroot/scss/bootstrap.blazor.scss wwwroot/css/bootstrap.blazor.css",
     "css-compile-bundle": "node-sass --output-style expanded --source-map true --source-map-contents true --precision 8 wwwroot/scss/bootstrap.blazor.bundle.scss wwwroot/css/bootstrap.blazor.bundle.css",
     "css-minify": "cleancss --level 2 --format breaksWith=lf --output wwwroot/css/bootstrap.blazor.min.css wwwroot/css/bootstrap.blazor.css",
-    "css-minify-bundle": "cleancss --level 2 --format breaksWith=lf --output wwwroot/css/bootstrap.blazor.bundle.min.css wwwroot/css/bootstrap.blazor.bundle.css",    
+    "css-minify-bundle": "cleancss --level 2 --format breaksWith=lf --output wwwroot/css/bootstrap.blazor.bundle.min.css wwwroot/css/bootstrap.blazor.bundle.css",
     "watch-css": "nodemon --ignore dist/ --ignore css/ -e scss -x \"npm run css\""
   },
   "devDependencies": {

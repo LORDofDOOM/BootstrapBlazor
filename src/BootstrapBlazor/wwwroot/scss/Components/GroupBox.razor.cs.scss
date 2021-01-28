@@ -1,5 +1,5 @@
 ﻿.groupbox {
-    border: 1px solid #ddd;
+    border: 1px solid $gray-300;
     padding: 1.5rem 1rem 1rem 1rem;
     border-radius: 4px;
     position: relative;
@@ -10,6 +10,6 @@
         position: absolute;
         top: -10px;
         left: 30px;
-        background-color: #fff;
+        background-color: $white;
         padding: 0 0.5rem;
     }

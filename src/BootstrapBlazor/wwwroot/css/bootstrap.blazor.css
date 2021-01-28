@@ -11,8 +11,7 @@ html,
 body,
 button,
 .popover {
-  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
- Microsoft YaHei, SimSun, sans-serif;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
 }
 
 body,
@@ -422,7 +421,6 @@ input:disabled,
 }
 
 /*end alert*/
-/*end camera*/
 /*light*/
 .light {
   background-image: radial-gradient(circle, #fff, #adb5bd, #343a40);
@@ -661,7 +659,7 @@ input:disabled,
 
 @media (min-width: 375px) {
   .page-link {
-        padding: 0.5rem 0.5rem;
+    padding: 0.5rem 0.5rem;
   }
 }
 
@@ -672,7 +670,6 @@ input:disabled,
 }
 
 /*end pagination*/
-/*end qr*/
 /*multi-select*/
 .multi-select {
   width: 100%;
@@ -1022,7 +1019,6 @@ input:disabled,
 }
 
 /*end timer*/
-/*end toast*/
 /*toggle*/
 .toggle {
   position: relative;
@@ -1194,8 +1190,7 @@ input:disabled,
   user-select: none;
   white-space: nowrap;
   margin: 0;
-  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
- Microsoft YaHei, SimSun, sans-serif;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
 }
 
 .form-checkbox .radio-input {
@@ -2497,7 +2492,7 @@ td.end:not(.next-month):not(.prev-month):not(.disabled)
   margin: 0;
 }
 
-        .tabs-border-card > .tabs-header .tabs-item.active {
+.tabs-border-card > .tabs-header .tabs-item.active {
   color: #4da3ff;
   background-color: #fff;
   border-right-color: #dee2e6;
@@ -2597,10 +2592,10 @@ td.end:not(.next-month):not(.prev-month):not(.disabled)
 }
 
 .is-page .layout-main > .tabs {
-    margin: -1rem;
-    border: none;
-    border-radius: unset;
-    min-height: calc(100% + 2rem);
+  margin: -1rem;
+  border: none;
+  border-radius: unset;
+  min-height: calc(100% + 2rem);
 }
 
 /*end tabs*/

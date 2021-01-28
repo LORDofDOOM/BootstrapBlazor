@@ -20,12 +20,12 @@
         }
 
         .rate .rate-item i {
-            color: #c6d1de;
+            color: $primary-50;
             transition: .3s;
         }
 
         .rate .rate-item.is-on i {
-            color: #c6d1de;
+            color: $primary-50;
         }
 
             .rate .rate-item.is-on i:before {
@@ -33,5 +33,5 @@
             }
 
     .rate:not(.disabled) .rate-item.is-on i {
-        color: #f7ba2a;
+        color: $warning;
     }
