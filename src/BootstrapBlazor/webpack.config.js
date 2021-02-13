@@ -32,6 +32,14 @@ module.exports = {
       path.resolve(__dirname, "Components/Table/Table.razor.cs.min.js"),
       path.resolve(__dirname, "Components/Table/Filter/TableFilter.razor.cs.min.js"),
       path.resolve(__dirname, "Components/Drawer/Drawer.razor.cs.min.js"),
+	  path.resolve(__dirname, "Components/Select/Select.razor.cs.min.js"),
+	  path.resolve(__dirname, "Components/DateTimePicker/DateTimePicker.razor.cs.min.js"),
+	  path.resolve(__dirname, "Components/DateTimePicker/TimePickerBody.razor.cs.min.js"),
+	  path.resolve(__dirname, "Components/DateTimeRange/DateTimeRange.razor.cs.min.js"),
+	  path.resolve(__dirname, "Components/Tab/Tab.razor.cs.min.js"),
+	  path.resolve(__dirname, "Components/Layout/Layout.razor.cs.min.js"),
+	  path.resolve(__dirname, "Components/GoTop/GoTop.razor.cs.min.js"),
+	  
     ],
   },
   optimization: {
