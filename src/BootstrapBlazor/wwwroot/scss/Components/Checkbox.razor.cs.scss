@@ -33,11 +33,11 @@
     }
 
         .form-checkbox .radio-input .radio-inner {
-            border: 1px solid #dcdfe6;
+            border: 1px solid $gray-300;
             border-radius: 100%;
             width: 14px;
             height: 14px;
-            background-color: #fff;
+            background-color: $white;
             position: relative;
             cursor: pointer;
             display: inline-block;
@@ -52,19 +52,19 @@
 
         .form-checkbox .checkbox-input .checkbox-inner {
             display: inline-block;
-            border: 1px solid #dcdfe6;
+            border: 1px solid $gray-300;
             border-radius: 2px;
             width: 14px;
             height: 14px;
             position: relative;
-            background-color: #fff;
+            background-color: $white;
             transition: border-color .25s cubic-bezier(.71,-.46,.29,1.46), background-color .25s cubic-bezier(.71,-.46,.29,1.46);
         }
 
             .form-checkbox .checkbox-input .checkbox-inner:after {
                 box-sizing: content-box;
                 content: "";
-                border: 1px solid #fff;
+                border: 1px solid $white;
                 border-left: 0;
                 border-top: 0;
                 height: 7px;
@@ -81,7 +81,7 @@
         width: 4px;
         height: 4px;
         border-radius: 100%;
-        background-color: #fff;
+        background-color: $white;
         content: "";
         position: absolute;
         left: 50%;
@@ -96,8 +96,8 @@
 
     .form-checkbox.is-checked .checkbox-input .checkbox-inner, .form-checkbox.is-indeterminate .checkbox-input .checkbox-inner,
     .form-checkbox.is-checked .radio-input .radio-inner {
-        background-color: #409eff;
-        border-color: #409eff;
+        background-color: $primary-200;
+        border-color: $primary-200;
     }
 
         .form-checkbox.is-checked .checkbox-input .checkbox-inner:after {
@@ -114,23 +114,23 @@
 
         .form-checkbox.is-disabled .checkbox-input .checkbox-inner,
         .form-checkbox.is-disabled .radio-input .radio-inner {
-            background-color: #edf2fc;
-            border-color: #dcdfe6;
+            background-color: $gray-100;
+            border-color: $gray-300;
         }
 
         .form-checkbox.is-disabled .checkbox-label {
-            color: #c0c4cc;
+            color: $gray-200;
         }
 
         .form-checkbox.is-disabled.is-checked .checkbox-input .checkbox-inner:after {
-            border-color: #c0c4cc;
+            border-color: $gray-200;
         }
 
     .form-checkbox.is-indeterminate .checkbox-input .checkbox-inner:before {
         content: "";
         position: absolute;
         display: block;
-        background-color: #fff;
+        background-color: $white;
         height: 2px;
         transform: scale(.5);
         left: 0;
@@ -139,11 +139,11 @@
     }
 
     .form-checkbox.is-invalid .checkbox-input .checkbox-inner {
-        border-color: #dc3545;
+        border-color: $danger;
     }
 
     .form-checkbox.is-valid .checkbox-input .checkbox-inner {
-        border-color: #28a745;
+        border-color: $success;
     }
 
 @media (min-width: 576px) {

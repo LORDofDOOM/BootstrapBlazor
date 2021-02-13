@@ -9,9 +9,9 @@
     .table-filter .table-filter-item {
         min-width: 220px;
         border-radius: 0.25rem;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.125);
-        background-color: #fff;
-        border: 1px solid rgba(0,0,0,.125);
+        box-shadow: 0 0 10px rgba($black, 0.125);
+        background-color: $white;
+        border: 1px solid rgba($black,.125);
         position: absolute;
         display: none;
     }
@@ -44,7 +44,7 @@
         }
 
         .table-filter .card-arrow:before {
-            border-bottom-color: #ced4da;
+            border-bottom-color: $gray-400;
             top: 0;
             border-width: 0 .5rem .5rem .5rem;
         }
@@ -52,7 +52,7 @@
         .table-filter .card-arrow:after {
             top: 1px;
             border-width: 0 .5rem .5rem .5rem;
-            border-bottom-color: #f7f7f7;
+            border-bottom-color: $gray-50;
         }
 
     .table-filter .card-body {
@@ -86,12 +86,12 @@
             font-size: 0.875rem;
             border-radius: 3px;
             line-height: 12px;
-            border: 1px solid #dcdfe6;
-            color: #606266;
+            border: 1px solid $gray-300;
+            color: #$gray-600;
             transition: border-color .3s linear, color .3s linear;
         }
 
             .table-filter .card-footer .btn:not(.is-disabled):not(:disabled):hover {
-                border-color: #409eff;
-                color: #409eff;
+                border-color: $primary-200;
+                color: $primary-200;
             }

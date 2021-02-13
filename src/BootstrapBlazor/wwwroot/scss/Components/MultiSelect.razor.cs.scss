@@ -9,7 +9,7 @@
     }
 
 .multi-select-toggle {
-    border: solid 1px #ddd;
+    border: solid 1px $gray-300;
     border-radius: 4px;
     cursor: pointer;
     min-height: 35px;
@@ -24,11 +24,11 @@
     .multi-select-toggle .clear {
         padding: 7px 0.25rem;
         display: none;
-        color: #adb5bd;
+        color: $gray-500;
     }
 
         .multi-select-toggle .clear:hover {
-            background-color: #ddd;
+            background-color: $gray-300;
             border-radius: 4px;
         }
 
@@ -52,7 +52,7 @@
         width: 30px;
         right: 0;
         top: 0;
-        color: #c0c4cc;
+        color: $gray-200;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -76,10 +76,10 @@
 }
 
     .multi-select-items span {
-        border: solid 1px #ddd;
+        border: solid 1px $gray-300;
         border-radius: 4px;
         padding: 2px 6px;
-        background-color: #e9ecef;
+        background-color: $gray-200;
         margin-bottom: 3px;
     }
 
@@ -110,8 +110,8 @@
     }
 
         .multi-select-items .multi-select-close:hover {
-            color: #333;
-            background-color: #ddd;
+            color: $gray-800;
+            background-color: $gray-300;
         }
 
 .multi-select-menu {
@@ -122,10 +122,10 @@
     font-size: inherit;
     cursor: pointer;
     overflow: auto;
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
-    background-color: #fff;
+    box-shadow: 0 2px 12px 0 rgba($black,.1);
+    background-color: $white;
     background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.15);
+    border: 1px solid rgba($black,.15);
     border-radius: .25rem;
     position: absolute;
     z-index: 1000;
@@ -144,13 +144,13 @@
     .multi-select-menu .toolbar .btn {
         line-height: 12px;
         padding: 7px 15px;
-        border: 1px solid #dee2e6;
+        border: 1px solid $gray-300;
         transition: border-color .3s linear, color .3s linear;
     }
 
         .multi-select-menu .toolbar .btn:hover {
-            border-color: #409eff;
-            color: #409eff;
+            border-color: $primary-200;
+            color: $primary-200;
         }
 
         .multi-select-menu .toolbar .btn:not(:last-child) {
@@ -171,7 +171,7 @@
         position: absolute;
         left: calc(100% - 34px);
         top: 18px;
-        color: #adb5bd;
+        color: $gray-500;
     }
 
 .multi-select-menu-item {
@@ -182,11 +182,11 @@
 }
 
     .multi-select-menu-item.active {
-        background-color: #dee2e6;
+        background-color: $gray-300;
     }
 
     .multi-select-menu-item:hover {
-        background-color: #6fd6e6;
+        background-color: $info-200;
     }
 
     .multi-select-menu-item > span {
@@ -205,7 +205,7 @@
 
 .multi-select-ph {
     padding: 0 1rem;
-    color: #c0c4cc;
+    color: $gray-200;
     line-height: 35px;
     position: absolute;
 }
@@ -215,7 +215,7 @@
     height: 0;
     border-width: 0 6px 6px;
     border-style: solid;
-    border-color: transparent transparent rgba(0,0,0,.15);
+    border-color: transparent transparent rgba($black,.15);
     position: absolute;
     left: 20px;
     margin-top: 4px;
@@ -229,7 +229,7 @@
         height: 0;
         border-width: 0 6px 6px;
         border-style: solid;
-        border-color: transparent transparent #fff;
+        border-color: transparent transparent $white;
         position: absolute;
         top: 1px;
         left: -6px;

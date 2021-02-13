@@ -1,5 +1,5 @@
 ﻿.layout-gotop {
-    background: rgba(255,255,255,.5);
+    background: rgba($white,.5);
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -8,10 +8,10 @@
     justify-content: center;
     margin-right: 4px;
     transition: background-color .3s linear;
-    color: #606266;
+    color: $gray-600;
 }
 
     .layout-gotop:hover {
-        background-color: #fff;
-        color: #606266;
+        background-color: $white;
+        color: $gray-600;
     }
