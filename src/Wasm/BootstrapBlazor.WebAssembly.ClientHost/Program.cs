@@ -42,7 +42,10 @@ namespace BootstrapBlazor.WebAssembly.ClientHost
             builder.Services.AddExampleService();
 
             // 增加 BootstrapBlazor 组件
-            builder.Services.AddBootstrapBlazor();
+            builder.Services.AddBootstrapBlazor(setupAction: option =>
+            {
+                option.ResourceManagerStringLocalizerType = typeof(Program);
+            });
 
             // 增加 Table Excel 导出服务
             builder.Services.AddBootstrapBlazorTableExcelExport();
@@ -58,43 +61,40 @@ namespace BootstrapBlazor.WebAssembly.ClientHost
 
             builder.Services.AddSingleton<ICultureStorage, DefaultCultureStorage>();
 
-            builder.Services.Configure<BootstrapBlazorOptions>(op => op.ToastDelay = 4000);
+            builder.Services.Configure<BootstrapBlazorOptions>(op =>
+            {
+                op.ToastDelay = 4000;
+                op.SupportedCultures.AddRange(new string[] { "zh-CN", "en-US" });
+            });
+
+            builder.Services.AddLocalization();
 
             var host = builder.Build();
 
-            await GetCultureAsync(host);
+            await SetCultureAsync(host);
 
             await host.RunAsync();
         }
 
-        // based on https://github.com/pranavkm/LocSample
-        private static async Task GetCultureAsync(WebAssemblyHost host)
+        private static async Task SetCultureAsync(WebAssemblyHost host)
         {
+            // 如果 localStorage 未设置语言使用浏览器请求语言
             var jsRuntime = host.Services.GetRequiredService<IJSRuntime>();
-            var cultureName = await jsRuntime.InvokeAsync<string>("$.blazorCulture.get") ?? CultureInfo.CurrentCulture.Name;
-            var culture = new CultureInfo(cultureName);
-            CultureInfo.DefaultThreadCurrentCulture = culture;
-            CultureInfo.DefaultThreadCurrentUICulture = culture;
+            var cultureName = await jsRuntime.InvokeAsync<string>("$.blazorCulture.get");
+
+            if (!string.IsNullOrEmpty(cultureName))
+            {
+                var culture = new CultureInfo(cultureName);
+
+                // 注意 wasm 模式此处必须使用 DefaultThreadCurrentCulture 不可以使用 CurrentCulture
+                CultureInfo.DefaultThreadCurrentCulture = culture;
+                CultureInfo.DefaultThreadCurrentUICulture = culture;
+            }
         }
 
         internal class DefaultCultureStorage : ICultureStorage
         {
             public CultureStorageMode Mode { get; set; } = CultureStorageMode.LocalStorage;
-        }
-
-        internal class CorsMessageHandler : HttpClientHandler
-        {
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="request"></param>
-            /// <param name="cancellationToken"></param>
-            /// <returns></returns>
-            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-            {
-                request.SetBrowserRequestMode(BrowserRequestMode.Cors);
-                return base.SendAsync(request, cancellationToken);
-            }
         }
     }
 }

@@ -3,6 +3,9 @@
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using BootstrapBlazor.Components;
+using BootstrapBlazor.Localization.Json;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
@@ -49,35 +52,39 @@ namespace Microsoft.AspNetCore.Components.Forms
             var cacheKey = (CultureInfoName: CultureInfo.CurrentUICulture.Name, Type: modelType, FieldName: fieldName);
             if (!DisplayNameCache.TryGetValue(cacheKey, out var dn))
             {
-                if (TryGetValidatableProperty(cacheKey.Type, cacheKey.FieldName, out var propertyInfo))
+                // 显示名称为空时通过资源文件查找 FieldName 项
+                var localizer = JsonStringLocalizerFactory.CreateLocalizer(cacheKey.Type);
+                var stringLocalizer = localizer[fieldName];
+                if (!stringLocalizer.ResourceNotFound)
                 {
-                    var colNameAttribute = propertyInfo.GetCustomAttribute<ColumnNameAttribute>();
-                    if (colNameAttribute != null)
-                    {
-                        dn = colNameAttribute.GetName();
-                    }
-                    if (string.IsNullOrEmpty(dn))
-                    {
-                        var displayNameAttribute = propertyInfo.GetCustomAttribute<DisplayAttribute>();
-                        if (displayNameAttribute != null)
-                        {
-                            dn = displayNameAttribute.Name;
-                        }
-                    }
-                    if (string.IsNullOrEmpty(dn))
-                    {
-                        var displayAttribute = propertyInfo.GetCustomAttribute<DisplayNameAttribute>();
-                        if (displayAttribute != null)
-                        {
-                            dn = displayAttribute.DisplayName;
-                        }
-                    }
+                    dn = stringLocalizer.Value;
+                }
+                else if (TryGetValidatableProperty(cacheKey.Type, cacheKey.FieldName, out var propertyInfo))
+                {
+                    // 回退查找 Display 标签
+                    dn = propertyInfo.GetCustomAttribute<DisplayAttribute>()?.Name
+                        ?? propertyInfo.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName;
 
+                    // 回退查找资源文件通过 dn 查找匹配项 用于支持 Validation
                     if (!string.IsNullOrEmpty(dn))
                     {
-                        // add display name into cache
-                        DisplayNameCache.GetOrAdd(cacheKey, key => dn);
+                        var resxType = ServiceProviderHelper.ServiceProvider.GetRequiredService<IOptions<JsonLocalizationOptions>>();
+                        if (resxType.Value.ResourceManagerStringLocalizerType != null)
+                        {
+                            localizer = JsonStringLocalizerFactory.CreateLocalizer(resxType.Value.ResourceManagerStringLocalizerType);
+                            stringLocalizer = localizer[dn];
+                            if (!stringLocalizer.ResourceNotFound)
+                            {
+                                dn = stringLocalizer.Value;
+                            }
+                        }
                     }
+                }
+
+                // add display name into cache
+                if (!string.IsNullOrEmpty(dn))
+                {
+                    DisplayNameCache.GetOrAdd(cacheKey, key => dn);
                 }
             }
             return dn ?? cacheKey.FieldName;

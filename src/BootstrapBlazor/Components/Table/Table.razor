@@ -124,6 +124,14 @@
                 </div>
             }
         </div>
+
+        @if (ShowTopPagination && TotalCount > 0 && IsPagination)
+        {
+            <div class="table-pagination">
+                <Pagination PageItemsSource="@PageItemsSource" PageItems="@PageItems" TotalCount="@TotalCount" PageIndex="@PageIndex" OnPageClick="@OnPageClick" OnPageItemsChanged="@OnPageItemsChanged"></Pagination>
+            </div>
+        }
+
         <div class="@WrapperClassName">
             @if (ActiveRenderModel == TableRenderModel.Table)
             {
@@ -240,12 +248,15 @@
             }
         }
 
-        @if (TotalCount > 0 && IsPagination)
+        @if (!ShowTopPagination && TotalCount > 0 && IsPagination)
         {
             <div class="table-pagination">
                 <Pagination PageItemsSource="@PageItemsSource" PageItems="@PageItems" TotalCount="@TotalCount" PageIndex="@PageIndex" OnPageClick="@OnPageClick" OnPageItemsChanged="@OnPageItemsChanged"></Pagination>
             </div>
         }
+        <div class="table-loader">
+            <Spinner Color="Color.Primary" />
+        </div>
     }
 </div>
 

@@ -272,8 +272,9 @@ namespace BootstrapBlazor.Components
                 // 初始化列
                 if (AutoGenerateColumns)
                 {
+                    var cols = InternalTableColumn.GetProperties<TItem>(Columns);
                     Columns.Clear();
-                    Columns.AddRange(InternalTableColumn.GetProperties<TItem>());
+                    Columns.AddRange(cols);
                 }
 
                 ColumnVisibles = Columns.Select(i => new ColumnVisibleItem { FieldName = i.GetFieldName(), Visible = i.Visible }).ToList();
@@ -292,6 +293,12 @@ namespace BootstrapBlazor.Components
 
             if (IsRendered)
             {
+                if(IsLoading)
+                {
+                    IsLoading = false;
+                    var _ = JSRuntime.InvokeVoidAsync(TableElement, "bb_table_load", "hide");
+                }
+
                 // fix: https://gitee.com/LongbowEnterprise/BootstrapBlazor/issues/I2AYEH
                 // PR: https://gitee.com/LongbowEnterprise/BootstrapBlazor/pulls/818
                 if (Columns.Any(col => col.ShowTips) && string.IsNullOrEmpty(methodName))

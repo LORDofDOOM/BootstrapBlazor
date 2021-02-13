@@ -2,15 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
-using BootstrapBlazor.Components;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Reflection;
 
 namespace BootstrapBlazor.Localization.Json
 {
@@ -20,39 +15,31 @@ namespace BootstrapBlazor.Localization.Json
     public class JsonLocalizationOptions : LocalizationOptions
     {
         /// <summary>
-        /// 获得/设置 本地化资源文件流集合 默认为空
+        /// 获得/设置 微软 resx 格式指定类型
         /// </summary>
-        public IEnumerable<Stream>? JsonLocalizationStreams { get; set; }
+        public Type? ResourceManagerStringLocalizerType { get; set; }
 
         /// <summary>
-        /// 获得/设置 自定义 IStringLocalizer 接口 默认为空
+        /// 获得/设置 外置资源文件程序集集合
         /// </summary>
-        public IStringLocalizer? StringLocalizer { get; set; }
+        public IEnumerable<Assembly>? AdditionalJsonAssemblies { get; set; }
 
         /// <summary>
-        /// 获得/设置 自定义 Json 格式资源流集合
+        /// 获得/设置 外置资源文件路径集合
         /// </summary>
-        public Func<string, IConfiguration>? LocalizerConfigurationFactory { get; set; }
+        public IEnumerable<string>? AdditionalJsonFiles { get; set; }
 
         /// <summary>
-        /// 获得/设置 LoggerFactory 实例
+        /// 获得/设置 回落默认文化
         /// </summary>
-        public ILoggerFactory LoggerFactory { get; set; }
+        internal string? FallbackCulture { get; set; }
 
         /// <summary>
         /// 构造方法
         /// </summary>
         public JsonLocalizationOptions()
         {
-            ResourcesPath = "Resources";
-            LoggerFactory = ServiceProviderHelper.ServiceProvider.GetRequiredService<ILoggerFactory>();
+            ResourcesPath = "Locales";
         }
-
-        /// <summary>
-        /// 创建 IOptions 示例方法
-        /// </summary>
-        /// <param name="resourcesPath"></param>
-        /// <returns></returns>
-        public IOptions<LocalizationOptions> CreateOptions(string? resourcesPath = null) => Options.Create(new LocalizationOptions() { ResourcesPath = resourcesPath ?? ResourcesPath });
     }
 }
