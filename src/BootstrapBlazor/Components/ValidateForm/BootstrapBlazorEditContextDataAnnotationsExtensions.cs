@@ -2,12 +2,17 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
+using BootstrapBlazor.Localization.Json;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 
 namespace BootstrapBlazor.Components
 {
@@ -47,7 +52,8 @@ namespace BootstrapBlazor.Components
             {
                 var validationContext = new ValidationContext(editContext.Model);
                 var validationResults = new List<ValidationResult>();
-                Validator.TryValidateObject(editContext.Model, validationContext, validationResults, true);
+
+                TryValidateObject(editContext.Model, validationContext, validationResults);
                 editForm.ValidateObject(editContext.Model, validationContext, validationResults);
 
                 messages.Clear();
@@ -80,7 +86,7 @@ namespace BootstrapBlazor.Components
             };
 
             var propertyValue = fieldIdentifier.GetPropertyValue();
-            Validator.TryValidateProperty(propertyValue, validationContext, results);
+            TryValidateProperty(propertyValue, validationContext, results);
             editForm.ValidateProperty(propertyValue, validationContext, results);
 
             messages.Clear(fieldIdentifier);
@@ -101,6 +107,69 @@ namespace BootstrapBlazor.Components
             var invoker = PropertyValueInvokerCache.GetOrAdd(cacheKey, key => model.GetPropertyValueLambda<object, object>(key.FieldName).Compile());
 
             return invoker.Invoke(model);
+        }
+
+        private static void TryValidateObject(object model, ValidationContext context, ICollection<ValidationResult> results)
+        {
+            var modelType = model.GetType();
+            foreach (var p in modelType.GetProperties())
+            {
+                var fieldIdentifier = new FieldIdentifier(model, fieldName: p.Name);
+                var propertyValue = fieldIdentifier.GetPropertyValue();
+                TryValidateProperty(propertyValue, context, results, p);
+            }
+        }
+
+        private static void TryValidateProperty(object value, ValidationContext context, ICollection<ValidationResult> results, PropertyInfo? propertyInfo = null)
+        {
+            var modelType = context.ObjectType;
+            if (propertyInfo == null)
+            {
+                propertyInfo = modelType.GetProperty(context.MemberName!);
+            }
+
+            if (propertyInfo != null)
+            {
+                var rules = propertyInfo.GetCustomAttributes(true).Where(i => i.GetType().BaseType == typeof(ValidationAttribute)).Cast<ValidationAttribute>();
+                var displayName = new FieldIdentifier(context.ObjectInstance, propertyInfo.Name).GetDisplayName();
+                var memberName = propertyInfo.Name;
+                var attributeSpan = "Attribute".AsSpan();
+                foreach (var rule in rules)
+                {
+                    if (!rule.IsValid(value))
+                    {
+                        // 查找 resx 资源文件中的 ErrorMessage
+                        var ruleNameSpan = rule.GetType().Name.AsSpan();
+                        var index = ruleNameSpan.IndexOf(attributeSpan, StringComparison.OrdinalIgnoreCase);
+                        var ruleName = rule.GetType().Name.AsSpan().Slice(0, index);
+                        var isResx = false;
+                        if (!string.IsNullOrEmpty(rule.ErrorMessage))
+                        {
+                            var resxType = ServiceProviderHelper.ServiceProvider.GetRequiredService<IOptions<JsonLocalizationOptions>>().Value.ResourceManagerStringLocalizerType;
+                            if (resxType != null && TryGetLocalizer(resxType, rule.ErrorMessage, out var resx))
+                            {
+                                rule.ErrorMessage = resx;
+                                isResx = true;
+                            }
+                        }
+                        if (!isResx && TryGetLocalizer(context.ObjectType, $"{memberName}.{ruleName.ToString()}", out var msg))
+                        {
+                            rule.ErrorMessage = msg;
+                        }
+
+                        var errorMessage = rule.FormatErrorMessage(displayName ?? memberName);
+                        results.Add(new ValidationResult(errorMessage, new string[] { memberName }));
+                    }
+                }
+            }
+        }
+
+        private static bool TryGetLocalizer(Type type, string key, [MaybeNullWhen(false)] out string? text)
+        {
+            var localizer = JsonStringLocalizerFactory.CreateLocalizer(type);
+            var l = localizer[key];
+            text = !l.ResourceNotFound ? l.Value : null;
+            return !l.ResourceNotFound;
         }
     }
 }

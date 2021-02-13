@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - master
-      - dev
-      - hot-fix
 
 jobs:
   publish:
@@ -17,7 +15,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.102
+        dotnet-version: 5.0.103
 
     - name: Publish wasm
       run: |

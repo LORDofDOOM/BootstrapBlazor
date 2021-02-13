@@ -44,6 +44,11 @@ namespace BootstrapBlazor.Components
         protected List<TItem> SelectedItems { get; set; } = new List<TItem>();
 
         /// <summary>
+        /// 获得/设置 是否正在查询数据
+        /// </summary>
+        protected bool IsLoading { get; set; }
+
+        /// <summary>
         /// 获得 渲染模式
         /// </summary>
         protected TableRenderModel ActiveRenderModel => RenderModel switch
@@ -236,6 +241,12 @@ namespace BootstrapBlazor.Components
         /// <returns></returns>
         public async Task QueryAsync()
         {
+            // 通知客户端开启遮罩
+            if (!IsAutoRefresh)
+            {
+                IsLoading = true;
+                var _ = JSRuntime.InvokeVoidAsync(TableElement, "bb_table_load", "show");
+            }
             await QueryData();
             StateHasChanged();
         }
@@ -246,13 +257,13 @@ namespace BootstrapBlazor.Components
         protected async Task QueryData()
         {
             // https://gitee.com/LongbowEnterprise/BootstrapBlazor/issues/I29YK1
-            // TODO: 选中行目前不支持跨页
-            // 原因是选中行实例无法在翻页后保持
+            // 选中行目前不支持跨页 原因是选中行实例无法在翻页后保持
             SelectedItems.Clear();
 
             QueryData<TItem>? queryData = null;
             var queryOption = new QueryPageOptions()
             {
+                IsPage = IsPagination,
                 PageIndex = PageIndex,
                 PageItems = PageItems,
                 SearchText = SearchText,

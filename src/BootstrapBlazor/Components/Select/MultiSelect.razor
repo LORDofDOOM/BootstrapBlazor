@@ -28,7 +28,8 @@
             }
         </div>
     </div>
-    <div class="@MenuClassString">
+    <div class="multi-select-menu-arrow"></div>
+    <div class="multi-select-menu">
         @if (ShowSearch)
         {
             <div class="search">
@@ -36,20 +37,24 @@
                 <i class="fa fa-search"></i>
             </div>
         }
-        @if (ShowSelectAllButton)
+        @if (ShowToolbar)
         {
             <div class="toolbar">
-                <button class="btn" type="button" @onclick="@SelectAll">@SelectAllText</button>
-                <button class="btn" type="button" @onclick="@InvertSelect">@ReverseSelectText</button>
-                <button class="btn" type="button" @onclick="@Clear">@ClearText</button>
+                @if (ShowDefaultButtons)
+                {
+                    <button class="btn" type="button" @onclick="@SelectAll">@SelectAllText</button>
+                    <button class="btn" type="button" @onclick="@InvertSelect">@ReverseSelectText</button>
+                    <button class="btn" type="button" @onclick="@Clear">@ClearText</button>
+                }
+                @ButtonTemplate
             </div>
         }
         @foreach (var item in GetData())
         {
-            <div class="@GetItemClassString(item)" @onclick="@(e => ToggleRow(item))">
-                <Checkbox TValue="bool" Value="@GetCheckedState(item)"></Checkbox>
+            <DynamicElement OnClick="() => ToggleRow(item, true)" TriggerClick="@CheckCanTrigger(item)" class="@GetItemClassString(item)">
+                <Checkbox TValue="bool" Value="GetCheckedState(item)" IsDisabled="@CheckCanSelect(item)"></Checkbox>
                 <span>@item.Text</span>
-            </div>
+            </DynamicElement>
         }
     </div>
 </div>
