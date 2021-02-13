@@ -11,8 +11,7 @@ html,
 body,
 button,
 .popover {
-  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
- Microsoft YaHei, SimSun, sans-serif;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
 }
 
 body,
@@ -46,7 +45,7 @@ a:focus {
 .form-control.is-valid,
 .was-validated .form-control:valid,
 .form-control.valid.modified:not([type=checkbox]) {
-    outline: none;
+  outline: none;
 }
 
 input:disabled,
@@ -293,7 +292,6 @@ input:disabled,
 }
 
 /*end alert*/
-/*end camera*/
 /*light*/
 .light {
   background-image: radial-gradient(circle, #fff, #adb5bd, #343a40);
@@ -532,7 +530,7 @@ input:disabled,
 
 @media (min-width: 375px) {
   .page-link {
-        padding: 0.5rem 0.5rem;
+    padding: 0.5rem 0.5rem;
   }
 }
 
@@ -541,8 +539,8 @@ input:disabled,
     padding: 0.5rem 0.75rem;
   }
 }
-/*end pagination*/
 
+/*end pagination*/
 /*switch*/
 .switch {
   display: inline-flex;
@@ -683,7 +681,6 @@ input:disabled,
 }
 
 /*end timer*/
-/*end toast*/
 /*toggle*/
 .toggle {
   position: relative;
@@ -831,8 +828,8 @@ input:disabled,
 .toggle-off.btn-xs {
   padding-left: 12px;
 }
-/*end toggle*/
 
+/*end toggle*/
 /*progress*/
 .form-inline .progress {
   width: 100%;
@@ -1773,7 +1770,6 @@ input:disabled,
 }
 
 /*end menu*/
-
 /*step*/
 .steps {
   display: flex;
