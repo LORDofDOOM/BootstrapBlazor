@@ -3,10 +3,10 @@
 }
 
 .transfer-panel {
-    border: 1px solid #ebeef5;
+    border: 1px solid $gray-200;
     border-radius: 4px;
     overflow: hidden;
-    background: #fff;
+    background: $white;
     display: inline-block;
     vertical-align: middle;
     width: 200px;
@@ -18,11 +18,11 @@
     .transfer-panel .transfer-panel-header {
         height: 40px;
         line-height: 40px;
-        background: #f5f7fa;
+        background: $gray-100;
         margin: 0;
         padding-left: 15px;
-        border-bottom: 1px solid #ebeef5;
-        color: #000;
+        border-bottom: 1px solid $gray-200;
+        color: $black;
     }
 
 .transfer-panel-body {
@@ -62,9 +62,9 @@
         }
 
     .transfer-buttons .is-disabled, .transfer-buttons .is-disabled:active, .transfer-buttons .is-disabled:focus, .transfer-buttons .is-disabled:hover, .transfer-buttons [disabled] {
-        color: #fff;
-        background-color: #a0cfff;
-        border-color: #a0cfff;
+        color: $white;
+        background-color: $primary-50;
+        border-color: $primary-50;
     }
 
 .transfer-panel-filter {
@@ -83,14 +83,14 @@
         border-radius: 16px;
         padding-right: 10px;
         padding-left: 30px;
-        border: 1px solid #dcdfe6;
+        border: 1px solid $gray-300;
         transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-        color: #606266;
+        color: $gray-600;
     }
 
         .transfer-panel-filter .input-inner:focus {
             outline: none;
-            border-color: #409eff;
+            border-color: $primary-200;
         }
 
     .transfer-panel-filter .input-prefix {
@@ -103,7 +103,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #c0c4cc;
+        color: $gray-200;
     }
 
         .transfer-panel-filter .input-prefix:hover i:before, .transfer-panel-filter .input-prefix.is-on i:before {

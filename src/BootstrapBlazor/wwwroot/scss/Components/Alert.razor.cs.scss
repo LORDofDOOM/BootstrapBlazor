@@ -9,26 +9,26 @@
 }
 
 .alert.is-bar.alert-info {
-    border-left: 4px solid #50bfff;
-    background-color: #ecf8ff;
+    border-left: 5px solid $info;
+    background-color: $gray-300;
 }
 
 .alert.is-bar.alert-success {
-    border-left: 4px solid #28a745;
-    background-color: #c3e6cb;
+    border-left: 5px solid $success;
+    background-color: $gray-300;
 }
 
 .alert.is-bar.alert-primary {
-    border-left: 4px solid #007bff;
-    background-color: #daeafc;
+    border-left: 5px solid $primary;
+    background-color: $gray-300;
 }
 
 .alert.is-bar.alert-warning {
-    border-left: 4px solid #ffc107;
-    background-color: #fffcf2;
+    border-left: 5px solid $warning;
+    background-color: $gray-300;
 }
 
 .alert.is-bar.alert-danger {
-    border-left: 4px solid #dc3545;
-    background-color: #faeaec;
+    border-left: 5px solid $danger;
+    background-color: $gray-300;
 }

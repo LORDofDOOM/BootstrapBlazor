@@ -33,11 +33,11 @@
         }
 
         .tree .tree-item.hover:before {
-            background-color: #66a2e0a1;
+            background-color: $primary-100;
         }
 
         .tree .tree-item.active:before {
-            background-color: #409effa1;
+            background-color: $primary-200;
         }
 
         .tree .tree-item .tree-content {
