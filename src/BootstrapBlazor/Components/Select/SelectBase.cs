@@ -111,6 +111,10 @@ namespace BootstrapBlazor.Components
         /// <returns></returns>
         protected IEnumerable<SelectedItem> GetItems()
         {
+            if (!Items.Any() && typeof(TValue).IsEnum())
+            {
+                Items = typeof(TValue).ToSelectList();
+            }
             var items = Items.ToList();
             items.AddRange(Childs);
 

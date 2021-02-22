@@ -164,22 +164,17 @@ namespace BootstrapBlazor.Components
         private int GetOrder(string fieldName) => Model.GetType().GetProperty(fieldName)?.GetCustomAttribute<EditorOrderAttribute>()?.Order ?? 0;
 
         #region AutoEdit
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
         private RenderFragment AutoGenerateTemplate(IEditorItem item) => builder =>
         {
             var fieldType = item.PropertyType;
             if (fieldType != null && Model != null)
             {
                 // GetDisplayName
-                var displayName = item.GetDisplayName();
                 var fieldName = item.GetFieldName();
+                var displayName = Utility.GetDisplayName(Model, fieldName);
 
                 // FieldValue
-                var valueInvoker = GetPropertyValueLambdaCache.GetOrAdd((typeof(TModel), fieldName), key => Model.GetPropertyValueLambda<TModel, object?>(key.FieldName).Compile());
+                var valueInvoker = GetPropertyValueLambdaCache.GetOrAdd((typeof(TModel), fieldName), key => LambdaExtensions.GetPropertyValueLambda<TModel, object?>(Model, key.FieldName).Compile());
                 var fieldValue = valueInvoker.Invoke(Model);
 
                 // ValueChanged
@@ -220,8 +215,7 @@ namespace BootstrapBlazor.Components
                 switch (type.Name)
                 {
                     case nameof(String):
-                        var placeHolder = Model.GetPlaceHolder(fieldName);
-                        ret.Add(new KeyValuePair<string, object>("placeholder", placeHolder ?? PlaceHolderText));
+                        ret.Add(new KeyValuePair<string, object>("placeholder", Utility.GetPlaceHolder(Model, fieldName) ?? PlaceHolderText));
                         break;
                     case nameof(Int32):
                     case nameof(Double):
@@ -284,7 +278,7 @@ namespace BootstrapBlazor.Components
             {
                 if (model != null)
                 {
-                    var invoker = SetPropertyValueLambdaCache.GetOrAdd((typeof(TModel), fieldName), key => model.SetPropertyValueLambda<TModel, object?>(key.FieldName).Compile());
+                    var invoker = SetPropertyValueLambdaCache.GetOrAdd((typeof(TModel), fieldName), key => LambdaExtensions.SetPropertyValueLambda<TModel, object?>(model, key.FieldName).Compile());
                     invoker.Invoke(model, t);
                 }
             });

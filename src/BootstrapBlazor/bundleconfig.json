@@ -12,6 +12,12 @@
     ]
   },
   {
+    "outputFileName": "Components/Button/Button.razor.cs.min.css",
+    "inputFiles": [
+      "Components/Button/Button.razor.cs.css"
+    ]
+  },
+  {
     "outputFileName": "Components/Editor/Editor.razor.cs.min.css",
     "inputFiles": [
       "Components/Editor/Editor.razor.cs.css"
@@ -180,6 +186,36 @@
     ]
   },
   {
+    "outputFileName": "Components/Tree/Tree.razor.cs.min.css",
+    "inputFiles": [
+      "Components/Tree/Tree.razor.cs.css"
+    ]
+  },
+  {
+    "outputFileName": "Components/Transfer/Transfer.razor.cs.min.css",
+    "inputFiles": [
+      "Components/Transfer/Transfer.razor.cs.css"
+    ]
+  },
+  {
+    "outputFileName": "Components/Console/Console.razor.cs.min.css",
+    "inputFiles": [
+      "Components/Console/Console.razor.cs.css"
+    ]
+  },
+  {
+    "outputFileName": "Components/Tooltip/Tooltip.cs.min.css",
+    "inputFiles": [
+      "Components/Tooltip/Tooltip.cs.css"
+    ]
+  },
+  {
+    "outputFileName": "Components/Alert/Alert.razor.cs.min.css",
+    "inputFiles": [
+      "Components/Alert/Alert.razor.cs.css"
+    ]
+  },
+  {
     "outputFileName": "wwwroot/css/bootstrap.blazor.bundle.min.css",
     "inputFiles": [
       "wwwroot/lib/bootstrap/css/bootstrap.min.css",
@@ -214,7 +250,13 @@
       "Components/GoTop/GoTop.razor.cs.min.css",
       "Components/Select/MultiSelect.razor.cs.min.css",
       "Components/Checkbox/Checkbox.razor.cs.min.css",
-      "Components/Radio/Radio.razor.cs.min.css"
+      "Components/Radio/Radio.razor.cs.min.css",
+      "Components/Tree/Tree.razor.cs.min.css",
+      "Components/Transfer/Transfer.razor.cs.min.css",
+      "Components/Console/Console.razor.cs.min.css",
+      "Components/Button/Button.razor.cs.min.css",
+      "Components/Tooltip/Tooltip.cs.min.css",
+      "Components/Alert/Alert.razor.cs.min.css"
     ]
   },
   {
@@ -308,12 +350,6 @@
     ]
   },
   {
-    "outputFileName": "wwwroot/js/bootstrap.blazor.min.js",
-    "inputFiles": [
-      "wwwroot/js/bootstrap.blazor.js"
-    ]
-  },
-  {
     "outputFileName": "Components/Camera/Camera.razor.cs.min.js",
     "inputFiles": [
       "Components/Camera/Camera.razor.cs.js"
@@ -398,6 +434,42 @@
     ]
   },
   {
+    "outputFileName": "Components/Select/MultiSelect.razor.cs.min.js",
+    "inputFiles": [
+      "Components/Select/MultiSelect.razor.cs.js"
+    ]
+  },
+  {
+    "outputFileName": "Components/Tree/Tree.razor.cs.min.js",
+    "inputFiles": [
+      "Components/Tree/Tree.razor.cs.js"
+    ]
+  },
+  {
+    "outputFileName": "Components/Console/Console.razor.cs.min.js",
+    "inputFiles": [
+      "Components/Console/Console.razor.cs.js"
+    ]
+  },
+  {
+    "outputFileName": "Components/Button/PopConfirmButton.razor.cs.min.js",
+    "inputFiles": [
+      "Components/Button/PopConfirmButton.razor.cs.js"
+    ]
+  },
+  {
+    "outputFileName": "Components/Popover/Popover.cs.min.js",
+    "inputFiles": [
+      "Components/Popover/Popover.cs.js"
+    ]
+  },
+  {
+    "outputFileName": "Components/Tooltip/Tooltip.cs.min.js",
+    "inputFiles": [
+      "Components/Tooltip/Tooltip.cs.js"
+    ]
+  },
+  {
     "outputFileName": "wwwroot/js/bootstrap.blazor.bundle.min.js",
     "inputFiles": [
       "wwwroot/lib/jquery/jquery-3.5.1.min.js",
@@ -410,7 +482,6 @@
       "wwwroot/lib/extensions/longbow.extensions.min.js",
       "wwwroot/lib/captcha/longbow.captcha.min.js",
       "wwwroot/lib/tab/longbow.tab.min.js",
-      "wwwroot/js/bootstrap.blazor.min.js",
       "Components/Upload/Upload.razor.cs.min.js",
       "Components/Editor/Editor.razor.cs.min.js",
       "Components/Message/Message.razor.cs.min.js",
@@ -435,7 +506,13 @@
       "Components/DateTimeRange/DateTimeRange.razor.cs.min.js",
       "Components/Tab/Tab.razor.cs.min.js",
       "Components/Layout/Layout.razor.cs.min.js",
-      "Components/GoTop/GoTop.razor.cs.min.js"
+      "Components/GoTop/GoTop.razor.cs.min.js",
+      "Components/Select/MultiSelect.razor.cs.min.js",
+      "Components/Tree/Tree.razor.cs.min.js",
+      "Components/Console/Console.razor.cs.min.js",
+      "Components/Button/PopConfirmButton.razor.cs.min.js",
+      "Components/Popover/Popover.cs.min.js",
+      "Components/Tooltip/Tooltip.cs.min.js"
     ],
     "minify": {
       "enabled": false,

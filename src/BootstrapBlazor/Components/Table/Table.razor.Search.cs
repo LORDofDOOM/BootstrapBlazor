@@ -77,7 +77,7 @@ namespace BootstrapBlazor.Components
         protected async Task ResetSearchClick()
         {
             if (OnResetSearchAsync != null) await OnResetSearchAsync(SearchModel);
-            else if (SearchTemplate == null) SearchModel.Reset();
+            else if (SearchTemplate == null) Utility.Reset(SearchModel);
             await SearchClick();
         }
 
@@ -124,10 +124,10 @@ namespace BootstrapBlazor.Components
             var searchs = new List<InternalSearchAction>();
             if (!string.IsNullOrEmpty(SearchText))
             {
-                searchs.AddRange(columns.Select(col => new InternalSearchAction() { FieldKey = col.GetFieldName(), Value = SearchText }));
+                searchs.AddRange(columns.Where(col => col.PropertyType == typeof(string)).Select(col => new InternalSearchAction() { FieldKey = col.GetFieldName(), Value = SearchText }));
             }
 
-            // 未处理高级搜索弹窗内条件
+            //TODO: 未处理高级搜索弹窗内条件
             return searchs;
         }
 

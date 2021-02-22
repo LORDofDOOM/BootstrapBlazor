@@ -6,11 +6,10 @@ using BootstrapBlazor.Components;
 using BootstrapBlazor.Shared.Common;
 using BootstrapBlazor.Shared.Pages.Components;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using Foo = BootstrapBlazor.Shared.Pages.Components.Foo;
 
 namespace BootstrapBlazor.Shared.Pages
 {
@@ -19,7 +18,7 @@ namespace BootstrapBlazor.Shared.Pages
     /// </summary>
     public sealed partial class EditDialogs
     {
-        private BindItem Model { get; set; } = new BindItem()
+        private Foo Model { get; set; } = new Foo()
         {
             Name = "Name 1234",
             Address = "Address 1234"
@@ -34,7 +33,7 @@ namespace BootstrapBlazor.Shared.Pages
 
         private async Task ShowDialog()
         {
-            var option = new EditDialogOption<BindItem>()
+            var option = new EditDialogOption<Foo>()
             {
                 Title = "编辑对话框",
                 Model = Model,

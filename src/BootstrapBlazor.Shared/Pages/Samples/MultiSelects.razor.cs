@@ -8,11 +8,12 @@ using BootstrapBlazor.Shared.Pages.Components;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Foo = BootstrapBlazor.Shared.Pages.Components.Foo;
 
 namespace BootstrapBlazor.Shared.Pages
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public partial class MultiSelects
     {
@@ -80,6 +81,7 @@ namespace BootstrapBlazor.Shared.Pages
         }
 
         private IEnumerable<string> SelectedArrayValues { get; set; } = Enumerable.Empty<string>();
+        private IEnumerable<EnumEducation> SelectedEnumValues { get; set; } = new List<EnumEducation> { EnumEducation.Middel, EnumEducation.Primary };
 
         private IEnumerable<SelectedItem> OnSearch(string searchText)
         {
@@ -92,7 +94,7 @@ namespace BootstrapBlazor.Shared.Pages
             return Task.CompletedTask;
         }
 
-        private BindItem Model { get; set; } = new BindItem();
+        private Foo Model { get; set; } = new Foo();
 
         private Foo Foo { get; set; } = new Foo();
 

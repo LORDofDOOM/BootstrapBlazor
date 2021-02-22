@@ -33,14 +33,14 @@ namespace BootstrapBlazor.Components
             .AddClass("disabled", IsDisabled)
             .Build();
 
-        private string? ToggleClassString => CssBuilder.Default("multi-select-toggle")
+        private string? ToggleClassString => CssBuilder.Default("dropdown-menu-toggle")
             .AddClass($"border-{Color.ToDescriptionString()}", Color != Color.None && !IsDisabled)
             .AddClass("disabled", IsDisabled)
             .AddClass("selected", SelectedItems.Any())
             .AddClass(CssClass).AddClass(ValidCss)
             .Build();
 
-        private string? GetItemClassString(SelectedItem item) => CssBuilder.Default("multi-select-menu-item")
+        private string? GetItemClassString(SelectedItem item) => CssBuilder.Default("dropdown-item")
             .AddClass("active", GetCheckedState(item))
             .Build();
 
@@ -177,7 +177,22 @@ namespace BootstrapBlazor.Components
             MinErrorMessage ??= Localizer[nameof(MinErrorMessage)];
             MaxErrorMessage ??= Localizer[nameof(MaxErrorMessage)];
 
-            if (Items == null) Items = Enumerable.Empty<SelectedItem>();
+            if (Items == null)
+            {
+                Type? innerType = null;
+                if (typeof(IEnumerable).IsAssignableFrom(typeof(TValue)))
+                {
+                    innerType = typeof(TValue).GetGenericArguments()[0];
+                }
+                if (innerType != null && innerType.IsEnum)
+                {
+                    Items = innerType.ToSelectList();
+                }
+                else
+                {
+                    Items = Enumerable.Empty<SelectedItem>();
+                }
+            }
 
             if (OnSearchTextChanged == null)
             {
@@ -339,7 +354,14 @@ namespace BootstrapBlazor.Components
                 foreach (var item in SelectedItems)
                 {
                     var val = item.Value;
-                    instance.Add(val);
+                    if (t[0].IsEnum)
+                    {
+                        instance.Add(Enum.Parse(t[0], val));
+                    }
+                    else
+                    {
+                        instance.Add(val);
+                    }
                 }
                 CurrentValue = (TValue)instance;
             }

@@ -87,6 +87,9 @@
     "ThisMonth": "This Month",
     "LastMonth": "Last Month"
   },
+  "BootstrapBlazor.Components.BootstrapInputNumber": {
+    "ParsingErrorMessage": "The {0} field must be a number."
+  },
   "BootstrapBlazor.Components.ResultDialogOption": {
     "ButtonYesText": "Yes",
     "ButtonNoText": "No",
@@ -140,9 +143,6 @@
     "PlaceHolder": "Please input ...",
     "ClearButtonText": "Clear",
     "GenerateButtonText": "Generate"
-  },
-  "BootstrapBlazor.Components.RequiredValidator": {
-    "ErrorMessage": "This field is required"
   },
   "BootstrapBlazor.Components.Search": {
     "SearchButtonText": "Search"

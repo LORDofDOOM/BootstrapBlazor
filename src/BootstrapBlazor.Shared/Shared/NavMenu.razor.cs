@@ -159,7 +159,7 @@ namespace BootstrapBlazor.Shared.Shared
             item.AddItem(new DemoMenuItem()
             {
                 Text = "表单组件 ValidateForm",
-                Url = "forms"
+                Url = "validateforms"
             });
             item.AddItem(new DemoMenuItem()
             {
@@ -193,11 +193,6 @@ namespace BootstrapBlazor.Shared.Shared
             });
             item.AddItem(new DemoMenuItem()
             {
-                Text = "下拉框 DropdownList",
-                Url = "dropdownlists"
-            });
-            item.AddItem(new DemoMenuItem()
-            {
                 Text = "富文本框 Editor",
                 Url = "editors"
             });
@@ -208,6 +203,7 @@ namespace BootstrapBlazor.Shared.Shared
             });
             item.AddItem(new DemoMenuItem()
             {
+                IsUpdate = true,
                 Text = "数值框 InputNumber",
                 Url = "inputnumbers"
             });

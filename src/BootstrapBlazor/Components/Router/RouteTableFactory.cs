@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
@@ -11,8 +10,6 @@ namespace BootstrapBlazor.Components
 {
     internal static class RouteTableFactory
     {
-        static readonly char[] _queryOrHashStartChar = new[] { '?', '#' };
-
         [NotNull]
         private static Routing.IRouteTable? Routes { get; set; }
         private static readonly HashSet<Assembly> _assemblies = new HashSet<Assembly>();
@@ -50,6 +47,8 @@ namespace BootstrapBlazor.Components
 
 #if SSR
         #region SSR 模式可用
+        static readonly char[] _queryOrHashStartChar = new[] { '?', '#' };
+
         public static RouteContext Create(IEnumerable<Assembly> assemblies, string url)
         {
             var routerAssembly = typeof(Microsoft.AspNetCore.Components.Routing.Router).Assembly;

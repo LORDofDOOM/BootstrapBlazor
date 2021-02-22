@@ -17,12 +17,12 @@ namespace BootstrapBlazor.Shared.Pages
     public sealed partial class Selects
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         private Foo Model { get; set; } = new Foo();
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         private Foo BindModel { get; set; } = new Foo() { Name = "" };
 
@@ -164,7 +164,7 @@ namespace BootstrapBlazor.Shared.Pages
             return SelectedBoolItem.HasValue ? SelectedBoolItem.Value.ToString() : "null";
         }
 
-        private SortOrder SelectedEnumItem { get; set; } = SortOrder.Unset;
+        private EnumEducation SelectedEnumItem { get; set; } = EnumEducation.Primary;
 
         /// <summary>
         /// 获得事件方法

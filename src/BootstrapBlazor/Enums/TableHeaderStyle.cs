@@ -4,17 +4,27 @@
 
 using System.ComponentModel;
 
-namespace BootstrapBlazor.Shared.Common
+namespace BootstrapBlazor.Components
 {
     /// <summary>
-    /// 
+    /// 表格 thead 样式枚举
     /// </summary>
-    internal class Foo
+    public enum TableHeaderStyle
     {
         /// <summary>
-        /// 
+        /// 未设置
         /// </summary>
-        [DisplayName("城市名称")]
-        public string Name { get; set; } = "Shanghai";
+        None,
+        /// <summary>
+        /// 浅色
+        /// </summary>
+        [Description("thead-light")]
+        Light,
+
+        /// <summary>
+        /// 深色
+        /// </summary>
+        [Description("thead-dark")]
+        Dark
     }
 }

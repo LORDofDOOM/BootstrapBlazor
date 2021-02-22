@@ -26,6 +26,13 @@ namespace BootstrapBlazor.Components
             .Build();
 
         /// <summary>
+        /// 获得 thead 样式表集合
+        /// </summary>
+        protected string? HeaderClass => CssBuilder.Default()
+            .AddClass(HeaderStyle.ToDescriptionString(), HeaderStyle != TableHeaderStyle.None)
+            .Build();
+
+        /// <summary>
         /// 获得 表头行是否选中状态
         /// </summary>
         /// <returns></returns>

@@ -16,7 +16,7 @@ namespace BootstrapBlazor.Components
     /// <summary>
     /// AutoComplete 组件基类
     /// </summary>
-    public abstract class AutoCompleteBase : BootstrapInputBase<string>
+    public partial class AutoComplete
     {
         private bool _isLoading;
         private bool _isShown;
@@ -48,13 +48,6 @@ namespace BootstrapBlazor.Components
         [Parameter]
         [NotNull]
         public string? NoDataTip { get; set; }
-
-        /// <summary>
-        /// 获得 PlaceHolder 属性
-        /// </summary>
-        [Parameter]
-        [NotNull]
-        public string? PlaceHolder { get; set; }
 
         /// <summary>
         /// 是否开启模糊查询，默认为 false

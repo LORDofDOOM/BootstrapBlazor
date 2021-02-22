@@ -12,53 +12,54 @@
         cursor: pointer;
     }
 
-    .form-select .dropdown-menu-arrow {
+.dropdown-menu-arrow {
+    width: 0;
+    height: 0;
+    border-width: 0 6px 6px;
+    border-style: solid;
+        border-color: transparent transparent rgba($black,.15);
+    position: absolute;
+    left: 20px;
+    margin-top: 4px;
+    z-index: 1001;
+    display: none;
+}
+
+    .dropdown-menu-arrow:after {
+        content: " ";
         width: 0;
         height: 0;
         border-width: 0 6px 6px;
         border-style: solid;
-        border-color: transparent transparent rgba($black,.15);
-        position: absolute;
-        left: 20px;
-        margin-top: 4px;
-        z-index: 1001;
-        display: none;
-    }
-
-        .form-select .dropdown-menu-arrow:after {
-            content: " ";
-            width: 0;
-            height: 0;
-            border-width: 0 6px 6px;
-            border-style: solid;
             border-color: transparent transparent $white;
-            position: absolute;
-            top: 1px;
-            left: -6px;
-        }
+        position: absolute;
+        top: 1px;
+        left: -6px;
+    }
 
-    .form-select .form-select-input[readonly] {
         background-color: $white;
-    }
+.form-select.show .dropdown-menu-arrow {
+    display: block;
+}
 
-    .form-select.show .dropdown-menu-arrow {
-        display: block;
-    }
+.form-select .form-select-input[readonly] {
+    background-color: #fff;
+}
 
-    .form-select.show .form-select-append i {
-        transform: rotate(0);
-    }
+.form-select.show .form-select-append i {
+    transform: rotate(0);
+}
 
-    .form-select.is-disabled .form-select-input {
+.form-select.is-disabled .form-select-input {
         background-color: $gray-100;
         border-color: $gray-300;
         color: $gray-200;
-        cursor: not-allowed;
-    }
+    cursor: not-allowed;
+}
 
-    .form-select.is-disabled .form-select-append {
+.form-select.is-disabled .form-select-append {
         color: $gray-200;
-    }
+}
 
 .form-select-input {
     color: $gray-600;

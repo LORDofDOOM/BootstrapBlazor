@@ -195,6 +195,12 @@ namespace BootstrapBlazor.Components
         public int AutoRefreshInterval { get; set; } = 2000;
 
         /// <summary>
+        /// 获取/设置 表格 thead 样式 <see cref="TableHeaderStyle"/>，默认为浅色<see cref="TableHeaderStyle.None"/>
+        /// </summary>
+        [Parameter]
+        public TableHeaderStyle HeaderStyle { get; set; } = TableHeaderStyle.None;
+
+        /// <summary>
         /// 获得/设置 单击行回调委托方法
         /// </summary>
         [Parameter]
@@ -293,7 +299,7 @@ namespace BootstrapBlazor.Components
 
             if (IsRendered)
             {
-                if(IsLoading)
+                if (IsLoading)
                 {
                     IsLoading = false;
                     var _ = JSRuntime.InvokeVoidAsync(TableElement, "bb_table_load", "hide");
@@ -381,7 +387,7 @@ namespace BootstrapBlazor.Components
                 else if (!string.IsNullOrEmpty(col.FormatString))
                 {
                     // 格式化字符串
-                    content = val?.Format(col.FormatString, CultureInfo.CurrentUICulture.DateTimeFormat) ?? "";
+                    content = Utility.Format(val, col.FormatString);
                 }
                 else if (col.PropertyType.IsEnum())
                 {
@@ -389,7 +395,11 @@ namespace BootstrapBlazor.Components
                 }
                 else if (col.PropertyType.IsDateTime())
                 {
-                    content = val?.Format(CultureInfo.CurrentUICulture.DateTimeFormat) ?? "";
+                    content = Utility.Format(val, CultureInfo.CurrentUICulture.DateTimeFormat);
+                }
+                else if (val is IEnumerable<object> v)
+                {
+                    content = string.Join(",", v);
                 }
                 else
                 {
@@ -404,7 +414,7 @@ namespace BootstrapBlazor.Components
             object? ret = null;
             if (item != null)
             {
-                var invoker = GetPropertyCache.GetOrAdd((typeof(TItem), fieldName), key => item.GetPropertyValueLambda<TItem, object>(key.Item2).Compile());
+                var invoker = GetPropertyCache.GetOrAdd((typeof(TItem), fieldName), key => LambdaExtensions.GetPropertyValueLambda<TItem, object>(item, key.Item2).Compile());
                 ret = invoker(item);
             }
             return ret;
