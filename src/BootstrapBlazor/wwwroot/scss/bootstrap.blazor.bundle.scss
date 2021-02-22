@@ -46,11 +46,13 @@
 @import "bootstrapblazor";
 
 /* Import Bootstrap Blazor Components */
+@import "Components/Alert.razor.cs.scss";
 @import "Components/BarcodeReader.razor.cs.scss";
 @import "Components/Camera.razor.cs.scss";
 @import "Components/Carousel.razor.cs.scss";
 @import "Components/Checkbox.razor.cs.scss";
 @import "Components/Collapse.razor.cs.scss";
+@import "Components/Console.razor.cs.scss";
 @import "Components/DateTimePicker.razor.cs.scss";
 @import "Components/DateTimeRange.razor.cs.scss";
 @import "Components/Drawer.razor.cs.scss";
@@ -72,6 +74,9 @@
 @import "Components/TableFilter.razor.cs.scss";
 @import "Components/TimePickerBody.razor.cs.scss";
 @import "Components/Toast.razor.cs.scss";
+@import "Components/Tooltip.cs.scss";
+@import "Components/Transfer.razor.cs.scss";
+@import "Components/Tree.razor.cs.scss";
 @import "Components/Upload.razor.cs.scss";
 
 /* Import files to Bundle */

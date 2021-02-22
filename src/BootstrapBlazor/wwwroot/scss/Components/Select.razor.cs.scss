@@ -37,13 +37,12 @@
         left: -6px;
     }
 
-        background-color: $white;
 .form-select.show .dropdown-menu-arrow {
     display: block;
 }
 
 .form-select .form-select-input[readonly] {
-    background-color: #fff;
+    background-color: $white;
 }
 
 .form-select.show .form-select-append i {
