@@ -1,25 +1,24 @@
 ﻿(function ($) {
     $.extend({
-        bb_markdown: function (el, method) {
-            var key = 'bb_editor';
+        bb_markdown: function (el, obj, value, method) {
             var $el = $(el);
-            if (method) {
-                var editor = $el.data(key);
-                if (editor) {
-                    var result = editor[method]();
-                    console.log(result);
-                    return result;
+            $.extend(value, {
+                events: {
+                    blur: function () {
+                        var val = $el.toastuiEditor('getMarkdown');
+                        var html = $el.toastuiEditor('getHtml');
+                        obj.invokeMethodAsync(method, [val, html]);
+                    }
                 }
-            }
-            else {
-                var id = $.getUID();
-                $el.attr('id', id);
-                var editor = editormd(id, {
-                    saveHTMLToTextarea: true,
-                    path: "/lib/"
-                });
-                $el.data(key, editor);
-            }
+            })
+
+            // 修复弹窗内初始化值不正确问题
+            var handler = window.setInterval(function () {
+                if ($el.is(':visible')) {
+                    window.clearInterval(handler);
+                    $el.toastuiEditor(value);
+                }
+            }, 100);
         }
     });
 })(jQuery);

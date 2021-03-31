@@ -89,6 +89,12 @@ namespace BootstrapBlazor.Components
         public bool ShowColumnList { get; set; }
 
         /// <summary>
+        /// 获得/设置 是否显示保存、删除失败后的吐司提示 默认为 true 显示
+        /// </summary>
+        [Parameter]
+        public bool ShowErrorToast { get; set; } = true;
+
+        /// <summary>
         /// 获得/设置 表格 Toolbar 按钮模板
         /// </summary>
         [Parameter]
@@ -99,6 +105,12 @@ namespace BootstrapBlazor.Components
         /// </summary>
         [Parameter]
         public Func<Task<TItem>>? OnAddAsync { get; set; }
+
+        /// <summary>
+        /// 获得/设置 编辑按钮回调方法
+        /// </summary>
+        [Parameter]
+        public Func<TItem, Task>? OnEditAsync { get; set; }
 
         /// <summary>
         /// 获得/设置 保存按钮异步回调方法
@@ -228,6 +240,10 @@ namespace BootstrapBlazor.Components
             {
                 if (SelectedItems.Count == 1)
                 {
+                    if (OnEditAsync != null)
+                    {
+                        await OnEditAsync(SelectedItems[0]);
+                    }
                     if (UseInjectDataService && GetDataService() is IEntityFrameworkCoreDataService ef)
                     {
                         EditModel = SelectedItems[0];
@@ -296,13 +312,16 @@ namespace BootstrapBlazor.Components
             if (OnSaveAsync != null) valid = await OnSaveAsync((TItem)context.Model);
             else valid = await GetDataService().SaveAsync((TItem)context.Model);
 
-            var option = new ToastOption
+            if (ShowErrorToast || valid)
             {
-                Category = valid ? ToastCategory.Success : ToastCategory.Error,
-                Title = SaveButtonToastTitle
-            };
-            option.Content = string.Format(SaveButtonToastResultContent, valid ? SuccessText : FailText, Math.Ceiling(option.Delay / 1000.0));
-            await Toast.Show(option);
+                var option = new ToastOption
+                {
+                    Category = valid ? ToastCategory.Success : ToastCategory.Error,
+                    Title = SaveButtonToastTitle
+                };
+                option.Content = string.Format(SaveButtonToastResultContent, valid ? SuccessText : FailText, Math.Ceiling(option.Delay / 1000.0));
+                await Toast.Show(option);
+            }
 
             return valid;
         }
@@ -323,7 +342,11 @@ namespace BootstrapBlazor.Components
                     }
                     else if (EditMode == EditMode.EditForm)
                     {
-                        ShowAddForm = false;
+                        if (ShowAddForm)
+                        {
+                            await QueryData();
+                            ShowAddForm = false;
+                        }
                         ShowEditForm = false;
                         StateHasChanged();
                     }
@@ -341,7 +364,7 @@ namespace BootstrapBlazor.Components
             }
         }
 
-        private readonly DialogOption DialogOption = new DialogOption();
+        private readonly DialogOption DialogOption = new();
 
         /// <summary>
         /// 
@@ -424,7 +447,7 @@ namespace BootstrapBlazor.Components
                 SelectedItems.Clear();
                 await QueryAsync();
             }
-            await Toast.Show(option);
+            if (ShowErrorToast || ret) await Toast.Show(option);
         };
 
         /// <summary>

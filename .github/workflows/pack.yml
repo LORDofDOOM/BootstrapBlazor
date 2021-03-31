@@ -3,8 +3,7 @@ name: Package to Nuget
 on:
   push:
     branches:
-      - master
-      - dev
+      - pack
 
 jobs:
   pack:
@@ -16,7 +15,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.103
+        dotnet-version: 5.0.201
 
     - name: Publish to Nuget
       env: 

@@ -81,7 +81,20 @@
     "Address.Required": "{0}是必填项",
     "Education.Required": "{0}是必选项",
     "Hobby.Required": "请选择一种{0}",
-    "Name.PlaceHolder": "不可为空"
+    "Name.PlaceHolder": "不可为空",
+    "Hobbys": "游泳,登山,打球,下棋",
+    "Foo.Name": "张三 {0}",
+    "Foo.Address": "上海市普陀区金沙江路 {0} 弄",
+    "Foo.Address2": "地球、中国、上海市普陀区金沙江路 {0} 弄 这里是超长单元格示例",
+    "Foo.BindValue": "绑定值"
+  },
+  "BootstrapBlazor.Shared.Pages.ValidateForms.ComplexFoo": {
+    "Name": "姓名",
+    "Name.Required": "{0} 值是必填项"
+  },
+  "BootstrapBlazor.Shared.Pages.ValidateForms.Dummy2": {
+    "Name": "姓名",
+    "Name.Required": "Dummy2 {0} 值是必填项"
   },
   "BootstrapBlazor.Shared.Pages.Components.EnumEducation": {
     "PlaceHolder": "请选择 ...",
@@ -90,5 +103,9 @@
   },
   "BootstrapBlazor.Shared.Pages.Inputs": {
     "PlaceHolder": "请输入 ..."
+  },
+  "BootstrapBlazor.Shared.Pages.Components.ThemeChooser": {
+    "Title": "点击切换主题",
+    "HeaderText": "请选择主题"
   }
 }

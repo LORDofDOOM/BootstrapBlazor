@@ -15,35 +15,19 @@ using System.Threading.Tasks;
 namespace BootstrapBlazor.Shared.Pages
 {
     /// <summary>
-    /// 
+    /// 弹窗组件示例代码
     /// </summary>
     public sealed partial class Dialogs
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        private IEnumerable<SelectedItem> RadioItems { get; set; } = new SelectedItem[] {
-            new SelectedItem("false", "不保持状态") { Active = true },
-            new SelectedItem("true", "保持状态")
-        };
-
         [NotNull]
         private Logger? Trace { get; set; }
 
         /// <summary>
-        /// 
+        /// 获得 弹窗注入服务
         /// </summary>
         [Inject]
         [NotNull]
         private DialogService? DialogService { get; set; }
-
-        private Task OnStateChanged(CheckboxState state, SelectedItem item)
-        {
-            KeepState = bool.Parse(item.Value);
-            return Task.CompletedTask;
-        }
-
-        private bool KeepState { get; set; }
 
         /// <summary>
         /// 
@@ -52,7 +36,7 @@ namespace BootstrapBlazor.Shared.Pages
         private Task OnClick() => DialogService.Show(new DialogOption()
         {
             Title = "我是服务创建的弹出框",
-            BodyTemplate = DynamicComponent.CreateComponent<Button>(new KeyValuePair<string, object>[]
+            BodyTemplate = BootstrapDynamicComponent.CreateComponent<Button>(new KeyValuePair<string, object>[]
             {
                 new KeyValuePair<string, object>(nameof(Button.ChildContent), new RenderFragment(builder => builder.AddContent(0, "我是服务创建的按钮")))
             })
@@ -65,10 +49,10 @@ namespace BootstrapBlazor.Shared.Pages
             {
                 Title = "利用代码关闭弹出框",
             };
-            option.BodyTemplate = DynamicComponent.CreateComponent<Button>(new KeyValuePair<string, object>[]
+            option.BodyTemplate = BootstrapDynamicComponent.CreateComponent<Button>(new KeyValuePair<string, object>[]
             {
                 new KeyValuePair<string, object>(nameof(Button.Text), "点击关闭弹窗"),
-                new KeyValuePair<string, object>(nameof(Button.OnClick), EventCallback.Factory.Create<MouseEventArgs>(this, async () => await option.Dialog!.Close()))
+                new KeyValuePair<string, object>(nameof(Button.OnClick), EventCallback.Factory.Create<MouseEventArgs>(this, async () => await option.Dialog.Close()))
             }).Render();
             await DialogService.Show(option);
         }
@@ -80,8 +64,7 @@ namespace BootstrapBlazor.Shared.Pages
         private Task OnClickCounter() => DialogService.Show(new DialogOption()
         {
             Title = "自带的 Counter 组件",
-            KeepChildrenState = KeepState,
-            Component = DynamicComponent.CreateComponent<Counter>()
+            Component = BootstrapDynamicComponent.CreateComponent<Counter>()
         });
 
         /// <summary>
@@ -110,9 +93,9 @@ namespace BootstrapBlazor.Shared.Pages
                 ShowFooter = false,
                 BodyContext = DataPrimaryId
             };
-            op.BodyTemplate = DynamicComponent.CreateComponent<DataDialogComponent>(new List<KeyValuePair<string, object>>
+            op.BodyTemplate = BootstrapDynamicComponent.CreateComponent<DataDialogComponent>(new List<KeyValuePair<string, object>>
             {
-                new KeyValuePair<string, object>(nameof(DataDialogComponent.OnClose), new Action(async () => await op.Dialog!.Toggle()))
+                new KeyValuePair<string, object>(nameof(DataDialogComponent.OnClose), new Action(async () => await op.Dialog.Close()))
             }).Render();
 
             await DialogService.Show(op);
@@ -159,6 +142,15 @@ namespace BootstrapBlazor.Shared.Pages
             }
         }
 
+        private async Task ShowDialogLoop()
+        {
+            await DialogService.Show(new DialogOption()
+            {
+                Title = $"弹窗 {DateTime.Now}",
+                Component = BootstrapDynamicComponent.CreateComponent<DialogDemo>()
+            });
+        }
+
         /// <summary>
         /// 获得属性方法
         /// </summary>
@@ -194,13 +186,6 @@ namespace BootstrapBlazor.Shared.Pages
                     Type = "RenderFragment",
                     ValueList = " — ",
                     DefaultValue = " — "
-                },
-                new AttributeItem() {
-                    Name = "KeepChildrenState",
-                    Description = "是否保持弹窗内组件状态",
-                    Type = "boolean",
-                    ValueList = "true|false",
-                    DefaultValue = "false"
                 },
                 new AttributeItem() {
                     Name = "IsCentered",

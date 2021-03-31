@@ -1,6 +1,4 @@
 ﻿@page "/tables/edit"
-@inherits TablesBaseEdit
-@inject IStringLocalizer<Foo> Localizer
 
 <h3>Table 表格</h3>
 
@@ -11,44 +9,35 @@
            IsPagination="true" PageItemsSource="@PageItemsSource"
            IsStriped="true" IsBordered="true" IsMultipleSelect="true"
            ShowToolbar="true" ShowExtendButtons="true" ShowSkeleton="true"
-           OnQueryAsync="@OnEditQueryAsync" OnResetSearchAsync="@OnResetSearchAsync"
-           OnAddAsync="@OnAddAsync" OnSaveAsync="@OnSaveAsync" OnDeleteAsync="@OnDeleteAsync">
+           OnQueryAsync="@OnQueryAsync" OnAddAsync="@OnAddAsync" OnSaveAsync="@OnSaveAsync" OnDeleteAsync="@OnDeleteAsync">
         <TableColumns>
             <TableColumn @bind-Field="@context.DateTime" Width="180" />
             <TableColumn @bind-Field="@context.Name" />
             <TableColumn @bind-Field="@context.Address" />
             <TableColumn @bind-Field="@context.Education" />
             <TableColumn @bind-Field="@context.Count" />
-            <TableColumn @bind-Field="@context.Complete">
-                <Template Context="v">
-                    <Switch IsDisabled="true" Value="v.Value" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
-                </Template>
-            </TableColumn>
+            <TableColumn @bind-Field="@context.Complete" ComponentType="@typeof(Switch)" />
         </TableColumns>
         <EditTemplate>
             <div class="form-inline">
                 <div class="row">
                     <div class="form-group col-12 col-sm-6">
-                        <BootstrapInput @bind-Value="@context.Name" placeholder="不可为空，50字以内" maxlength="50">
-                        </BootstrapInput>
+                        <BootstrapInput @bind-Value="@context.Name" placeholder="不可为空，50字以内" maxlength="50" />
                     </div>
                     <div class="form-group col-12 col-sm-6">
-                        <BootstrapInput @bind-Value="@context.Address" placeholder="不可为空，50字以内" maxlength="50">
-                        </BootstrapInput>
+                        <BootstrapInput @bind-Value="@context.Address" placeholder="不可为空，50字以内" maxlength="50" />
                     </div>
                     <div class="form-group col-12 col-sm-6">
-                        <DateTimePicker @bind-Value="@context.DateTime">
-                        </DateTimePicker>
+                        <DateTimePicker @bind-Value="@context.DateTime" />
                     </div>
                     <div class="form-group col-12 col-sm-6">
-                        <Select Items="@Educations" @bind-Value="@context.Education">
-                        </Select>
+                        <Select Items="@Educations" @bind-Value="@context.Education" />
                     </div>
                     <div class="form-group col-12 col-sm-6">
                         <BootstrapInput @bind-Value="@context.Count" />
                     </div>
                     <div class="form-group col-12 col-sm-6">
-                        <Switch @bind-Value="@context.Complete" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
+                        <Switch @bind-Value="@context.Complete" ShowInnerText="true" />
                     </div>
                 </div>
             </div>
@@ -66,24 +55,15 @@
            IsPagination="true" PageItemsSource="@PageItemsSource"
            IsStriped="true" IsBordered="true" IsMultipleSelect="true"
            ShowToolbar="true" ShowExtendButtons="true" ShowSkeleton="true"
-           OnQueryAsync="@OnEditQueryAsync"
+           OnQueryAsync="@OnQueryAsync"
            OnAddAsync="@OnAddAsync" OnSaveAsync="@OnSaveAsync" OnDeleteAsync="@OnDeleteAsync">
         <TableColumns>
             <TableColumn @bind-Field="@context.DateTime" Width="180" />
             <TableColumn @bind-Field="@context.Name" Readonly="true" />
-            <TableColumn @bind-Field="@context.Address" />
+            <TableColumn @bind-Field="@context.Address" Rows="3" />
             <TableColumn @bind-Field="@context.Education" />
             <TableColumn @bind-Field="@context.Count" Editable="false" />
-            <TableColumn @bind-Field="@context.Complete">
-                <Template Context="v">
-                    <Switch IsDisabled="true" Value="v.Value" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
-                </Template>
-                <EditTemplate Context="v">
-                    <div class="form-group col-12 col-sm-6">
-                        <Switch @bind-Value="(v as Foo)!.Complete" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
-                    </div>
-                </EditTemplate>
-            </TableColumn>
+            <TableColumn @bind-Field="@context.Complete" ComponentType="@typeof(Switch)" />
         </TableColumns>
     </Table>
 </Block>
@@ -94,7 +74,7 @@
            IsPagination="true" PageItemsSource="@PageItemsSource"
            IsStriped="true" IsBordered="true" IsMultipleSelect="true"
            ShowToolbar="true" ShowExtendButtons="true" ShowSkeleton="true"
-           OnQueryAsync="@OnEditQueryAsync"
+           OnQueryAsync="@OnQueryAsync"
            OnAddAsync="@OnAddAsync" OnSaveAsync="@OnSaveAsync" OnDeleteAsync="@OnDeleteAsync">
         <TableColumns>
             <TableColumn @bind-Field="@context.DateTime" Width="180" />
@@ -108,16 +88,7 @@
             <TableColumn @bind-Field="@context.Address" />
             <TableColumn @bind-Field="@context.Education" />
             <TableColumn @bind-Field="@context.Count" />
-            <TableColumn @bind-Field="@context.Complete">
-                <Template Context="v">
-                    <Switch IsDisabled="true" Value="v.Value" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
-                </Template>
-                <EditTemplate Context="v">
-                    <div class="form-group col-12 col-sm-6">
-                        <Switch @bind-Value="(v as Foo)!.Complete" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
-                    </div>
-                </EditTemplate>
-            </TableColumn>
+            <TableColumn @bind-Field="@context.Complete" ComponentType="@typeof(Switch)" />
         </TableColumns>
     </Table>
 </Block>
@@ -130,7 +101,7 @@
            IsStriped="true" IsBordered="true" IsMultipleSelect="true"
            ShowToolbar="true" ShowExtendButtons="true" ShowSkeleton="true"
            AddModalTitle="增加测试数据窗口" EditModalTitle="编辑测试数据窗口"
-           OnQueryAsync="@OnEditQueryAsync" EditMode="EditMode.EditForm"
+           OnQueryAsync="@OnQueryAsync" EditMode="EditMode.EditForm"
            OnAddAsync="@OnAddAsync" OnSaveAsync="@OnSaveAsync" OnDeleteAsync="@OnDeleteAsync">
         <TableColumns>
             <TableColumn @bind-Field="@context.DateTime" Width="180" />
@@ -144,16 +115,7 @@
             <TableColumn @bind-Field="@context.Address" />
             <TableColumn @bind-Field="@context.Education" />
             <TableColumn @bind-Field="@context.Count" />
-            <TableColumn @bind-Field="@context.Complete">
-                <Template Context="v">
-                    <Switch IsDisabled="true" Value="v.Value" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
-                </Template>
-                <EditTemplate Context="v">
-                    <div class="form-group col-12 col-sm-6">
-                        <Switch @bind-Value="(v as Foo)!.Complete" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
-                    </div>
-                </EditTemplate>
-            </TableColumn>
+            <TableColumn @bind-Field="@context.Complete" ComponentType="@typeof(Switch)" />
         </TableColumns>
     </Table>
 </Block>
@@ -167,7 +129,9 @@
             <li><code>OnSaveAsync</code></li>
             <li><code>OnQueryAsync</code></li>
         </ul>
-        <div>Startup 文件注入数据服务 <a href="https://gitee.com/LongbowEnterprise/BootstrapBlazor/wikis/Table%20%E7%BB%84%E4%BB%B6%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1%E4%BB%8B%E7%BB%8D?sort_id=3207977" target="_blank">实现原理与用法介绍</a></div>
+        <div class="mb-3">Startup 文件注入数据服务 <a href="https://gitee.com/LongbowEnterprise/BootstrapBlazor/wikis/Table%20%E7%BB%84%E4%BB%B6%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1%E4%BB%8B%E7%BB%8D?sort_id=3207977" target="_blank">实现原理与用法介绍</a></div>
+        <b>自定义数据服务</b>
+        <div class="mt-1">开启使用注入数据服务后，可通过设置 <code>DataServices</code> 参数对组件进行单独设置，如未设置内部使用注入服务提供的实例</div>
     </p>
     <Pre class="no-highlight mt-3">services.AddTableDemoDataService();</Pre>
     <Table TItem="Foo"
@@ -175,26 +139,7 @@
            IsStriped="true" IsBordered="true" IsMultipleSelect="true" AutoGenerateColumns="true"
            ShowToolbar="true" ShowExtendButtons="true" ShowSkeleton="true" UseInjectDataService="true">
         <TableColumns>
-            <TableColumn @bind-Field="@context.Complete">
-                <Template Context="v">
-                    <Switch IsDisabled="true" Value="v.Value" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
-                </Template>
-                <EditTemplate Context="v">
-                    <div class="form-group col-12 col-sm-6">
-                        <Switch @bind-Value="(v as Foo)!.Complete" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
-                    </div>
-                </EditTemplate>
-            </TableColumn>
-            <TableColumn @bind-Field="@context.Hobby">
-                <Template Context="v">
-                    <span>@(string.Join(",", v.Value))</span>
-                </Template>
-                <EditTemplate Context="v">
-                    <div class="form-group col-12">
-                        <CheckboxList @bind-Value="(v as Foo)!.Hobby" Items="@Hobbys" ShowLabel="true" DisplayText="@Localizer[nameof(Foo.Hobby)]" />
-                    </div>
-                </EditTemplate>
-            </TableColumn>
+            <TableColumn @bind-Field="@context.Hobby" Data="@Hobbys" />
         </TableColumns>
     </Table>
 </Block>

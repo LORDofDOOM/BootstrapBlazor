@@ -173,6 +173,12 @@ namespace BootstrapBlazor.Shared.Shared
             });
             item.AddItem(new DemoMenuItem()
             {
+                IsNew = true,
+                Text = "级联选择 Cascader",
+                Url = "cascaders"
+            });
+            item.AddItem(new DemoMenuItem()
+            {
                 Text = "多选框 Checkbox",
                 Url = "checkboxs"
             });
@@ -180,6 +186,11 @@ namespace BootstrapBlazor.Shared.Shared
             {
                 Text = "多选框组 CheckboxList",
                 Url = "checkboxlists"
+            });
+            item.AddItem(new DemoMenuItem()
+            {
+                Text = "颜色拾取器 ColorPicker",
+                Url = "colorpickers"
             });
             item.AddItem(new DemoMenuItem()
             {
@@ -203,8 +214,7 @@ namespace BootstrapBlazor.Shared.Shared
             });
             item.AddItem(new DemoMenuItem()
             {
-                IsUpdate = true,
-                Text = "数值框 InputNumber",
+                Text = "数字框 InputNumber",
                 Url = "inputnumbers"
             });
             item.AddItem(new DemoMenuItem()
@@ -229,7 +239,6 @@ namespace BootstrapBlazor.Shared.Shared
             });
             item.AddItem(new DemoMenuItem()
             {
-                IsUpdate = true,
                 Text = "多项选择器 MultiSelect",
                 Url = "multiselects"
             });
@@ -260,6 +269,7 @@ namespace BootstrapBlazor.Shared.Shared
             });
             item.AddItem(new DemoMenuItem()
             {
+                IsUpdate = true,
                 Text = "上传组件 Upload",
                 Url = "uploads"
             });
@@ -499,6 +509,13 @@ namespace BootstrapBlazor.Shared.Shared
                 Url = "tables/wrap"
             });
 
+            it.AddItem(new DemoMenuItem()
+            {
+                IsNew = true,
+                Text = "树形数据",
+                Url = "tables/tree"
+            });
+
             item.AddItem(it);
 
             AddBadge(it, false);
@@ -518,6 +535,7 @@ namespace BootstrapBlazor.Shared.Shared
             });
             item.AddItem(new DemoMenuItem()
             {
+                IsUpdate = true,
                 Text = "对话框 Dialog",
                 Url = "dialogs"
             });
@@ -538,6 +556,7 @@ namespace BootstrapBlazor.Shared.Shared
             });
             item.AddItem(new DemoMenuItem()
             {
+                IsUpdate = true,
                 Text = "模态框 Modal",
                 Url = "modals"
             });
@@ -683,10 +702,13 @@ namespace BootstrapBlazor.Shared.Shared
         private void AddBadge(DemoMenuItem item, bool append = true, int? count = null)
         {
             item.Component = CreateBadge(count ?? item.Items.Count(), item.IsNew, item.IsUpdate);
-            if (append) Menus.Add(item);
+            if (append)
+            {
+                Menus.Add(item);
+            }
         }
 
-        private static DynamicComponent CreateBadge(int count, bool isNew = false, bool isUpdate = false) => DynamicComponent.CreateComponent<State>(new KeyValuePair<string, object>[]
+        private static BootstrapDynamicComponent CreateBadge(int count, bool isNew = false, bool isUpdate = false) => BootstrapDynamicComponent.CreateComponent<State>(new KeyValuePair<string, object>[]
         {
             new KeyValuePair<string, object>(nameof(State.Count), count),
             new KeyValuePair<string, object>(nameof(State.IsNew), isNew),
@@ -711,8 +733,15 @@ namespace BootstrapBlazor.Shared.Shared
                 if (menu.Parent != null)
                 {
                     var pMenu = ((DemoMenuItem)menu.Parent);
-                    if (menu.IsNew) pMenu.IsNew = true;
-                    if (menu.IsUpdate) pMenu.IsUpdate = true;
+                    if (menu.IsNew)
+                    {
+                        pMenu.IsNew = true;
+                    }
+
+                    if (menu.IsUpdate)
+                    {
+                        pMenu.IsUpdate = true;
+                    }
                 }
 
                 item.Component = CreateBadge(0, menu.IsNew, menu.IsUpdate);

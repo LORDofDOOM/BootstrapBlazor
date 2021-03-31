@@ -27,18 +27,15 @@ namespace BootstrapBlazor.Shared.Pages
             .AddClass($"height: {Height * 100}px", Height > 0)
             .Build();
 
-        /// <summary>
-        /// 
-        /// </summary>
         private int Height { get; set; }
 
         /// <summary>
-        /// 
+        /// 获得/设置 是否显示页脚
         /// </summary>
         private bool ShowFooter { get; set; }
 
         /// <summary>
-        /// 
+        /// 获得/设置 是否固定 Header
         /// </summary>
         private bool IsFixedHeader { get; set; }
 
@@ -61,6 +58,10 @@ namespace BootstrapBlazor.Shared.Pages
         [NotNull]
         private PageLayout? RootPage { get; set; }
 
+        [Inject]
+        [NotNull]
+        private NavigationManager? Navigator { get; set; }
+
         /// <summary>
         /// OnInitialized 方法
         /// </summary>
@@ -77,20 +78,11 @@ namespace BootstrapBlazor.Shared.Pages
             SideBarItems.ElementAt(IsFullSide ? 0 : 1).Active = true;
         }
 
-        private async Task OnFooterChanged(CheckboxState state, bool val)
-        {
-            await UpdateAsync();
-        }
+        private Task OnFooterChanged(CheckboxState state, bool val) => UpdateAsync();
 
-        private async Task OnHeaderStateChanged(CheckboxState state, bool val)
-        {
-            await UpdateAsync();
-        }
+        private Task OnHeaderStateChanged(CheckboxState state, bool val) => UpdateAsync();
 
-        private async Task OnFooterStateChanged(CheckboxState state, bool val)
-        {
-            await UpdateAsync();
-        }
+        private Task OnFooterStateChanged(CheckboxState state, bool val) => UpdateAsync();
 
         private async Task OnSideChanged(CheckboxState state, SelectedItem item)
         {
@@ -98,10 +90,7 @@ namespace BootstrapBlazor.Shared.Pages
             await UpdateAsync();
         }
 
-        private async Task OnUseTabSetChanged(bool val)
-        {
-            await UpdateAsync();
-        }
+        private Task OnUseTabSetChanged(bool val) => UpdateAsync();
 
         /// <summary>
         /// 
@@ -109,7 +98,7 @@ namespace BootstrapBlazor.Shared.Pages
         /// <returns></returns>
         public async Task UpdateAsync()
         {
-            await RootPage.SetParametersAsync(ParameterView.FromDictionary(new Dictionary<string, object>()
+            await RootPage.SetParametersAsync(ParameterView.FromDictionary(new Dictionary<string, object?>()
             {
                 [nameof(RootPage.IsFullSide)] = IsFullSide,
                 [nameof(RootPage.IsFixedFooter)] = IsFixedFooter && ShowFooter,
@@ -120,6 +109,12 @@ namespace BootstrapBlazor.Shared.Pages
 
             // 获得 Razor 示例代码
             RootPage.Update();
+        }
+
+        private Task OnNavigation()
+        {
+            Navigator.NavigateTo("layout-page1", "代码导航");
+            return Task.CompletedTask;
         }
     }
 }

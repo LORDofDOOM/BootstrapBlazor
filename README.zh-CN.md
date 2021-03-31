@@ -1,4 +1,18 @@
-# Bootstrap Blazor Component
+<h1 align="center">Bootstrap Blazor 组件库</h1>
+
+<div align="center">
+<h2>一套基于 Bootstrap 和 Blazor 的企业级组件库</h2>
+
+[![Github build](https://img.shields.io/github/workflow/status/ArgoZhang/BootstrapBlazor/Package%20to%20Nuget/master?label=master&logo=github&logoColor=green)](https://github.com/ArgoZhang/BootstrapAdmin/actions?query=workflow%3A%22Auto+Build+CI%22+branch%3Amaster)
+[![Nuget](https://img.shields.io/nuget/v/BootstrapBlazor.svg?color=red&logo=nuget&logoColor=green)](https://www.nuget.org/packages/BootstrapBlazor/)
+[![Nuget](https://img.shields.io/nuget/dt/BootstrapBlazor.svg?logo=nuget&logoColor=green)](https://www.nuget.org/packages/BootstrapBlazor/)
+[![Github](https://img.shields.io/github/license/argozhang/bootstrapblazor.svg?logo=git&logoColor=red)](https://github.com/ArgoZhang/BootstrapBlazor/blob/master/LICENSE)
+[![Repo Size](https://img.shields.io/github/repo-size/ArgoZhang/BootstrapBlazor.svg?logo=github&logoColor=green&label=repo)](https://github.com/ArgoZhang/BootstrapBlazor)
+[![Commit Date](https://img.shields.io/github/last-commit/ArgoZhang/BootstrapBlazor/master.svg?logo=github&logoColor=green&label=commit)](https://github.com/ArgoZhang/BootstrapBlazor)
+
+</div>
+
+---
 
 <a href="README.md">English</a> | <span>中文</span>
 
@@ -28,17 +42,21 @@ Blazor 是一个使用 .NET 生成交互式客户端 Web UI 的框架：
 2. 安装 Visual Studio 2019 最新版 [官方网址](https://visualstudio.microsoft.com/vs/getting-started/)
 3. 获取本项目代码 [BootstrapBlazor](https://gitee.com/LongbowEnterprise/BootstrapBlazor)
 
+## 相关资源
+- [Blazor 官方文档](https://docs.microsoft.com/zh-cn/aspnet/core/blazor/?WT.mc_id=DT-MVP-5004174)
+- [MS Learn 平台 Blazor 教程](https://docs.microsoft.com/zh-cn/learn/modules/build-blazor-webassembly-visual-studio-code/?WT.mc_id=DT-MVP-5004174)
+
 ## QQ交流群
 
-[![QQ](https://img.shields.io/badge/QQ-795206915-green.svg?logo=tencent%20qq&logoColor=red)](https://shang.qq.com/wpa/qunwpa?idkey=d381355e50ff91db410c3da3eadb081ba859f64c2877e86343f4709b171f28b8)
+[![QQ](https://img.shields.io/badge/QQ-795206915(满)-red.svg?logo=tencent%20qq&logoColor=red)](https://qm.qq.com/cgi-bin/qm/qr?k=1-jF9-5WA_3GFiJgXem2U_AQfqbdyOlV&jump_from=webapi) [![QQ](https://img.shields.io/badge/QQ-675147445-green.svg?logo=tencent%20qq&logoColor=red)](https://qm.qq.com/cgi-bin/qm/qr?k=Geker7hCXK0HC-J8_974645j_n6w0OE0&jump_from=webapi)
 
 ## 视频教程
 
-B 站视频集锦 [传送门](https://gitee.com/LongbowEnterprise/BootstrapBlazor/wikis/%E8%A7%86%E9%A2%91%E8%B5%84%E6%BA%90?sort_id=3300624)
+B 站视频集锦 [传送门](https://space.bilibili.com/660853738/channel/index)
 
 ## 组件
 
-Blazor应用基于组件。 Blazor 中的组件是指 UI 元素，例如页面、对话框或数据输入窗体。
+Blazor 应用基于组件。 Blazor 中的组件是指 UI 元素，例如页面、对话框或数据输入窗体。
 
 组件是内置到 .NET 程序集的 .NET 类，用来：
 - 定义灵活的 UI 呈现逻辑。
@@ -48,18 +66,16 @@ Blazor应用基于组件。 Blazor 中的组件是指 UI 元素，例如页面�
 
 ### 内置组件
 
-内置组件 [传送门](https://www.blazor.zone/alerts)
+内置组件 [传送门](https://www.blazor.zone/components)
 
 ## 分支说明
 
 - master 稳定分支
 - dev 开发功能分支
-- publish 与演示网站同步
 - 其他 均为临时分支
 
 ## 演示地址
-[![website](https://img.shields.io/badge/Github-https://argozhang.github.io-success.svg?logo=buzzfeed&logoColor=red&color=red)](https://argozhang.github.io)
-[![website](https://img.shields.io/badge/linux-https://www.blazor.zone-success.svg?logo=buzzfeed&logoColor=green)](https://www.blazor.zone)
+[![website](https://img.shields.io/badge/Github-海外-success.svg?logo=buzzfeed&logoColor=red&color=red)](https://argozhang.github.io) [![website](https://img.shields.io/badge/linux-备站-success.svg?logo=buzzfeed&logoColor=green)](https://blazor.zylweb.cn) [![website](https://img.shields.io/badge/linux-主站-success.svg?logo=buzzfeed&logoColor=green)](https://www.blazor.zone)
 
 ## GVP 奖杯
 ![项目奖杯](https://images.gitee.com/uploads/images/2021/0112/120620_e596ac3c_554725.png "GVP.png")

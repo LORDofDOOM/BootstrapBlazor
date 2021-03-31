@@ -4,11 +4,13 @@
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BootstrapBlazor.Components
 {
     /// <summary>
-    /// DataAnnotationsValidator 验证组件
+    /// BootstrapBlazorDataAnnotationsValidator 验证组件
     /// </summary>
     public class BootstrapBlazorDataAnnotationsValidator : ComponentBase
     {
@@ -22,14 +24,26 @@ namespace BootstrapBlazor.Components
         /// 获得/设置 当前编辑窗体上下文
         /// </summary>
         [CascadingParameter]
-        public ValidateFormBase? EditForm { get; set; }
+        public ValidateForm? EditForm { get; set; }
 
         /// <summary>
         /// 初始化方法
         /// </summary>
         protected override void OnInitialized()
         {
-            CurrentEditContext!.AddEditContextDataAnnotationsValidation(EditForm!);
+            if (EditForm == null)
+            {
+                throw new InvalidOperationException($"{nameof(BootstrapBlazorDataAnnotationsValidator)} requires a cascading " +
+                    $"parameter of type {nameof(ValidateForm)}. For example, you can use {nameof(BootstrapBlazorDataAnnotationsValidator)} " +
+                    $"inside an {nameof(ValidateForm)}.");
+            }
+
+            if (CurrentEditContext == null)
+            {
+                throw new InvalidOperationException($"{nameof(BootstrapBlazorDataAnnotationsValidator)} requires a cascading parameter of type {nameof(EditContext)}. For example, you can use {nameof(BootstrapBlazorDataAnnotationsValidator)} inside an EditForm.");
+            }
+
+            CurrentEditContext.AddEditContextDataAnnotationsValidation(EditForm);
         }
     }
 }

@@ -6,10 +6,11 @@ using BootstrapBlazor.Components;
 using BootstrapBlazor.Shared.Common;
 using BootstrapBlazor.Shared.Pages.Components;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading.Tasks;
-using Foo = BootstrapBlazor.Shared.Pages.Components.Foo;
 
 namespace BootstrapBlazor.Shared.Pages
 {
@@ -28,15 +29,24 @@ namespace BootstrapBlazor.Shared.Pages
         [NotNull]
         private DialogService? DialogService { get; set; }
 
+        [Inject]
+        [NotNull]
+        private IStringLocalizer<Foo>? Localizer { get; set; }
+
         [NotNull]
         private Logger? Trace { get; set; }
 
         private async Task ShowDialog()
         {
+            var items = EditorItem<Foo>.GenerateEditorItems();
+            var item = items.First(i => i.GetFieldName() == nameof(Foo.Hobby));
+            item.Data = Foo.GenerateHobbys(Localizer);
+
             var option = new EditDialogOption<Foo>()
             {
                 Title = "编辑对话框",
                 Model = Model,
+                Items = items,
                 OnCloseAsync = () =>
                 {
                     Trace.Log("关闭按钮被点击");

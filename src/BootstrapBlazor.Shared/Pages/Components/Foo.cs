@@ -3,13 +3,14 @@
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
 using BootstrapBlazor.Components;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace BootstrapBlazor.Shared.Pages.Components
 {
-
     /// <summary>
     ///
     /// </summary>
@@ -20,6 +21,7 @@ namespace BootstrapBlazor.Shared.Pages.Components
         /// <summary>
         ///
         /// </summary>
+        [Key]
         [Display(Name = "主键")]
         [AutoGenerateColumn(Ignore = true)]
         public int Id { get; set; }
@@ -28,7 +30,7 @@ namespace BootstrapBlazor.Shared.Pages.Components
         ///
         /// </summary>
         [Required(ErrorMessage = "{0}不能为空")]
-        [AutoGenerateColumn(Order = 10, Filterable = true)]
+        [AutoGenerateColumn(Order = 10, Filterable = true, Searchable = true)]
         [Display(Name = "姓名")]
         public string? Name { get; set; }
 
@@ -44,7 +46,7 @@ namespace BootstrapBlazor.Shared.Pages.Components
         /// </summary>
         [Display(Name = "地址")]
         [Required(ErrorMessage = "{0}不能为空")]
-        [AutoGenerateColumn(Order = 20, Filterable = true)]
+        [AutoGenerateColumn(Order = 20, Filterable = true, Searchable = true)]
         public string? Address { get; set; }
 
         /// <summary>
@@ -59,7 +61,7 @@ namespace BootstrapBlazor.Shared.Pages.Components
         ///
         /// </summary>
         [Display(Name = "是/否")]
-        [AutoGenerateColumn(Order = 50)]
+        [AutoGenerateColumn(Order = 50, ComponentType = typeof(Switch))]
         public bool Complete { get; set; }
 
         /// <summary>
@@ -75,8 +77,62 @@ namespace BootstrapBlazor.Shared.Pages.Components
         /// </summary>
         [Required(ErrorMessage = "请选择一种{0}")]
         [Display(Name = "爱好")]
-        [EditorOrder(5)]
+        [AutoGenerateColumn(Order = 70)]
         public IEnumerable<string> Hobby { get; set; } = new List<string>();
+
+        private static readonly Random random = new();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="localizer"></param>
+        /// <returns></returns>
+        public static Foo Generate(IStringLocalizer<Foo> localizer) => new()
+        {
+            Id = 1,
+            Name = localizer["Foo.Name", "1000"],
+            DateTime = System.DateTime.Now,
+            Address = localizer["Foo.Address", $"{random.Next(1000, 2000)}"],
+            Count = random.Next(1, 100),
+            Complete = random.Next(1, 100) > 50,
+            Education = random.Next(1, 100) > 50 ? EnumEducation.Primary : EnumEducation.Middel
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static List<Foo> GenerateFoo(IStringLocalizer<Foo> localizer) => Enumerable.Range(1, 80).Select(i => new Foo()
+        {
+            Id = i,
+            Name = localizer["Foo.Name", $"{i:d4}"],
+            DateTime = System.DateTime.Now.AddDays(i - 1),
+            Address = localizer["Foo.Address", $"{random.Next(1000, 2000)}"],
+            Count = random.Next(1, 100),
+            Complete = random.Next(1, 100) > 50,
+            Education = random.Next(1, 100) > 50 ? EnumEducation.Primary : EnumEducation.Middel
+        }).ToList();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static List<Foo> GenerateWrapFoo(IStringLocalizer<Foo> localizer) => Enumerable.Range(1, 4).Select(i => new Foo()
+        {
+            Id = i,
+            Name = localizer["Foo.Name", $"{i:d4}"],
+            DateTime = System.DateTime.Now.AddDays(i - 1),
+            Address = localizer["Foo.Address2", $"{random.Next(1000, 2000)}"],
+            Count = random.Next(1, 100),
+            Complete = random.Next(1, 100) > 50,
+            Education = random.Next(1, 100) > 50 ? EnumEducation.Primary : EnumEducation.Middel
+        }).ToList();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<SelectedItem> GenerateHobbys(IStringLocalizer<Foo> localizer) => localizer["Hobbys"].Value.Split(",").Select(i => new SelectedItem(i, i)).ToList();
     }
 
     /// <summary>

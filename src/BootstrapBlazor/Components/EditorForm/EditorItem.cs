@@ -66,15 +66,33 @@ namespace BootstrapBlazor.Components
         public object? Step { get; set; }
 
         /// <summary>
+        /// 获得/设置 Textarea行数
+        /// </summary>
+        [Parameter]
+        public int Rows { get; set; }
+
+        /// <summary>
         /// 获得/设置 编辑模板
         /// </summary>
         [Parameter]
         public RenderFragment<object>? EditTemplate { get; set; }
 
         /// <summary>
+        /// 获得/设置 组件类型 默认为 null
+        /// </summary>
+        [Parameter]
+        public Type? ComponentType { get; set; }
+
+        /// <summary>
         /// 获得/设置 显示顺序
         /// </summary>
         public int Order { get; set; }
+
+        /// <summary>
+        /// 获得/设置 额外数据源一般用于下拉框或者 CheckboxList 这种需要额外配置数据源组件使用
+        /// </summary>
+        [Parameter]
+        public IEnumerable<SelectedItem>? Data { get; set; }
 
         /// <summary>
         /// 获得/设置 IEditorItem 集合实例
@@ -91,7 +109,10 @@ namespace BootstrapBlazor.Components
             base.OnInitialized();
 
             EditorItems?.Add(this);
-            if (FieldExpression != null) _fieldIdentifier = FieldIdentifier.Create(FieldExpression);
+            if (FieldExpression != null)
+            {
+                _fieldIdentifier = FieldIdentifier.Create(FieldExpression);
+            }
 
             // 获取模型属性定义类型
             PropertyType = typeof(TValue);
@@ -101,11 +122,17 @@ namespace BootstrapBlazor.Components
         /// <summary>
         /// 获取绑定字段显示名称方法
         /// </summary>
-        public string GetDisplayName() => _fieldIdentifier?.GetDisplayName() ?? Text ?? "";
+        public string GetDisplayName() => Text ?? _fieldIdentifier?.GetDisplayName() ?? string.Empty;
 
         /// <summary>
         /// 获取绑定字段信息方法
         /// </summary>
-        public string GetFieldName() => _fieldIdentifier?.FieldName ?? "";
+        public string GetFieldName() => _fieldIdentifier?.FieldName ?? string.Empty;
+
+        /// <summary>
+        /// 获得指定泛型的 IEditorItem 集合
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<IEditorItem> GenerateEditorItems() => InternalTableColumn.GetProperties<TValue>();
     }
 }

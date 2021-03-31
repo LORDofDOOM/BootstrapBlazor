@@ -64,10 +64,22 @@ namespace BootstrapBlazor.Components
 
         public object? Step { get; set; }
 
+        public int Rows { get; set; }
+
         [NotNull]
         public string? Text { get; set; }
 
         public RenderFragment<object>? EditTemplate { get; set; }
+
+        /// <summary>
+        /// 获得/设置 组件类型 默认为 null
+        /// </summary>
+        public Type? ComponentType { get; set; }
+
+        /// <summary>
+        /// 获得/设置 额外数据源一般用于下拉框或者 CheckboxList 这种需要额外配置数据源组件使用
+        /// </summary>
+        public IEnumerable<SelectedItem>? Data { get; set; }
 
         public int Order { get; set; }
 
@@ -101,7 +113,7 @@ namespace BootstrapBlazor.Components
 
                 // Issue: 增加定义设置标签 AutoGenerateClassAttribute
                 // https://gitee.com/LongbowEnterprise/BootstrapBlazor/issues/I381ED
-                var displayName = Utility.GetDisplayName(type, prop.Name);
+                var displayName = attr?.Text ?? Utility.GetDisplayName(type, prop.Name);
                 if (attr == null)
                 {
                     tc = new InternalTableColumn(prop.Name, prop.PropertyType, displayName);
@@ -140,6 +152,11 @@ namespace BootstrapBlazor.Components
                 .Concat(cols.Where(a => a.Order < 0).OrderBy(a => a.Order));
         }
 
+        /// <summary>
+        /// 集成 class 标签中设置的参数值
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="dest"></param>
         private static void InheritValue(AutoGenerateClassAttribute source, ITableColumn dest)
         {
             if (source.Align != Alignment.None) dest.Align = source.Align;
@@ -179,6 +196,7 @@ namespace BootstrapBlazor.Components
             if (source.ShowTips) dest.ShowTips = source.ShowTips;
             if (source.Sortable) dest.Sortable = source.Sortable;
             if (source.TextEllipsis) dest.TextEllipsis = source.TextEllipsis;
+            if (source.Data != null) dest.Data = source.Data;
             if (source.Template != null)
             {
                 if (dest is InternalTableColumn d) d.Template = source.Template;
@@ -187,6 +205,7 @@ namespace BootstrapBlazor.Components
             if (source.Visible) dest.Visible = source.Visible;
             if (source.Width != null) dest.Width = source.Width;
             if (!string.IsNullOrEmpty(source.Text)) dest.Text = source.Text;
+            if (source.Rows > 0) dest.Rows = source.Rows;
         }
     }
 }

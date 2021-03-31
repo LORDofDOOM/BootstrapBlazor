@@ -89,7 +89,10 @@ namespace BootstrapBlazor.Components
                 {
                     Value = value;
                     _ = ValueChanged.InvokeAsync(value);
-                    if (!SkipValidate && FieldIdentifier != null) EditContext?.NotifyFieldChanged(FieldIdentifier.Value);
+                    if (!SkipValidate && FieldIdentifier != null)
+                    {
+                        EditContext?.NotifyFieldChanged(FieldIdentifier.Value);
+                    }
                 }
             }
         }
@@ -150,10 +153,10 @@ namespace BootstrapBlazor.Components
         }
 
         /// <summary>
-        /// 获得/设置 类型转化失败格式化字符串 默认为 {0}字段值必须为{1}类型
+        /// 获得/设置 类型转化失败格式化字符串 默认为 null
         /// </summary>
         [Parameter]
-        public string ParsingErrorMessage { get; set; } = "{0}字段值必须为{1}类型";
+        public string? ParsingErrorMessage { get; set; }
 
 #nullable disable
         /// <summary>
@@ -185,7 +188,7 @@ namespace BootstrapBlazor.Components
         [Parameter]
         public override string? Id
         {
-            get { return (EditForm != null && !string.IsNullOrEmpty(EditForm.Id) && FieldIdentifier != null) ? $"{EditForm.Id}_{FieldIdentifier.Value.FieldName}" : _id; }
+            get { return (EditForm != null && !string.IsNullOrEmpty(EditForm.Id) && FieldIdentifier != null) ? $"{EditForm.Id}_{FieldIdentifier.Value.Model.GetHashCode()}_{FieldIdentifier.Value.FieldName}" : _id; }
             set { _id = value; }
         }
 
@@ -229,7 +232,13 @@ namespace BootstrapBlazor.Components
         /// 获得 ValidateFormBase 实例
         /// </summary>
         [CascadingParameter]
-        protected ValidateFormBase? EditForm { get; set; }
+        protected ValidateForm? EditForm { get; set; }
+
+        /// <summary>
+        /// 获得 ValidateFormBase 实例
+        /// </summary>
+        [CascadingParameter(Name = "EditorFormShowLabel")]
+        protected bool EditFormShowLabel { get; set; }
 
         /// <summary>
         /// Formats the value as a string. Derived classes can override this to determine the formating used for <see cref="CurrentValueAsString"/>.
@@ -264,19 +273,15 @@ namespace BootstrapBlazor.Components
                 else
                 {
                     result = default!;
+                    var fieldName = FieldIdentifier?.GetDisplayName() ?? "";
+                    var typeName = typeof(TValue).GetTypeDesc();
+                    validationErrorMessage = ParsingErrorMessage ?? $"The {fieldName} field is not valid.";
                 }
             }
             catch (Exception ex)
             {
                 validationErrorMessage = ex.Message;
                 result = default!;
-            }
-
-            if (!ret && validationErrorMessage == null)
-            {
-                var fieldName = FieldIdentifier?.GetDisplayName() ?? "";
-                var typeName = typeof(TValue).GetTypeDesc();
-                validationErrorMessage = string.Format(ParsingErrorMessage, fieldName, typeName);
             }
             return ret;
         }
@@ -313,8 +318,15 @@ namespace BootstrapBlazor.Components
                 // This is the first run
                 // Could put this logic in OnInit, but its nice to avoid forcing people who override OnInit to call base.OnInit()
 
-                if (CascadedEditContext != null) EditContext = CascadedEditContext;
-                if (ValueExpression != null) FieldIdentifier = Microsoft.AspNetCore.Components.Forms.FieldIdentifier.Create(ValueExpression);
+                if (CascadedEditContext != null)
+                {
+                    EditContext = CascadedEditContext;
+                }
+
+                if (ValueExpression != null)
+                {
+                    FieldIdentifier = Microsoft.AspNetCore.Components.Forms.FieldIdentifier.Create(ValueExpression);
+                }
             }
 
             // For derived components, retain the usual lifecycle with OnInit/OnParametersSet/etc.
@@ -328,17 +340,19 @@ namespace BootstrapBlazor.Components
         {
             base.OnInitialized();
 
-            if (EditForm != null && FieldIdentifier != null)
+            if (EditForm != null && FieldIdentifier.HasValue)
             {
-                // 组件被禁用时不进行客户端验证
-                if (!IsDisabled) EditForm.AddValidator((FieldIdentifier.Value.Model.GetType(), FieldIdentifier.Value.FieldName), this);
-
-                // 内置到验证组件时才使用绑定属性值获取 DisplayName
-                if (DisplayText == null) DisplayText = FieldIdentifier.Value.GetDisplayName();
+                EditForm.AddValidator(FieldIdentifier.Value, this);
             }
 
-            //显式设置显示标签时一定显示
-            IsShowLabel = ShowLabel || EditForm != null;
+            // 显式设置显示标签时一定显示
+            IsShowLabel = ShowLabel || EditForm != null || EditFormShowLabel;
+
+            // 内置到验证组件时才使用绑定属性值获取 DisplayName
+            if (IsShowLabel && DisplayText == null && FieldIdentifier.HasValue)
+            {
+                DisplayText = FieldIdentifier.Value.GetDisplayName();
+            }
         }
 
         /// <summary>
@@ -392,16 +406,8 @@ namespace BootstrapBlazor.Components
         public void ValidateProperty(object? propertyValue, ValidationContext context, List<ValidationResult> results)
         {
             // 如果禁用移除验证信息
-            if (IsDisabled)
+            if (!IsDisabled && !SkipValidate)
             {
-                results.Clear();
-            }
-            else
-            {
-                // 模型验证设置 验证属性名称
-                // 验证组件内部使用
-                if (string.IsNullOrEmpty(context.MemberName) && FieldIdentifier.HasValue) context.MemberName = FieldIdentifier.Value.FieldName;
-
                 // 增加数值类型验证如 泛型 TValue 为 int 输入为 Empty 时
                 ValidateType(context, results);
 
@@ -450,7 +456,10 @@ namespace BootstrapBlazor.Components
                     TooltipMethod = "dispose";
                 }
 
-                if (Tooltip != null) Tooltip.Title = ErrorMessage;
+                if (Tooltip != null)
+                {
+                    Tooltip.Title = ErrorMessage;
+                }
 
                 OnValidate(IsValid ?? true);
             }
@@ -462,7 +471,10 @@ namespace BootstrapBlazor.Components
         /// <param name="valid">检查结果</param>
         protected virtual void OnValidate(bool valid)
         {
-            if (AdditionalAttributes != null) AdditionalAttributes["aria-invalid"] = !valid;
+            if (AdditionalAttributes != null)
+            {
+                AdditionalAttributes["aria-invalid"] = !valid;
+            }
         }
         #endregion
 

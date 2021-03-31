@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
@@ -25,23 +26,34 @@ namespace BootstrapBlazor.Shared.Pages
         [NotNull]
         private Logger? Trace2 { get; set; }
 
+        [NotNull]
+        private Logger? Trace3 { get; set; }
+
+        [NotNull]
+        private Logger? Trace4 { get; set; }
+
         [Inject]
         [NotNull]
         private IStringLocalizer<EnumEducation>? Localizer { get; set; }
 
-        private readonly Foo Model = new Foo();
+        [Inject]
+        [NotNull]
+        private IStringLocalizer<Foo>? LocalizerFoo { get; set; }
+
+        private Foo Model { get; set; } = new();
 
         private IEnumerable<SelectedItem>? Educations { get; set; }
 
-        private readonly IEnumerable<SelectedItem> Hobbys = new List<SelectedItem>()
-        {
-            new SelectedItem("游泳", "游泳"),
-            new SelectedItem("登山", "登山"),
-            new SelectedItem("打球", "打球"),
-            new SelectedItem("下棋", "下棋")
-        };
+        [NotNull]
+        private IEnumerable<SelectedItem>? Hobbys { get; set; }
 
-        /// <summary>
+        [NotNull]
+        private ValidateForm? Test { get; set; }
+
+        [NotNull]
+        private ComplexFoo? ComplexModel { get; set; }
+
+        /// <summary>baise
         /// OnInitialized 方法
         /// </summary>
         protected override void OnInitialized()
@@ -50,6 +62,11 @@ namespace BootstrapBlazor.Shared.Pages
 
             // 初始化参数
             Educations = typeof(EnumEducation).ToSelectList(new SelectedItem("", Localizer["PlaceHolder"] ?? "请选择 ..."));
+            Hobbys = Foo.GenerateHobbys(LocalizerFoo);
+            ComplexModel = new ComplexFoo()
+            {
+                Dummy = new Dummy1() { Dummy2 = new Dummy2() },
+            };
         }
 
         private Task OnInvalidSubmit1(EditContext context)
@@ -70,6 +87,43 @@ namespace BootstrapBlazor.Shared.Pages
             return Task.CompletedTask;
         }
 
+        private Task OnInvalidSubmitAddress(EditContext context)
+        {
+            Trace3.Log("OnInvalidSubmit 回调委托");
+            return Task.CompletedTask;
+        }
+
+        private Task OnInvalidComplexModel(EditContext context)
+        {
+            Trace4.Log("OnInvalidSubmit 回调委托");
+            return Task.CompletedTask;
+        }
+
+        private Task OnValidComplexModel(EditContext context)
+        {
+            Trace4.Log("OnValidSubmit 回调委托");
+            Test.SetError<ComplexFoo>(f => f.Dummy.Dummy2.Name, "数据库中已存在");
+            return Task.CompletedTask;
+        }
+
+        private class ComplexFoo : Foo
+        {
+            [NotNull]
+            public Dummy1? Dummy { get; set; }
+        }
+
+        private class Dummy1
+        {
+            [NotNull]
+            public Dummy2? Dummy2 { get; set; }
+        }
+
+        private class Dummy2
+        {
+            [Required]
+            public string? Name { get; set; }
+        }
+
         #region 参数说明
         private static IEnumerable<AttributeItem> GetAttributes() => new AttributeItem[]
         {
@@ -80,6 +134,13 @@ namespace BootstrapBlazor.Shared.Pages
                 Type = "object",
                 ValueList = " — ",
                 DefaultValue = " — "
+            },
+            new AttributeItem() {
+                Name = "ValidateAllProperties",
+                Description = "是否检查所有字段",
+                Type = "bool",
+                ValueList = "true/false",
+                DefaultValue = "false"
             },
             new AttributeItem() {
                 Name = "ChildContent",

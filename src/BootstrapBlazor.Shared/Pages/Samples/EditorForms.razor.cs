@@ -5,8 +5,11 @@
 using BootstrapBlazor.Components;
 using BootstrapBlazor.Shared.Common;
 using BootstrapBlazor.Shared.Pages.Components;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BootstrapBlazor.Shared.Pages
 {
@@ -15,6 +18,10 @@ namespace BootstrapBlazor.Shared.Pages
     /// </summary>
     public sealed partial class EditorForms
     {
+        [Inject]
+        [NotNull]
+        private IStringLocalizer<Foo>? Localizer { get; set; }
+
         private Foo Model { get; } = new Foo()
         {
             Name = "张三",
@@ -32,13 +39,8 @@ namespace BootstrapBlazor.Shared.Pages
             Education = EnumEducation.Middel
         };
 
-        private IEnumerable<SelectedItem> Hobbys { get; } = new List<SelectedItem>()
-        {
-            new SelectedItem("游泳", "游泳"),
-            new SelectedItem("登山", "登山"),
-            new SelectedItem("打球", "打球"),
-            new SelectedItem("下棋", "下棋")
-        };
+        [NotNull]
+        private IEnumerable<SelectedItem>? Hobbys { get; set; }
 
         private List<SelectedItem> DummyItems { get; } = new List<SelectedItem>()
         {
@@ -48,6 +50,16 @@ namespace BootstrapBlazor.Shared.Pages
             new SelectedItem("4", "4"),
             new SelectedItem("5", "5")
         };
+
+        /// <summary>
+        /// OnInitialized 方法
+        /// </summary>
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            Hobbys = Foo.GenerateHobbys(Localizer);
+        }
 
         private static IEnumerable<AttributeItem> GetAttributes() => new AttributeItem[]
         {

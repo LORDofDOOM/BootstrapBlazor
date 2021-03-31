@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject IOptions<WebsiteOptions> WebsiteOption
 
 <CascadingValue Value="this" IsFixed="true">
     <Layout SideWidth="0" IsPage="true" IsFullSide="@IsFullSide" IsFixedHeader="@IsFixedHeader" IsFixedFooter="@IsFixedFooter"
@@ -31,10 +32,11 @@
         </Main>
         <Footer>
             <div class="text-center flex-fill">
-                <a class="page-layout-demo-footer-link" href="https://gitee.com/LongbowEnterprise/BootstrapAdmin" target="_blank">Bootstrap Admin</a>
+                <a class="page-layout-demo-footer-link" href="@WebsiteOption.Value.BootstrapAdminLink" target="_blank">Bootstrap Admin</a>
             </div>
         </Footer>
     </Layout>
+
     <Drawer Placement="Placement.Right" @bind-IsOpen="@IsOpen" IsBackdrop="true">
         <div class="layout-drawer-body">
             <div class="btn btn-info w-100" @onclick="@(e => IsOpen = false)">点击关闭</div>

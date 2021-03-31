@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Website: https://www.blazor.zone or https://argozhang.github.io/
 
+using BootstrapBlazor.Components;
 using BootstrapBlazor.Shared.Pages.Components;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,9 @@ namespace BootstrapBlazor.Shared.Pages.Table
     /// </summary>
     public sealed partial class TablesDetailRow
     {
-        private IEnumerable<DetailRow> GetDetailRowsByName(string name) => Enumerable.Range(1, 4).Select(i => new DetailRow()
+        private Dictionary<string, IEnumerable<DetailRow>> Cache { get; } = new();
+
+        private static IEnumerable<DetailRow> GetDetailRowsByName(string name) => Enumerable.Range(1, 4).Select(i => new DetailRow()
         {
             Id = i,
             Name = name,
@@ -35,24 +38,24 @@ namespace BootstrapBlazor.Shared.Pages.Table
             /// 
             /// </summary>
             [DisplayName("培训课程")]
+            [AutoGenerateColumn(Order = 10)]
             public string Name { get; set; } = "";
 
             /// <summary>
             /// 
             /// </summary>
             [DisplayName("日期")]
+            [AutoGenerateColumn(Order = 20, Width = 180)]
             public DateTime DateTime { get; set; }
 
             /// <summary>
             /// 
             /// </summary>
             [DisplayName("是/否")]
+            [AutoGenerateColumn(Order = 30, Width = 70, ComponentType = typeof(Switch))]
             public bool Complete { get; set; }
         }
 
-        private bool ShowDetailRow(Foo item)
-        {
-            return item.Complete;
-        }
+        private static bool ShowDetailRow(Foo item) => item.Complete;
     }
 }

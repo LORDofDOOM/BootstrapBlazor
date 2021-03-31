@@ -22,6 +22,22 @@ namespace BootstrapBlazor.Components
     public sealed partial class EditorForm<TModel>
     {
         /// <summary>
+        /// 支持每行多少个控件功能
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        private string? GetCssString(IEditorItem item) => CssBuilder.Default("form-group col-12")
+            .AddClass("col-sm-6", item.Data == null && ItemsPerRow == null && item.Rows == 0)
+            .AddClass($"col-sm-6 col-md-{Math.Floor(12d / (ItemsPerRow ?? 1))}", item.Data == null && ItemsPerRow != null && item.Rows == 0)
+            .Build();
+
+        /// <summary>
+        /// 获得/设置 每行显示组件数量 默认为 null
+        /// </summary>
+        [Parameter]
+        public int? ItemsPerRow { get; set; }
+
+        /// <summary>
         /// 获得/设置 列模板
         /// </summary>
         [Parameter]
@@ -91,12 +107,18 @@ namespace BootstrapBlazor.Components
             if (CascadedEditContext != null)
             {
                 var message = Localizer["ModelInvalidOperationExceptionMessage", nameof(EditorForm<TModel>)];
-                if (CascadedEditContext.Model.GetType() != typeof(TModel)) throw new InvalidOperationException(message);
+                if (CascadedEditContext.Model.GetType() != typeof(TModel))
+                {
+                    throw new InvalidOperationException(message);
+                }
 
                 Model = (TModel)CascadedEditContext.Model;
             }
 
-            if (Model == null) throw new ArgumentNullException(nameof(Model));
+            if (Model == null)
+            {
+                throw new ArgumentNullException(nameof(Model));
+            }
 
             PlaceHolderText ??= Localizer[nameof(PlaceHolderText)];
         }
@@ -127,7 +149,6 @@ namespace BootstrapBlazor.Components
                 else
                 {
                     // 如果 EditorItems 有值表示 用户自定义列
-
                     if (AutoGenerateAllItem)
                     {
                         // 获取绑定模型所有属性
@@ -140,13 +161,17 @@ namespace BootstrapBlazor.Components
                             if (item != null)
                             {
                                 // 过滤掉不编辑的列
-                                if (!el.Editable) items.Remove(item);
+                                if (!el.Editable)
+                                {
+                                    items.Remove(item);
+                                }
                                 else
                                 {
                                     // 设置只读属性与列模板
                                     item.Readonly = el.Readonly;
                                     item.EditTemplate = el.EditTemplate;
                                     item.Text = el.Text;
+                                    item.Data = el.Data;
                                 }
                             }
                         }
@@ -161,7 +186,7 @@ namespace BootstrapBlazor.Components
             }
         }
 
-        private int GetOrder(string fieldName) => Model.GetType().GetProperty(fieldName)?.GetCustomAttribute<EditorOrderAttribute>()?.Order ?? 0;
+        private int GetOrder(string fieldName) => Model.GetType().GetProperty(fieldName)?.GetCustomAttribute<AutoGenerateColumnAttribute>()?.Order ?? 0;
 
         #region AutoEdit
         private RenderFragment AutoGenerateTemplate(IEditorItem item) => builder =>
@@ -169,9 +194,10 @@ namespace BootstrapBlazor.Components
             var fieldType = item.PropertyType;
             if (fieldType != null && Model != null)
             {
-                // GetDisplayName
                 var fieldName = item.GetFieldName();
-                var displayName = Utility.GetDisplayName(Model, fieldName);
+                // GetDisplayName
+                // 先取 Text 属性值，然后取资源文件中的值
+                var displayName = item.GetDisplayName() ?? Utility.GetDisplayName(Model, fieldName);
 
                 // FieldValue
                 var valueInvoker = GetPropertyValueLambdaCache.GetOrAdd((typeof(TModel), fieldName), key => LambdaExtensions.GetPropertyValueLambda<TModel, object?>(Model, key.FieldName).Compile());
@@ -186,15 +212,18 @@ namespace BootstrapBlazor.Components
                 var tDelegate = typeof(Func<>).MakeGenericType(fieldType);
                 var valueExpression = Expression.Lambda(tDelegate, body);
 
-                var index = 0;
-                var componentType = EditorForm<TModel>.GenerateComponent(fieldType);
-                builder.OpenComponent(index++, componentType);
-                builder.AddAttribute(index++, "DisplayText", displayName);
-                builder.AddAttribute(index++, "Value", fieldValue);
-                builder.AddAttribute(index++, "ValueChanged", fieldValueChanged);
-                builder.AddAttribute(index++, "ValueExpression", valueExpression);
-                builder.AddAttribute(index++, "IsDisabled", item.Readonly);
-                builder.AddMultipleAttributes(index++, CreateMultipleAttributes(fieldType, fieldName, item));
+                var componentType = item.ComponentType ?? EditorForm<TModel>.GenerateComponent(fieldType, item.Rows != 0);
+                builder.OpenComponent(0, componentType);
+                builder.AddAttribute(1, "DisplayText", displayName);
+                builder.AddAttribute(2, "Value", fieldValue);
+                builder.AddAttribute(3, "ValueChanged", fieldValueChanged);
+                builder.AddAttribute(4, "ValueExpression", valueExpression);
+                builder.AddAttribute(5, "IsDisabled", item.Readonly);
+                if (IsCheckboxList(fieldType) && item.Data != null)
+                {
+                    builder.AddAttribute(6, nameof(CheckboxList<IEnumerable<string>>.Items), item.Data);
+                }
+                builder.AddMultipleAttributes(7, CreateMultipleAttributes(fieldType, fieldName, item));
                 builder.CloseComponent();
             }
         };
@@ -208,7 +237,10 @@ namespace BootstrapBlazor.Components
                 // 枚举类型
                 // 通过字符串转化为枚举类实例
                 var items = type.ToSelectList();
-                if (items != null) ret.Add(new KeyValuePair<string, object>("Items", items));
+                if (items != null)
+                {
+                    ret.Add(new KeyValuePair<string, object>("Items", items));
+                }
             }
             else
             {
@@ -216,8 +248,15 @@ namespace BootstrapBlazor.Components
                 {
                     case nameof(String):
                         ret.Add(new KeyValuePair<string, object>("placeholder", Utility.GetPlaceHolder(Model, fieldName) ?? PlaceHolderText));
+                        if (item.Rows != 0)
+                        {
+                            ret.Add(new KeyValuePair<string, object>("rows", item.Rows));
+                        }
                         break;
+                    case nameof(Int16):
                     case nameof(Int32):
+                    case nameof(Int64):
+                    case nameof(Single):
                     case nameof(Double):
                     case nameof(Decimal):
                         ret.Add(new KeyValuePair<string, object>("Step", item.Step!));
@@ -234,13 +273,17 @@ namespace BootstrapBlazor.Components
             return ret;
         }
 
-        private static Type GenerateComponent(Type fieldType)
+        private static Type GenerateComponent(Type fieldType, bool hasRows)
         {
             Type? ret = null;
             var type = (Nullable.GetUnderlyingType(fieldType) ?? fieldType);
             if (type.IsEnum)
             {
                 ret = typeof(Select<>).MakeGenericType(fieldType);
+            }
+            else if (IsCheckboxList(type))
+            {
+                ret = typeof(CheckboxList<IEnumerable<string>>);
             }
             else
             {
@@ -252,17 +295,33 @@ namespace BootstrapBlazor.Components
                     case nameof(DateTime):
                         ret = typeof(DateTimePicker<>).MakeGenericType(fieldType);
                         break;
+                    case nameof(Int16):
                     case nameof(Int32):
+                    case nameof(Int64):
+                    case nameof(Single):
                     case nameof(Double):
                     case nameof(Decimal):
-                        ret = typeof(BootstrapInput<>).MakeGenericType(fieldType);
+                        ret = typeof(BootstrapInputNumber<>).MakeGenericType(fieldType);
                         break;
                     case nameof(String):
-                        ret = typeof(BootstrapInput<>).MakeGenericType(typeof(string));
+                        if (hasRows)
+                        {
+                            ret = typeof(Textarea);
+                        }
+                        else
+                        {
+                            ret = typeof(BootstrapInput<>).MakeGenericType(typeof(string));
+                        }
                         break;
                 }
             }
             return ret ?? typeof(BootstrapInput<>).MakeGenericType(fieldType);
+        }
+
+        private static bool IsCheckboxList(Type fieldType)
+        {
+            var type = (Nullable.GetUnderlyingType(fieldType) ?? fieldType);
+            return type.IsAssignableTo(typeof(IEnumerable<string>));
         }
 
         /// <summary>

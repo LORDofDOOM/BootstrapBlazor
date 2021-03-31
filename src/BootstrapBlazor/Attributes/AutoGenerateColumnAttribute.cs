@@ -4,6 +4,7 @@
 
 using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
@@ -40,6 +41,8 @@ namespace BootstrapBlazor.Components
         /// 获得/设置 是否为默认排序规则 默认为 SortOrder.Unset
         /// </summary>
         public SortOrder DefaultSortOrder { get; set; }
+
+        IEnumerable<SelectedItem>? IEditorItem.Data { get; set; }
 
         /// <summary>
         /// 获得/设置 列宽
@@ -88,6 +91,11 @@ namespace BootstrapBlazor.Components
         public RenderFragment<object>? EditTemplate { get; set; }
 
         /// <summary>
+        /// 获得/设置 组件类型 默认为 null
+        /// </summary>
+        public Type? ComponentType { get; set; }
+
+        /// <summary>
         /// 获得/设置 显示模板
         /// </summary>
         public RenderFragment<object>? Template { get; set; }
@@ -106,6 +114,11 @@ namespace BootstrapBlazor.Components
         /// 获得/设置 步长 默认为 1
         /// </summary>
         public object? Step { get; set; }
+
+        /// <summary>
+        /// 获得/设置 Textarea 行数
+        /// </summary>
+        public int Rows { get; set; }
 
         /// <summary>
         /// 获得/设置 列过滤器
@@ -133,7 +146,7 @@ namespace BootstrapBlazor.Components
         /// 
         /// </summary>
         /// <returns></returns>
-        public string GetDisplayName() => Text ?? "";
+        public string? GetDisplayName() => Text;
 
         /// <summary>
         /// 

@@ -1,5 +1,4 @@
-﻿@inherits TablesBaseQuery
-@page "/tables/fix-column"
+﻿@page "/tables/fix-column"
 
 <h3>固定列功能</h3>
 
@@ -18,11 +17,7 @@
             <TableColumn @bind-Field="@context.Address" Width="900" />
             <TableColumn @bind-Field="@context.Education" Width="100" />
             <TableColumn @bind-Field="@context.Count" Width="100" />
-            <TableColumn @bind-Field="@context.Complete" Width="100" Fixed="true">
-                <Template Context="v">
-                    <Switch IsDisabled="true" Value="v.Value" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
-                </Template>
-            </TableColumn>
+            <TableColumn @bind-Field="@context.Complete" Width="100" Fixed="true" ComponentType="@typeof(Switch)" />
         </TableColumns>
     </Table>
 </Block>
@@ -35,11 +30,7 @@
             <TableColumn @bind-Field="@context.Address" Width="900" />
             <TableColumn @bind-Field="@context.Education" Width="100" />
             <TableColumn @bind-Field="@context.Count" Width="100" />
-            <TableColumn @bind-Field="@context.Complete" Width="100" Fixed="true">
-                <Template Context="v">
-                    <Switch IsDisabled="true" Value="v.Value" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
-                </Template>
-            </TableColumn>
+            <TableColumn @bind-Field="@context.Complete" Width="100" Fixed="true" ComponentType="@typeof(Switch)" />
         </TableColumns>
     </Table>
 </Block>
@@ -54,11 +45,7 @@
             <TableColumn @bind-Field="@context.Address" Width="900" />
             <TableColumn @bind-Field="@context.Education" Width="100" />
             <TableColumn @bind-Field="@context.Count" Width="100" />
-            <TableColumn @bind-Field="@context.Complete" Width="100" Fixed="true">
-                <Template Context="v">
-                    <Switch IsDisabled="true" Value="v.Value" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
-                </Template>
-            </TableColumn>
+            <TableColumn @bind-Field="@context.Complete" Width="100" Fixed="true" ComponentType="@typeof(Switch)" />
         </TableColumns>
     </Table>
 </Block>
@@ -73,11 +60,7 @@
             <TableColumn @bind-Field="@context.Address" Width="900" />
             <TableColumn @bind-Field="@context.Education" Width="100" />
             <TableColumn @bind-Field="@context.Count" Width="100" />
-            <TableColumn @bind-Field="@context.Complete" Width="100" Fixed="true">
-                <Template Context="v">
-                    <Switch IsDisabled="true" Value="v.Value" ShowInnerText="true" OnInnerText="是" OffInnerText="否" />
-                </Template>
-            </TableColumn>
+            <TableColumn @bind-Field="@context.Complete" Width="100" Fixed="true" ComponentType="@typeof(Switch)" />
         </TableColumns>
     </Table>
 </Block>

@@ -20,11 +20,13 @@ else
             {
                 @if (item.EditTemplate != null)
                 {
-                    @item.EditTemplate.Invoke(Model)
+                    <CascadingValue Value="@ShowLabel" IsFixed="true" Name="EditorFormShowLabel">
+                        @item.EditTemplate.Invoke(Model)
+                    </CascadingValue>
                 }
                 else
                 {
-                    <div class="form-group col-12 col-sm-6">
+                    <div class="@GetCssString(item)">
                         @AutoGenerateTemplate(item)
                     </div>
                 }

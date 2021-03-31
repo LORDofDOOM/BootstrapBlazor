@@ -127,14 +127,12 @@ namespace BootstrapBlazor.Shared.Pages
         private Task OnShowDialog() => Dialog.Show(new DialogOption()
         {
             Title = "弹窗中使用级联下拉框",
-            Component = DynamicComponent.CreateComponent<CustomerSelectDialog>()
+            Component = BootstrapDynamicComponent.CreateComponent<CustomerSelectDialog>()
         });
 
-        private readonly List<SelectedItem> _item2 = new List<SelectedItem>();
+        private readonly List<SelectedItem> _item2 = new();
 
         private IEnumerable<SelectedItem> Items2 => _item2;
-
-        private IEnumerable<SelectedItem> EnumItems { get; set; } = typeof(SortOrder).ToSelectList();
 
         private IEnumerable<SelectedItem> NullableIntItems { get; set; } = new SelectedItem[]
         {

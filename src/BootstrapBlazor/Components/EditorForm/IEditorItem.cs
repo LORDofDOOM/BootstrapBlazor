@@ -4,6 +4,7 @@
 
 using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections.Generic;
 
 namespace BootstrapBlazor.Components
 {
@@ -33,9 +34,19 @@ namespace BootstrapBlazor.Components
         string? Text { get; set; }
 
         /// <summary>
+        /// 获得/设置 额外数据源一般用于下拉框或者 CheckboxList 这种需要额外配置数据源组件使用
+        /// </summary>
+        IEnumerable<SelectedItem>? Data { get; set; }
+
+        /// <summary>
         /// 获得/设置 步长 默认为 null
         /// </summary>
         object? Step { get; set; }
+
+        /// <summary>
+        /// 获得/设置 Textarea 行数 默认为 0
+        /// </summary>
+        int Rows { get; set; }
 
         /// <summary>
         /// 获得/设置 编辑模板
@@ -43,9 +54,14 @@ namespace BootstrapBlazor.Components
         RenderFragment<object>? EditTemplate { get; set; }
 
         /// <summary>
+        /// 获得/设置 组件类型 默认为 null
+        /// </summary>
+        Type? ComponentType { get; set; }
+
+        /// <summary>
         /// 获取绑定字段显示名称方法
         /// </summary>
-        string GetDisplayName();
+        string? GetDisplayName();
 
         /// <summary>
         /// 获取绑定字段信息方法
