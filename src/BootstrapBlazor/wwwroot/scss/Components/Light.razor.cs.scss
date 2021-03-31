@@ -1,5 +1,5 @@
 ﻿.light {
-    background-image: radial-gradient(circle, #fff, #aaa, #333);
+    background-image: radial-gradient(circle, $white, $gray-500, $gray-800);
     cursor: pointer;
     width: 20px;
     height: 20px;
@@ -12,7 +12,7 @@
     }
 
 .light-danger {
-    background-image: radial-gradient(circle, #e17777, #892726, #700604);
+    background-image: radial-gradient(circle, $danger-400, $danger-700, $danger-900);
 }
 
     .light-danger.flash {
@@ -20,25 +20,25 @@
     }
 
     .light-danger:hover {
-        background-image: radial-gradient(circle, #e17777, #b33332, #bf211e);
+        background-image: radial-gradient(circle, $danger-400, $danger, $danger-600);
     }
 
 @keyframes danger {
     0% {
-        background-image: radial-gradient(circle, #e17777, #892726, #700604);
+        background-image: radial-gradient(circle, $danger-400,$danger-700, $danger-900);
     }
 
     55% {
-        background-image: radial-gradient(circle, #e17777, #892726, #700604);
+        background-image: radial-gradient(circle, $danger-400,$danger-700, $danger-900);
     }
 
     100% {
-        background-image: radial-gradient(circle, #fff, #aaa, #333);
+        background-image: radial-gradient(circle, $white, $gray-500, $gray-800);
     }
 }
 
 .light-success {
-    background-image: radial-gradient(circle, #5cb85c, #116811, #024702);
+    background-image: radial-gradient(circle, $success-400, $success-700, $success-900);
 }
 
     .light-success.flash {
@@ -46,25 +46,25 @@
     }
 
     .light-success:hover {
-        background-image: radial-gradient(circle, #5cb85c, #0c980c, #087b08);
+        background-image: radial-gradient(circle, $success-400, $success, $success-600);
     }
 
 @keyframes success {
     0% {
-        background-image: radial-gradient(circle, #5cb85c, #116811, #024702);
+        background-image: radial-gradient(circle, $success-400, $success-700, $success-900);
     }
 
     55% {
-        background-image: radial-gradient(circle, #5cb85c, #116811, #024702);
+        background-image: radial-gradient(circle, $success-400, $success-700, $success-900);
     }
 
     100% {
-        background-image: radial-gradient(circle, #fff, #aaa, #333);
+        background-image: radial-gradient(circle, $white, $gray-500, $gray-800);
     }
 }
 
 .light-info {
-    background-image: radial-gradient(circle, #5bc0de, #1d7792, #085166);
+    background-image: radial-gradient(circle, $info-400, $info-700, $info-900);
 }
 
     .light-info.flash {
@@ -72,25 +72,25 @@
     }
 
     .light-info:hover {
-        background-image: radial-gradient(circle, #5bc0de, #085166, #085166);
+        background-image: radial-gradient(circle, $info-400, $info, $info-600);
     }
 
 @keyframes info {
     0% {
-        background-image: radial-gradient(circle, #5bc0de, #1d7792, #085166);
+        background-image: radial-gradient(circle, $info-400, $info-700, $info-900);
     }
 
     55% {
-        background-image: radial-gradient(circle, #5bc0de, #1d7792, #085166);
+        background-image: radial-gradient(circle, $info-400, $info-700, $info-900);
     }
 
     100% {
-        background-image: radial-gradient(circle, #fff, #aaa, #333);
+        background-image: radial-gradient(circle, $white, $gray-500, $gray-800);
     }
 }
 
 .light-warning {
-    background-image: radial-gradient(circle, #ffc107, #cc9f18, #a28018);
+    background-image: radial-gradient(circle, $warning-400, $warning-700, $warning-900);
 }
 
     .light-warning.flash {
@@ -98,25 +98,25 @@
     }
 
     .light-warning:hover {
-        background-image: radial-gradient(circle, #ffc107, #a28018, #a28018);
+        background-image: radial-gradient(circle, $warning-400, $warning-900, $warning-900);
     }
 
 @keyframes warning {
     0% {
-        background-image: radial-gradient(circle, #ffc107, #cc9f18, #a28018);
+        background-image: radial-gradient(circle, $warning-400, $warning-700, $warning-900);
     }
 
     55% {
-        background-image: radial-gradient(circle, #ffc107, #cc9f18, #a28018);
+        background-image: radial-gradient(circle, $warning-400, $warning-700, $warning-900);
     }
 
     100% {
-        background-image: radial-gradient(circle, #fff, #aaa, #333);
+        background-image: radial-gradient(circle, $white, $gray-500, $gray-800);
     }
 }
 
 .light-primary {
-    background-image: radial-gradient(circle, #007bff, #0f5fb5, #104f94);
+    background-image: radial-gradient(circle, $primary-400, $primary-700, $primary-900);
 }
 
     .light-primary.flash {
@@ -124,25 +124,25 @@
     }
 
     .light-primary:hover {
-        background-image: radial-gradient(circle, #007bff, #104f94, #104f94);
+        background-image: radial-gradient(circle, $primary-400, $primary-900, $primary-900);
     }
 
 @keyframes primary {
     0% {
-        background-image: radial-gradient(circle, #007bff, #0f5fb5, #104f94);
+        background-image: radial-gradient(circle, $primary-400, $primary-700, $primary-900);
     }
 
     55% {
-        background-image: radial-gradient(circle, #007bff, #0f5fb5, #104f94);
+        background-image: radial-gradient(circle, $primary-400, $primary-700, $primary-900);
     }
 
     100% {
-        background-image: radial-gradient(circle, #fff, #aaa, #333);
+        background-image: radial-gradient(circle, $white, $gray-500, $gray-800);
     }
 }
 
 .light-secondary {
-    background-image: radial-gradient(circle, #6c757d, #4b5054, #3b3d40);
+    background-image: radial-gradient(circle,$secondary-400, $secondary-700, $secondary-900);
 }
 
     .light-secondary.flash {
@@ -150,20 +150,20 @@
     }
 
     .light-secondary:hover {
-        background-image: radial-gradient(circle, #6c757d, #3b3d40, #3b3d40)
+        background-image: radial-gradient(circle,$secondary-400, $secondary-900, $secondary-900)
     }
 
 @keyframes secondary {
     0% {
-        background-image: radial-gradient(circle, #6c757d, #4b5054, #3b3d40);
+        background-image: radial-gradient(circle,$secondary-400, $secondary-700, $secondary-900);
     }
 
     55% {
-        background-image: radial-gradient(circle, #6c757d, #3b3d40, #3b3d40);
+        background-image: radial-gradient(circle,$secondary-400, $secondary-900, $secondary-900);
     }
 
     100% {
-        background-image: radial-gradient(circle, #fff, #aaa, #333);
+        background-image: radial-gradient(circle, $white, $gray-500, $gray-800);
     }
 }
 
@@ -189,6 +189,6 @@
     }
 
     100% {
-        background-image: radial-gradient(circle, #fff, #aaa, #333);
+        background-image: radial-gradient(circle, $white, $gray-500, $gray-800);
     }
 }

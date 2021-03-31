@@ -8,11 +8,11 @@
         margin: 0;
         display: inline-block;
         position: relative;
-        border: 1px solid #dcdfe6;
+        border: 1px solid $gray-300;
         outline: none;
         border-radius: 10px;
         box-sizing: border-box;
-        background: #dcdfe6;
+        background: $gray-300;
         cursor: pointer;
         transition: border-color .3s,background-color .3s;
         vertical-align: middle;
@@ -27,7 +27,7 @@
             transition: all .3s;
             width: 16px;
             height: 16px;
-            background-color: #fff;
+            background-color:  $white;
         }
 
         .switch .switch-core:before {
@@ -37,7 +37,7 @@
             left: calc(100% - 17px);
             transition: all .3s;
             font-size: 80%;
-            color: #606266;
+            color: $gray-600;
         }
 
     .switch.is-checked .switch-core:after {
@@ -47,7 +47,7 @@
 
     .switch.is-checked .switch-core:before {
         left: 5px;
-        color: #fff;
+        color: $white;
     }
 
     .switch .switch-label {
