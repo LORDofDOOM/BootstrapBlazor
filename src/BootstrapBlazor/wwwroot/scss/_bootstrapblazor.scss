@@ -1068,6 +1068,7 @@ input:disabled,
 
 .menu .dropdown-menu {
   overflow: unset;
+  max-height: unset;
   margin-top: 10px;
 }
 
@@ -1790,3 +1791,17 @@ input:disabled,
   background-color: $gray-100;
 }
 /*end widget*/
+
+form .control-label:before {
+  content: "";
+  position: relative;
+  top: 2px;
+  margin-right: 2px;
+  display: inline-block;
+  min-width: 5px;
+}
+
+form .control-label[required]:before {
+  content: "*";
+  color: $danger;
+}
