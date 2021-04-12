@@ -13,7 +13,7 @@ namespace BootstrapBlazor.Components
     /// <summary>
     /// Bootstrap Blazor 组件基类
     /// </summary>
-    public abstract class BootstrapComponentBase : ComponentBase, IDisposable
+    public abstract class BootstrapComponentBase : ComponentBase
     {
         /// <summary>
         /// 获得/设置 用户自定义属性
@@ -28,22 +28,18 @@ namespace BootstrapBlazor.Components
         [NotNull]
         protected IJSRuntime? JSRuntime { get; set; }
 
-        /// <summary>
-        /// Dispose 方法
-        /// </summary>
-        /// <param name="disposing"></param>
-        protected virtual void Dispose(bool disposing)
-        {
-
-        }
+        [Inject]
+        [NotNull]
+        private IServiceProvider? Provider { get; set; }
 
         /// <summary>
-        /// Dispose 方法
+        /// OnInitialized 方法
         /// </summary>
-        public void Dispose()
+        protected override void OnInitialized()
         {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
+            base.OnInitialized();
+
+            ServiceProviderHelper.RegisterProvider(Provider);
         }
     }
 }

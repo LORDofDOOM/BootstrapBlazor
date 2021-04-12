@@ -189,6 +189,7 @@ namespace BootstrapBlazor.Components
         {
             if (UseInjectDataService || OnSaveAsync != null)
             {
+                await ToggleLoading(true);
                 if (OnAddAsync != null)
                 {
                     EditModel = await OnAddAsync();
@@ -215,6 +216,7 @@ namespace BootstrapBlazor.Components
                     ShowAddForm = true;
                     ShowEditForm = false;
                 }
+                await ToggleLoading(false);
                 StateHasChanged();
             }
             else
@@ -240,6 +242,7 @@ namespace BootstrapBlazor.Components
             {
                 if (SelectedItems.Count == 1)
                 {
+                    await ToggleLoading(true);
                     if (OnEditAsync != null)
                     {
                         await OnEditAsync(SelectedItems[0]);
@@ -255,6 +258,7 @@ namespace BootstrapBlazor.Components
                     }
                     EditModalTitleString = EditModalTitle;
 
+                    // 显示编辑框
                     if (EditMode == EditMode.Popup)
                     {
                         await ShowEditDialog();
@@ -264,6 +268,7 @@ namespace BootstrapBlazor.Components
                         ShowEditForm = true;
                         ShowAddForm = false;
                     }
+                    await ToggleLoading(false);
                 }
                 else
                 {
@@ -302,7 +307,7 @@ namespace BootstrapBlazor.Components
         });
 
         /// <summary>
-        /// 
+        /// 保存数据方法
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
@@ -334,6 +339,7 @@ namespace BootstrapBlazor.Components
         {
             if (UseInjectDataService || OnSaveAsync != null)
             {
+                await ToggleLoading(true);
                 if (await SaveModelAsync(context))
                 {
                     if (EditMode == EditMode.Popup)
@@ -351,6 +357,7 @@ namespace BootstrapBlazor.Components
                         StateHasChanged();
                     }
                 }
+                await ToggleLoading(false);
             }
             else
             {
@@ -372,6 +379,7 @@ namespace BootstrapBlazor.Components
         protected Task ShowEditDialog() => DialogService.ShowEditDialog(new EditDialogOption<TItem>()
         {
             IsScrolling = ScrollingDialogContent,
+            ShowLoading = ShowLoading,
             Title = EditModalTitleString,
             Model = EditModel,
             Items = Columns.Where(i => i.Editable),
@@ -382,16 +390,20 @@ namespace BootstrapBlazor.Components
                 if (UseInjectDataService && GetDataService() is IEntityFrameworkCoreDataService ef)
                 {
                     // EFCore
+                    await ToggleLoading(true);
                     await ef.CancelAsync();
+                    await ToggleLoading(false);
                 }
             },
             OnSaveAsync = async context =>
             {
+                await ToggleLoading(true);
                 var valid = await SaveModelAsync(context);
                 if (valid)
                 {
                     await QueryAsync();
                 }
+                await ToggleLoading(false);
                 return valid;
             }
         });
@@ -424,6 +436,7 @@ namespace BootstrapBlazor.Components
         /// </summary>
         protected Func<Task> DeleteAsync() => async () =>
         {
+            await ToggleLoading(true);
             var ret = false;
             if (OnDeleteAsync != null) ret = await OnDeleteAsync(SelectedItems);
             else if (UseInjectDataService) ret = await GetDataService().DeleteAsync(SelectedItems);
@@ -448,6 +461,7 @@ namespace BootstrapBlazor.Components
                 await QueryAsync();
             }
             if (ShowErrorToast || ret) await Toast.Show(option);
+            await ToggleLoading(false);
         };
 
         /// <summary>

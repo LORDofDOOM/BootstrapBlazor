@@ -84,6 +84,12 @@
     ]
   },
   {
+    "outputFileName": "Components/Display/Display.razor.cs.min.css",
+    "inputFiles": [
+      "Components/Display/Display.razor.cs.css"
+    ]
+  },
+  {
     "outputFileName": "Components/Drawer/Drawer.razor.cs.min.css",
     "inputFiles": [
       "Components/Drawer/Drawer.razor.cs.css"
@@ -267,6 +273,7 @@
       "Components/DateTimePicker/DateTimePicker.razor.cs.min.css",
       "Components/DateTimePicker/TimePickerBody.razor.cs.min.css",
       "Components/DateTimeRange/DateTimeRange.razor.cs.min.css",
+      "Components/Display/Display.razor.cs.min.css",
       "Components/Drawer/Drawer.razor.cs.min.css",
       "Components/Editor/Editor.razor.cs.min.css",
       "Components/GoTop/GoTop.razor.cs.min.css",
@@ -393,6 +400,12 @@
     ]
   },
   {
+    "outputFileName": "Components/Dialog/EditDialog.razor.cs.min.js",
+    "inputFiles": [
+      "Components/Dialog/EditDialog.razor.cs.js"
+    ]
+  },
+  {
     "outputFileName": "Components/Drawer/Drawer.razor.cs.min.js",
     "inputFiles": [
       "Components/Drawer/Drawer.razor.cs.js"
@@ -501,6 +514,12 @@
     ]
   },
   {
+    "outputFileName": "Components/Title/Title.cs.min.js",
+    "inputFiles": [
+      "Components/Title/Title.cs.js"
+    ]
+  },
+  {
     "outputFileName": "Components/Toast/Toast.razor.cs.min.js",
     "inputFiles": [
       "Components/Toast/Toast.razor.cs.js"
@@ -550,6 +569,7 @@
       "Components/DateTimePicker/DateTimePicker.razor.cs.min.js",
       "Components/DateTimePicker/TimePickerBody.razor.cs.min.js",
       "Components/DateTimeRange/DateTimeRange.razor.cs.min.js",
+      "Components/Dialog/EditDialog.razor.cs.min.js",
       "Components/Drawer/Drawer.razor.cs.min.js",
       "Components/Editor/Editor.razor.cs.min.js",
       "Components/GoTop/GoTop.razor.cs.min.js",
@@ -568,6 +588,7 @@
       "Components/Tab/Tab.razor.cs.min.js",
       "Components/Table/Table.razor.cs.min.js",
       "Components/Table/Filter/TableFilter.razor.cs.min.js",
+      "Components/Title/Title.cs.min.js",
       "Components/Toast/Toast.razor.cs.min.js",
       "Components/Tooltip/Tooltip.cs.min.js",
       "Components/Tree/Tree.razor.cs.min.js",
