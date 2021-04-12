@@ -10753,6 +10753,7 @@ input:disabled,
 
 .menu .dropdown-menu {
   overflow: unset;
+  max-height: unset;
   margin-top: 10px;
 }
 
@@ -11460,6 +11461,20 @@ input:disabled,
 }
 
 /*end widget*/
+form .control-label:before {
+  content: "";
+  position: relative;
+  top: 2px;
+  margin-right: 2px;
+  display: inline-block;
+  min-width: 5px;
+}
+
+form .control-label[required]:before {
+  content: "*";
+  color: #dc3545;
+}
+
 /* Import Bootstrap Blazor Components */
 .alert i {
   margin-right: 0.5rem;
@@ -11719,6 +11734,7 @@ input:disabled,
 }
 
 .checkbox-list {
+  min-height: 35px;
   height: auto;
   display: flex;
   flex-flow: row wrap;
@@ -12230,6 +12246,26 @@ input:disabled,
 
 .datetime-range:hover:not(.disabled) .range-clear {
   display: flex;
+}
+
+@media (min-width: 576px) {
+  .form-inline .form-group .form-control.is-display {
+    width: 196px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .form-inline .form-control.is-display {
+    width: 100%;
+  }
+  .form-inline .form-group .control-label.is-display {
+    padding: 6px 0;
+    margin-bottom: 0;
+  }
+  .form-inline .control-label.is-display {
+    display: inline-block;
+    margin-bottom: .5rem;
+    padding: 0;
+  }
 }
 
 .drawer-wrapper {
@@ -13206,6 +13242,15 @@ input:disabled,
   width: 100%;
   font-size: inherit;
   cursor: pointer;
+}
+
+.form-select .dropdown-menu .dropdown-item.is-disabled {
+  color: #c0c4cc;
+  cursor: not-allowed;
+}
+
+.form-select .dropdown-menu .dropdown-item.is-disabled:active {
+  background-color: #f8f9fa;
 }
 
 .dropdown-menu-arrow {
@@ -14405,7 +14450,8 @@ input:disabled,
 }
 
 .table-loading,
-.table-loader {
+.table-loader,
+.form-loader {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14415,7 +14461,8 @@ input:disabled,
   flex: 1;
 }
 
-.table-loader {
+.table-loader,
+.form-loader {
   display: none;
   opacity: 0.8;
   position: absolute;
@@ -14427,7 +14474,8 @@ input:disabled,
   z-index: 4;
 }
 
-.table-loader.show {
+.table-loader.show,
+.form-loader.show {
   display: flex;
 }
 
@@ -14753,6 +14801,7 @@ input:disabled,
 
 .time-panel-content.has-seconds:after {
   left: 66.66667%;
+  pointer-events: none;
 }
 
 .time-panel-content:after {
@@ -14831,6 +14880,7 @@ input:disabled,
   font-size: 12px;
   color: #868e96;
   opacity: 0.6;
+  cursor: pointer;
 }
 
 .time-spinner-item.active:not(.disabled) {
@@ -15233,13 +15283,14 @@ input:disabled,
 }
 
 .upload .upload-body.is-list .upload-item .fa-trash-o,
-.upload .upload-body.is-list .upload-item:hover .fa-check-circle-o,
+.upload .upload-body.is-list .upload-item:not(.is-disabled):hover .fa-check-circle-o,
 .upload .upload-body.is-list .upload-item:hover .fa-times-circle-o,
 .upload .upload-body.is-avatar .upload-item .upload-item-delete,
 .upload .upload-body.is-avatar .upload-item.is-invalid .upload-item-spin,
 .upload .upload-body.is-avatar .upload-item.is-valid .upload-item-spin,
 .upload .upload-item.is-invalid .fa-check,
-.upload .upload-item.is-valid .fa-times {
+.upload .upload-item.is-valid .fa-times,
+.upload .upload-body.is-avatar .upload-item.is-disabled .upload-item-plus {
   display: none;
 }
 
@@ -15270,15 +15321,19 @@ input:disabled,
   border-radius: 50%;
 }
 
-.upload .upload-body.is-avatar .upload-item:hover,
-.upload .upload-body.is-avatar .upload-item.is-valid,
+.upload .upload-body.is-avatar .upload-item:not(.is-form):hover,
+.upload .upload-body.is-avatar .upload-item:not(.is-form).is-valid,
 .upload .upload-body.is-card .upload-item.is-valid,
-.upload .upload-body.is-card .upload-item:hover {
+.upload .upload-body.is-card .upload-item:not(.is-disabled):hover {
   border-color: #4da3ff;
 }
 
 .upload .upload-body.is-avatar .upload-item.is-valid {
   border-style: solid;
+}
+
+.upload .upload-body.is-avatar .upload-item.is-invalid .avatar {
+  color: #dc3545;
 }
 
 .upload .upload-body.is-avatar .upload-item .avatar {
@@ -15338,6 +15393,7 @@ input:disabled,
 
 .upload .upload-body.is-card .upload-item-body {
   border-radius: 4px;
+  width: 168px;
   height: 168px;
   border: 1px solid #f8f9fa;
   margin: 0 auto;
