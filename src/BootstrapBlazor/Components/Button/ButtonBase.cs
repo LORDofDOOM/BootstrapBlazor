@@ -46,7 +46,7 @@ namespace BootstrapBlazor.Components
         protected EventCallback<MouseEventArgs> OnClickButton { get; set; }
 
         /// <summary>
-        /// 
+        /// 获得/设置 实际按钮渲染图标
         /// </summary>
         protected string? ButtonIcon { get; set; }
 
@@ -141,6 +141,11 @@ namespace BootstrapBlazor.Components
         public RenderFragment? ChildContent { get; set; }
 
         /// <summary>
+        /// 获得/设置 是否当前正在异步执行操作
+        /// </summary>
+        protected bool IsAsyncLoading { get; set; }
+
+        /// <summary>
         /// OnInitialized 方法
         /// </summary>
         protected override void OnInitialized()
@@ -161,8 +166,9 @@ namespace BootstrapBlazor.Components
 
             OnClickButton = EventCallback.Factory.Create<MouseEventArgs>(this, async e =>
             {
-                if (IsAsync)
+                if (IsAsync && ButtonType == ButtonType.Button)
                 {
+                    IsAsyncLoading = true;
                     ButtonIcon = LoadingIcon;
                     IsDisabled = true;
                 }
@@ -174,12 +180,26 @@ namespace BootstrapBlazor.Components
                 {
                     await OnClick.InvokeAsync(e);
                 }
-                if (IsAsync)
+                if (IsAsync && ButtonType == ButtonType.Button)
                 {
                     ButtonIcon = Icon;
                     IsDisabled = false;
+                    IsAsyncLoading = false;
                 }
             });
+        }
+
+        /// <summary>
+        /// OnParametersSet 方法
+        /// </summary>
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+
+            if (!IsAsyncLoading)
+            {
+                ButtonIcon = Icon;
+            }
         }
 
         private bool _prevDisable;
