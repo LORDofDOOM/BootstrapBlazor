@@ -11785,6 +11785,19 @@ form .control-label[required]:before {
   margin-top: 1rem;
 }
 
+.card-header.bg-primary .btn-link,
+.card-header.bg-primary .btn-link + i,
+.card-header.bg-info .btn-link,
+.card-header.bg-info .btn-link + i,
+.card-header.bg-success .btn-link,
+.card-header.bg-success .btn-link + i,
+.card-header.bg-warning .btn-link,
+.card-header.bg-warning .btn-link + i,
+.card-header.bg-danger .btn-link,
+.card-header.bg-danger .btn-link + i {
+  color: #fff;
+}
+
 .popover.colorpicker-bs-popover {
   min-width: unset;
 }
@@ -15061,6 +15074,14 @@ form .control-label[required]:before {
   position: relative;
 }
 
+.transfer-panel.is-invalid {
+  border: 1px solid #dc3545;
+}
+
+.transfer-panel.is-valid {
+  border: 1px solid #28a745;
+}
+
 .transfer-panel .transfer-panel-header {
   height: 40px;
   line-height: 40px;
@@ -15090,6 +15111,10 @@ form .control-label[required]:before {
   height: 30px;
   line-height: 30px;
   padding-left: 15px;
+  display: block;
+}
+
+.form-inline .transfer-panel-item {
   display: block;
 }
 
@@ -15152,9 +15177,14 @@ form .control-label[required]:before {
   color: #f3f3f3;
 }
 
-.transfer-panel-filter .input-prefix:hover i:before, .transfer-panel-filter .input-prefix.is-on i:before {
+.transfer-panel-filter .input-prefix:not(.is-disabled):hover i:before,
+.transfer-panel-filter .input-prefix.is-on i:before {
   cursor: pointer;
   content: "\f057";
+}
+
+.transfer-panel-filter .input-prefix.is-disabled:hover i:before {
+  cursor: not-allowed;
 }
 
 .tree {

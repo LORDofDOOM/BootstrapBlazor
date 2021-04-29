@@ -26,6 +26,7 @@ module.exports = {
       path.resolve(__dirname, "Components/DateTimePicker/TimePickerBody.razor.cs.min.js"),
       path.resolve(__dirname, "Components/DateTimeRange/DateTimeRange.razor.cs.min.js"),
       path.resolve(__dirname, "Components/Dialog/EditDialog.razor.cs.min.js"),
+      path.resolve(__dirname, "Components/Download/Download.cs.min.js"),
       path.resolve(__dirname, "Components/Drawer/Drawer.razor.cs.min.js"),
       path.resolve(__dirname, "Components/Editor/Editor.razor.cs.min.js"),
       path.resolve(__dirname, "Components/GoTop/GoTop.razor.cs.min.js"),
