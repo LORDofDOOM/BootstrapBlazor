@@ -20,7 +20,7 @@ namespace BootstrapBlazor.Components
     /// <summary>
     /// CheckboxList 组件基类
     /// </summary>
-    public sealed partial class CheckboxList<TValue>
+    public partial class CheckboxList<TValue>
     {
         /// <summary>
         /// 获得 组件样式
@@ -100,7 +100,10 @@ namespace BootstrapBlazor.Components
             // 处理 Required 标签
             if (EditContext != null && FieldIdentifier != null)
             {
-                var pi = FieldIdentifier.Value.Model.GetType().GetProperty(FieldIdentifier.Value.FieldName);
+                var pi = FieldIdentifier.Value.Model.GetType()
+                    .GetProperties()
+                    .Where(p => p.Name == FieldIdentifier.Value.FieldName)
+                    .FirstOrDefault();
                 if (pi != null)
                 {
                     var required = pi.GetCustomAttribute<RequiredAttribute>();
@@ -178,16 +181,10 @@ namespace BootstrapBlazor.Components
                 {
                     foreach (var sl in Items.Where(i => i.Active))
                     {
-                        var val = sl.Value;
-                        if (t[0].IsEnum && val != null)
+                        if (sl.Value.TryConvertTo(t[0], out var val))
                         {
-                            instance.Add(Enum.Parse(t[0], val.ToString()));
+                            instance.Add(val);
                         }
-                        else
-                        {
-                            instance.Add(Convert.ChangeType(val, t[0]));
-                        }
-
                     }
                     CurrentValue = (TValue)instance;
                 }
