@@ -33,6 +33,7 @@ module.exports = {
       path.resolve(__dirname, "Components/Layout/Layout.razor.cs.min.js"),
       path.resolve(__dirname, "Components/Message/Message.razor.cs.min.js"),
       path.resolve(__dirname, "Components/Modal/Modal.razor.cs.min.js"),
+      path.resolve(__dirname, "Components/Menu/Menu.razor.cs.min.js"),
       path.resolve(__dirname, "Components/Popover/PopoverConfirmBox.razor.cs.min.js"),
       path.resolve(__dirname, "Components/QRCode/QRCode.razor.cs.min.js"),
       path.resolve(__dirname, "Components/Rate/Rate.razor.cs.min.js"),
@@ -49,7 +50,8 @@ module.exports = {
       path.resolve(__dirname, "Components/Toast/Toast.razor.cs.min.js"),
       path.resolve(__dirname, "Components/Tooltip/Tooltip.cs.min.js"),
       path.resolve(__dirname, "Components/Tree/Tree.razor.cs.min.js"),
-      path.resolve(__dirname, "Components/Upload/Upload.razor.cs.min.js")
+      path.resolve(__dirname, "Components/Upload/Upload.razor.cs.min.js"),
+      path.resolve(__dirname, "Components/ValidateForm/ValidateForm.razor.cs.min.js")
     ],
   },
   optimization: {
