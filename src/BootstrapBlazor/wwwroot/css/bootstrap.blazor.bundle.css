@@ -11499,6 +11499,11 @@ form .control-label[required]:before {
   padding-bottom: 0;
 }
 
+.checkbox-list.is-vertical {
+  display: flex;
+  flex-direction: column;
+}
+
 .checkbox-list .checkbox-item {
   display: inline-flex;
   width: 120px;
@@ -12404,8 +12409,11 @@ form .control-label[required]:before {
     width: 214px;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   }
-  .layout.is-page .layout-side.is-collapsed,
-  .layout.is-page .layout-side .menu.is-vertical.is-collapsed {
+  .layout.is-page .layout-side:not(:hover) .menu.is-vertical {
+    width: 100%;
+  }
+  .layout.is-page .layout-side.is-collapsed:not(:hover),
+  .layout.is-page .layout-side:not(:hover) .menu.is-vertical.is-collapsed {
     width: 70px;
   }
   .layout.is-page .layout-side.is-fixed-header {
@@ -12467,16 +12475,6 @@ form .control-label[required]:before {
   }
   .layout.is-page .layout-footer.is-collapsed {
     display: flex;
-  }
-  .layout.is-page .layout-menu .menu.is-vertical .nav-link:before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    opacity: 0;
-    transition: background-color .3s linear, opacity .3s linear;
   }
   .layout.is-page .layout-menu .menu.is-vertical.is-collapsed .nav-link.active::before {
     opacity: 1;
@@ -12851,8 +12849,11 @@ form .control-label[required]:before {
   list-style: none;
 }
 
+.menu .submenu li {
+  margin-top: 2px;
+}
+
 .menu .submenu .nav-link {
-  margin: 2px 0;
   border-radius: 4px;
   padding: .5rem 0.25rem;
 }
@@ -12870,50 +12871,22 @@ form .control-label[required]:before {
   margin: 0 4px;
 }
 
-.menu.is-collapsed {
-  width: 70px;
-  padding: 0;
-}
-
-.menu.is-collapsed .nav-link {
-  justify-content: center;
-  border-radius: 0;
-}
-
-.menu.is-collapsed > .submenu > li > .nav-link > .text {
-  max-width: 0;
-  margin: 0;
-}
-
-.menu.is-collapsed .nav-link .arrow {
-  transform: rotate(180deg);
-}
-
-.menu.is-collapsed > .submenu > li > .nav-link > .arrow,
-.menu.is-collapsed .fa-none {
-  display: none;
-}
-
-.menu.is-collapsed .submenu li {
-  position: relative;
-}
-
-.menu.is-collapsed .submenu .nav-link + .submenu {
-  position: absolute;
-  top: -2px;
-  left: 100%;
-  background-color: #f8f9fa;
-  color: #adb5bd;
-  z-index: 1;
-  display: none;
-}
-
-.menu.is-collapsed > .submenu > li > .nav-link + .submenu {
-  left: 70px;
-}
-
-.menu.is-collapsed li:hover > .nav-link + .submenu {
-  display: block;
+@media (min-width: 768px) {
+  .layout-side.is-collapsed:not(:hover) .menu.is-collapsed {
+    padding: 0;
+  }
+  .layout-side.is-collapsed:not(:hover) .menu.is-collapsed .nav-link {
+    justify-content: center;
+    border-radius: 0;
+  }
+  .layout-side.is-collapsed:not(:hover) .menu.is-collapsed .submenu .text {
+    margin: 0;
+    width: 0;
+    max-width: 0;
+  }
+  .layout-side.is-collapsed:not(:hover) .menu.is-collapsed .nav-link {
+    padding-left: 0 !important;
+  }
 }
 
 .is-draggable .modal-header {
