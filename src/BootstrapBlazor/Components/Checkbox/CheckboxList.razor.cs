@@ -27,6 +27,7 @@ namespace BootstrapBlazor.Components
         /// </summary>
         private string? ClassString => CssBuilder.Default("checkbox-list form-control")
             .AddClass("no-border", !ShowBorder && ValidCss != "is-invalid")
+            .AddClass("is-vertical", IsVertical)
             .AddClass(CssClass)
             .AddClass("is-invalid", IsValid.HasValue && !IsValid.Value)
             .Build();
@@ -58,6 +59,12 @@ namespace BootstrapBlazor.Components
         public bool ShowBorder { get; set; } = true;
 
         /// <summary>
+        /// 获得/设置 是否为竖向排列 默认为 false
+        /// </summary>
+        [Parameter]
+        public bool IsVertical { get; set; } = false;
+
+        /// <summary>
         /// 获得/设置 SelectedItemChanged 方法
         /// </summary>
         [Parameter]
@@ -66,10 +73,6 @@ namespace BootstrapBlazor.Components
         [Inject]
         [NotNull]
         private IStringLocalizerFactory? LocalizerFactory { get; set; }
-
-        [Inject]
-        [NotNull]
-        private IOptions<JsonLocalizationOptions>? Options { get; set; }
 
         /// <summary>
         /// OnInitialized 方法

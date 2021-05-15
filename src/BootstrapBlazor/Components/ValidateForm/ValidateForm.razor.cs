@@ -274,8 +274,7 @@ namespace BootstrapBlazor.Components
                     var ruleNameSpan = rule.GetType().Name.AsSpan();
                     var index = ruleNameSpan.IndexOf(attributeSpan, StringComparison.OrdinalIgnoreCase);
                     var ruleName = rule.GetType().Name.AsSpan().Slice(0, index);
-                    var isResx = false;
-                    rule.ErrorMessage = result.ErrorMessage;
+                    var find = false;
                     if (!string.IsNullOrEmpty(rule.ErrorMessage))
                     {
                         var resxType = Options.Value.ResourceManagerStringLocalizerType;
@@ -285,24 +284,40 @@ namespace BootstrapBlazor.Components
                                 key: rule.ErrorMessage, out var resx))
                         {
                             rule.ErrorMessage = resx;
-                            isResx = true;
+                            find = true;
                         }
                     }
-                    if (!isResx)
-                    {
-                        if (JsonStringLocalizerFactory.TryGetLocalizerString(
-                            localizer: LocalizerFactory.Create(rule.GetType()),
-                            key: nameof(rule.ErrorMessage), out var msg))
-                        {
-                            rule.ErrorMessage = msg;
-                        }
 
-                        if (JsonStringLocalizerFactory.TryGetLocalizerString(
+                    // 通过设置 ErrorMessage 检索
+                    if (!find && !string.IsNullOrEmpty(rule.ErrorMessage) && JsonStringLocalizerFactory.TryGetLocalizerString(
+                            localizer: LocalizerFactory.Create(context.ObjectType),
+                            key: rule.ErrorMessage, out var msg))
+                    {
+                        rule.ErrorMessage = msg;
+                        find = true;
+                    }
+
+                    // 通过 Attribute 检索
+                    if (!find && JsonStringLocalizerFactory.TryGetLocalizerString(
+                        localizer: LocalizerFactory.Create(rule.GetType()),
+                        key: nameof(rule.ErrorMessage), out msg))
+                    {
+                        rule.ErrorMessage = msg;
+                        find = true;
+                    }
+
+                    // 通过 字段.规则名称 检索
+                    if (!find && JsonStringLocalizerFactory.TryGetLocalizerString(
                             localizer: LocalizerFactory.Create(context.ObjectType),
                             key: $"{memberName}.{ruleName.ToString()}", out msg))
-                        {
-                            rule.ErrorMessage = msg;
-                        }
+                    {
+                        rule.ErrorMessage = msg;
+                        find = true;
+                    }
+
+                    if (!find)
+                    {
+                        rule.ErrorMessage = result.ErrorMessage;
                     }
 
                     var errorMessage = rule.FormatErrorMessage(displayName ?? memberName);
@@ -367,7 +382,8 @@ namespace BootstrapBlazor.Components
                 // 处理多个上传文件
                 uploader.UploadFiles.ForEach(file =>
                 {
-                    ValidateDataAnnotations(file.File, context, messages, pi, file.ValidateId);
+                    // 优先检查 File 流，如果没有检查 FileName
+                    ValidateDataAnnotations((object?)file.File ?? file.FileName, context, messages, pi, file.ValidateId);
                 });
             }
             else
@@ -400,7 +416,7 @@ namespace BootstrapBlazor.Components
                 {
                     b.TriggerAsync(true);
                 }
-                await OnValidSubmit(context);
+                await Task.Run(async () => await InvokeAsync(async () => await OnValidSubmit(context)));
                 foreach (var b in AsyncSubmitButtons)
                 {
                     b.TriggerAsync(false);
@@ -417,7 +433,7 @@ namespace BootstrapBlazor.Components
         {
             if (disposing)
             {
-                await JSRuntime.InvokeVoidAsync(Id, "bb_form", "dispose").ConfigureAwait(false);
+                await JSRuntime.InvokeVoidAsync(Id, "bb_form", "dispose");
             }
         }
 
@@ -427,7 +443,7 @@ namespace BootstrapBlazor.Components
         /// <returns></returns>
         public async ValueTask DisposeAsync()
         {
-            await DisposeAsyncCore(true).ConfigureAwait(false);
+            await DisposeAsyncCore(true);
             GC.SuppressFinalize(this);
         }
     }
